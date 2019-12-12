@@ -17,7 +17,7 @@ public:
 ```
 
 
-Yukarıdaki kodda `Mercedes` sınıfı taban sınıfı olan `Car` sınıfının saf sanal `getCylinderVolume` işlevini ezerken farklı bir geri dönüş değeri bildirmiş. C++ dilinin kurallarına göre bu durum bir sentaks hatası oluşturuyor. Ancak bu durumun “eşdeğişken geri dönüş türü” `(covariant return type)` denen bir istisnası var. `B` bir sınıf türü olmak üzere, taban sınıfın sanal işlevinin geri dönüş değeri B* türünden ise, türemiş sınıfın bu işlevi ezecek işlevinin geri dönüş değeri, eğer `D` sınıfı `B` sınıfından `public` türetmesiyle elde edilmiş bir sınıf ise, `D*` türünden olabilir. Aynı istisna referans semantiği için de söz konusu: `B` bir sınıf türü olmak üzere, taban sınıfın sanal işlevinin geri dönüş değeri B& türünden ise türemiş sınıfın bu işlevi ezecek işlevinin geri dönüş değeri, eğer `D` sınıfı `B` sınıfından `public` türetmesiyle elde edilmiş bir sınıf ise, `D&` türünden olabilir.
+Yukarıdaki kodda `Mercedes` sınıfı taban sınıfı olan `Car` sınıfının saf sanal `getCylinderVolume` işlevini ezerken farklı bir geri dönüş değeri bildirmiş. `C++` dilinin kurallarına göre bu durum bir sentaks hatası oluşturuyor. Ancak bu durumun “eşdeğişken geri dönüş türü” `(covariant return type)` denen bir istisnası var. `B` bir sınıf türü olmak üzere, taban sınıfın sanal işlevinin geri dönüş değeri B* türünden ise, türemiş sınıfın bu işlevi ezecek işlevinin geri dönüş değeri, eğer `D` sınıfı `B` sınıfından `public` türetmesiyle elde edilmiş bir sınıf ise, `D*` türünden olabilir. Aynı istisna referans semantiği için de söz konusu: `B` bir sınıf türü olmak üzere, taban sınıfın sanal işlevinin geri dönüş değeri `B&` türünden ise türemiş sınıfın bu işlevi ezecek işlevinin geri dönüş değeri, eğer `D` sınıfı `B` sınıfından `public` türetmesiyle elde edilmiş bir sınıf ise, `D&` türünden olabilir.
 `Car` sınıfının arayüzünde bulunan sanal kurucu işlev olarak görev yapacak saf sanal bir `clone` işlevinin yer aldığını düşünelim:
 
 ```
@@ -40,7 +40,7 @@ void carGame(Car *p)
 }
 ```
 
-`Mercedes` sınıfı `Car` sınıfının `clone`  işlevini ezerken işlevin geri dönüş türünü `Mercedes *` olarak değiştirdiğini görüyorsunuz. Bu kod geçerli, çünkü her Mercedes nesnesi aynı zamanda bir `Car` nesnesi. Peki neden böyle bir istisnaya duyulmuş? Eşdeğişken geri dönüş türü, türemiş sınıf nesnelerinin türemiş sınıf arayüzüyle işlendiği durumlar için önemli bir avantaj sağlıyor:
+`Mercedes` sınıfı `Car` sınıfının `clone`  işlevini ezerken işlevin geri dönüş türünü `Mercedes *` olarak değiştirdiğini görüyorsunuz. Bu kod geçerli, çünkü her `Mercedes` nesnesi aynı zamanda bir `Car` nesnesi. Peki neden böyle bir istisnaya duyulmuş? Eşdeğişken geri dönüş türü, türemiş sınıf nesnelerinin türemiş sınıf arayüzüyle işlendiği durumlar için önemli bir avantaj sağlıyor:
 
 ```
 Mercedes *getNewMercedes();
@@ -53,7 +53,7 @@ int main()
 
 }
 ```
-Yukarıdaki kodda bildirilen `getNewMercedes` isimli global işlev dinamik bir Mercedes nesnesinin adresini döndürüyor. main işlevi içinde bu işlevin geri dönüş değerinin doğrudan `Mercedes` türünden bir göstericiye ilk değer verdiğini görüyorsunuz. Eğer `Mercedes` sınıfınn `clone` işlevinin geri dönüş türü `Car *` olsaydı, yani eşdeğişken geri dönüş türü istisnası olmasaydı bu kod geçersiz olacaktı. Kodun geçerliliğini sağlamak için `static_cast` tür dönüştürme işlecini kullanmamız gerekecekti:
+Yukarıdaki kodda bildirilen `getNewMercedes` isimli global işlev dinamik bir `Mercedes` nesnesinin adresini döndürüyor. main işlevi içinde bu işlevin geri dönüş değerinin doğrudan `Mercedes` türünden bir göstericiye ilk değer verdiğini görüyorsunuz. Eğer `Mercedes` sınıfın `clone` işlevinin geri dönüş türü `Car *` olsaydı, yani eşdeğişken geri dönüş türü istisnası olmasaydı bu kod geçersiz olacaktı. Kodun geçerliliğini sağlamak için `static_cast` tür dönüştürme işlecini kullanmamız gerekecekti:
 
 
 ```
@@ -91,7 +91,7 @@ public:
 	//...
 };
 ```
-Burada dikkat edilmesi gereken bir nokta daha var: eşdeğişken geri dönüş türünün kullanılabilmesi için Mercedes sınıfının `getServiceStation` işlevinin bildiriminden önce MercedesServiceStation sınıfının sadece bildirilmiş olması (forward declaration) yeterli değil, sınıf tanımlanmış olmalı. Derleyici MercedesServiceStation referansını (ya da adresini) ServiceStation referansına (ya da adresine) dönüştürebilmek için MercedesServiceStation sınıfının belleğe yerleşim verilerine erişmek zorunda.
+Burada dikkat edilmesi gereken bir nokta daha var: eşdeğişken geri dönüş türünün kullanılabilmesi için `Mercedes` sınıfının `getServiceStation` işlevinin bildiriminden önce `MercedesServiceStation` sınıfının sadece bildirilmiş olması `(forward declaration)` yeterli değil, sınıf tanımlanmış olmalı. Derleyici `MercedesServiceStation` referansını (ya da adresini) `ServiceStation` referansına (ya da adresine) dönüştürebilmek için `MercedesServiceStation` sınıfının belleğe yerleşim verilerine erişmek zorunda.
 
 Eşdeğişken geri dönüş türünün avantajı bize her zaman uygun bir soyutlama `(abstraction)` seviyesi sağlaması. Eğer `Car` sınıfı türünden nesneler ile çalışıyor isek soyut `(abstract)` bir `ServiceStation` elde edeceğiz. Eğer spesifik bir `Car` türü, örneğin `Mercedes` türü ile çalışıyor isek somut bir `MercedesServiceStation` nesnesi elde edeceğiz:
 
