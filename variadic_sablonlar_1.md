@@ -1,4 +1,4 @@
-# Değişken sayıda Parametreli Şablonlar (Variadic Templates
+# Değişken sayıda Parametreli Şablonlar (Variadic Templates)
 
 C++ türden bağımsız programlamaya `(generic programming)` en güçlü desteği veren programlama dili. C++11 standartları ile dile eklenen en önemli araçlardan biri olan değişken sayıda parametreli şablonlar `(variadic templates)` türden bağımsız programlamanın gücünü daha da arttırıyor. Standart kütüphane artık birçok yerde böyle şablonlar kullanıyor. Dile eklenen bu araç ile hem sınıf şablonları `(class templates)` hem de işlev şablonları `(function templates)` artık istenen sayıda parametreye sahip olabiliyor. Değişken sayıda parametreye "parametre paketi" `(parameter pack)` deniyor. İki ayrı parametre paketi oluşturabiliyoruz:
 Şablon parametre paketi `(template parameter pack)`, sıfır ya da daha fazla sayıda şablon parametresini temsil ediyor.
@@ -10,24 +10,24 @@ Bir şablon parametre listesinde class ya da typename anahtar sözcüklerini izl
 template <class... Ts>
 ```
 
-Yukarıdaki sözdizimde `Ts` tür parametre listesini yani şablon parametre paketini temsil ediyor. Diğer şablonlarda olduğu gibi burada da class yerine `typename` anahtar sözcüğü kullanılabiliyoruz:
+Yukarıdaki sözdizimde `Ts` tür parametre listesini yani şablon parametre paketini temsil ediyor. Diğer şablonlarda olduğu gibi burada da `class` yerine `typename` anahtar sözcüğü kullanılabiliyoruz:
 
 ```
 template <typename... Ts>
 ```
-Ts yalnızca bir isim. Burada herhangi bir ismi kullanabiliriz. Ancak çoğunlukla `Args`, `Ts` gibi isimler tercih ediliyor.
+`Ts` yalnızca bir isim. Burada herhangi bir ismi kullanabiliriz. Ancak çoğunlukla `Args`, `Types`, `Ts` gibi isimler tercih ediliyor.
 
 ```
 template <unsigned... Ns>
 ```
 
-Burada da şablon parametre paketi `Ns` olarak isimlendirilmiş. Bu paket unsigned int türden olan şablon sabit parametrelerini `(non-type parameter)` temsil ediyor. Normal şablonlarda olduğu gibi değişken sayıda parametreli şablonlar da sınıflara ya da işlevlere ilişkin olabiliyor ve özelleştirilebiliyorlar `(specialization)`. Parametre paketi diğer şablon parametreleri ile birlikte kullanılabiliyor. Yalnızca iki kısıtlama söz konusu:
+Burada da şablon parametre paketi `Ns` olarak isimlendirilmiş. Bu paket `unsigned int` türden olan şablon sabit parametrelerini `(non-type parameter)` temsil ediyor. Normal şablonlarda olduğu gibi değişken sayıda parametreli şablonlar da sınıflara ya da işlevlere ilişkin olabiliyor ve özelleştirilebiliyorlar `(specialization)`. Parametre paketi diğer şablon parametreleri ile birlikte kullanılabiliyor. Yalnızca iki kısıtlama söz konusu:
 Parametre paketi son şablon parametresi olmalı ve yalnızca tek bir paramete paketi olmalı:
 
 ```
 template <typename X, int C, class... Ts>
 ```
-bu şablondan gerçek bir işlevin kodunu yazarken `X` yerine gerçek bir türü kullanacak. C ise şablonun sabit parametresi. Derleyici şablondan bir gerçek işlevin kodunu yazaraken `C` yerine `int` türden bir sabit kullanacak. `Ts` ismi ise bir tür parametre paketine işaret ediyor. `Ts`, sıfır ya da birden fazla türe karşılık gelen bir isim.
+Bu şablondan gerçek bir işlevin kodunu yazarken `X` yerine gerçek bir türü kullanacak. C ise şablonun sabit parametresi. Derleyici şablondan bir gerçek işlevin kodunu yazaraken `C` yerine `int` türden bir sabit kullanacak. `Ts` ismi ise bir tür parametre paketine işaret ediyor. `Ts`, sıfır ya da birden fazla türe karşılık gelen bir isim.
 
 İşlev parametre listesinde yer alan, şablon parametre paketi türünden olan parametre ise "işlev parametre paketi". Aşağıdaki örneğe bakalım:
 
@@ -36,7 +36,7 @@ template <typename T, typename... Args>
 void func(const T &t, Args ... rest);
 ```
 
-Yukarıdaki bildirimde yer alan `Args` ismi şablon parametre paketini rest ismi ise işlev parametre paketini temsil ediyor. `Args` sıfır ya da daha fazla sayıda şablon tür parametresini rest ise yine sıfır ya da daha fazla sayıda işlev parametre değişkenini içerecek.
+Yukarıdaki bildirimde yer alan `Args` ismi şablon parametre paketini rest ismi ise işlev parametre paketini temsil ediyor. `Args` sıfır ya da daha fazla sayıda şablon tür parametresini `rest` ise yine sıfır ya da daha fazla sayıda işlev parametre değişkenini içerecek.
 
 Derleyici diğer şablonlarda olduğu gibi şablon tür parametrelerinin çıkarımını da işleve gönderilen argüman olan ifadelerin türlerinden hareketle gerçekleştiriyor. Değişken sayıda parametreye sahip şablonlarda, derleyici paket içindeki kaç tane parametre yer aldığının da çıkarımını yapıyor. Bir örnekle gösterelim:
 
@@ -161,10 +161,12 @@ makeTuple(10, 4.5, 3L)
 
 çağrısından hareketle derleyici şablondan üreteceği kodda iki ayrı paket açılımı gerçekleştirecek.
 
-Args...
+`Args...`
+
 ifadesinin yerine işleve gönderilen argümanların çıkarımla elde edilmiş türlerini içeren virgüllerle ayrılmış bir listeyi
 
-rest...
+`rest...`
+
 ifadesinin yerine ise işleve gönderilen argüman olan ifadeleri içeren virgüllerle ayrılmış bir listeyi kullanacak. Yani paket açılımından sonra şöyle bir işlev kodu oluşturulacağını düşünebiliriz:
 
 ```
@@ -213,7 +215,7 @@ int main()
 	print(cout, ival, s, dval, "murat");
 }
 ```
-Şimdi kodu inceleyelim. Kodda daha yukarıda yer alan ve değişken sayıda parametreye sahip olmayan print işlev şablonuna bakalım:
+Şimdi kodu inceleyelim. Kodda daha yukarıda yer alan ve değişken sayıda parametreye sahip olmayan `print` işlev şablonuna bakalım:
 
 ```
 template<typename T>
