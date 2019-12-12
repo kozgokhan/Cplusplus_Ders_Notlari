@@ -1,3 +1,5 @@
+# Eş Değişken Geri Dönüş Türü (Variant Return Type)
+
 Türemiş bir sınıfın taban sınıfının bir sanal işlevini ezecek `(override)` bir işlevinin, taban sınıf işleviyle hem aynı imzaya hem de aynı geri dönüş türüne sahip olması gerekir:
 
 ```
