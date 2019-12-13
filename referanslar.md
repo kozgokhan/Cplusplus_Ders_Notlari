@@ -2,27 +2,28 @@
 
 Referans semantiği gösterici *(pointer)* semantiğine alternatif olan ancak C++ dilinin diğer araçlarına daha uygun bir yapıdır.
 `C++` programcılarına verilen ilk tavsiyelerden biri şöyledir: 
-> Referans kullanabildiğin her yerde referans yalnızca zorunlu olduğun yerlerde gösterici `pointer` kullan"
-Eski C++'ta yalnızca tek bir referans kategorisi vardı. C++11 ile birlikte dile **"R value reference"** *(sağ taraf referansı)* olarak isimlendirilen ikinci bir referans kategorisi eklendi. Sağ taraf referansları, C++ dilinde daha önce doğrudan mümkün olmayan *taşıma semantiği*"ni *(move semantics)* ve "mükemmel gönderim"i *(perfect forwarding)* gerçekleştirmek üzere dile eklenmiştir.
+> "Referans kullanabildiğin her yerde referans yalnızca zorunlu olduğun yerlerde gösterici `pointer` kullan."
+
+Eski `C++`'ta yalnızca tek bir referans kategorisi vardı. `C++11` ile birlikte dile "sağ taraf referansı" `(R value reference)` olarak isimlendirilen ikinci bir referans kategorisi eklendi. Sağ taraf referansları, C++ dilinde daha önce doğrudan mümkün olmayan `taşıma semantiği`"ni `(move semantics)` ve "mükemmel gönderim"i `(perfect forwarding)` gerçekleştirmek üzere dile eklenmiştir.
 
 Modern C++ referansları ikiye ayırıyor:
 
-+ L value reference (Sol taraf referansları)
-+ R value reference (Sağ taraf referansları)
++ `L value reference` (Sol taraf referansları)
++ `R value reference` (Sağ taraf referansları)
 
 Biz şimdilik yalnızca sol taraf referanslarını inceleyeceğiz. Sağ taraf referansları çok önemli bir konu olmakla birlikte ayrı bir dersimizin konusu olacak. Aksi belirtilmedikçe bundan sonra (şimdilik) referans dendiğinde sol taraf referansı anlaşılmalıdır.
 
 ## referans nedir?
 Refererans bir nesnenin yerine geçen bir isim olarak düşünülebilir. Öyle ki biz referans olan ismi kullandığımızda aslında o ismin bağlandığı (yerine geçtiği) nesneyi kullanmış oluyoruz. 
-Referanslar & atomu *declarator)*ile tanımlanır. *T* bir tür olmak üzere
+Referanslar & atomu `(declarator)` ile tanımlanır. `T` bir tür olmak üzere
 
 ```
 T &r = nesne;
 ```
 
-*r*, "nesne"nin yerine geçen bir referanstır.
+`r`, "nesne"nin yerine geçen bir referanstır.
 
-referanslara ilk değer vermek *(initialize)* zorunludur.
+referanslara ilk değer vermek `(initialize)` zorunludur.
 
 ```
 int x = 10;
@@ -48,7 +49,7 @@ void func
 }
 ```
 
-Tanımlanan bir referans bir nesnenin yerine geçer. Artık söz konusu referans isim, kendi kapamı *(scope)* içinde hep aynı nesnenin yerine geçecektir. Tanımlanmış bir referans bir başka nesnenin yerine geçemez yani referansın daha sonra bir başka nesneye bağlanması mümkün değildir:
+Tanımlanan bir referans bir nesnenin yerine geçer. Artık söz konusu referans isim, kendi kapamı `(scope)` içinde hep aynı nesnenin yerine geçecektir. Tanımlanmış bir referans bir başka nesnenin yerine geçemez yani referansın daha sonra bir başka nesneye bağlanması mümkün değildir:
 
 ```
 #include <iostream>
@@ -65,11 +66,11 @@ int main()
 }
 ```
 
-Yukarıdaki `main` işlevinde tanımlanan *r* referansı, *a* değişkeninin yerine geçiyor. Daha sonra yapılan 
+Yukarıdaki `main` işlevinde tanımlanan `r` referansı, `a` değişkeninin yerine geçiyor. Daha sonra yapılan 
 ```
 r = b;
 ```
-ataması, *r* referansının *b* değişkeninin yerine geçtiği anlamına gelmiyor. Bu atamanın anlamı şudur: *r* referansının bağlandığı nesneye *b* değişkeninin değeri atanmaktadır. Referanslar kendisi *const* olan göstericilere *const pointer)* enzetilebilir. Yukarıdaki kodun bir referans ile değil de bir gösterici değişken kullanılarak yazıldığını düşünelim:
+ataması, `r` referansının `b` değişkeninin yerine geçtiği anlamına gelmiyor. Bu atamanın anlamı şudur: `r` referansının bağlandığı nesneye `b` değişkeninin değeri atanmaktadır. Referanslar kendisi `const` olan göstericilere `(const pointer)` benzetilebilir. Yukarıdaki kodun bir referans ile değil de bir gösterici değişken kullanılarak yazıldığını düşünelim:
 
 
 ```
@@ -88,7 +89,7 @@ int main()
 ```
 
 
-Yukarıdaki örnekte `ptr`, kendisi *const* olan bir gösterici değişkendir *(const pointer)*. *ptr* değişkeninin tanımından sonra, *ptr*'ye artık başka bir nesnenin adresi atanamaz. Aşağıdaki kodu derleyip çalıştırınız:
+Yukarıdaki örnekte `ptr`, kendisi `const` olan bir gösterici değişkendir `(const pointer)`. `ptr` değişkeninin tanımından sonra, `ptr`'ye artık başka bir nesnenin adresi atanamaz. Aşağıdaki kodu derleyip çalıştırınız:
 
 ```
 #include <iostream>
@@ -130,7 +131,7 @@ int main()
 }
 ```
 
-C++'ta referansın yerine geçen referans `reference to reference` yoktur. Aşağıdaki kodu inceleyin:
+`C++`'ta referansın yerine geçen referans `reference to reference` yoktur. Aşağıdaki kodu inceleyin:
 
 ```
 #include <iostream>
@@ -458,9 +459,9 @@ void getter(const T *ptr);
 void setter(T *ptr);
 ```
 
-+ *getter* isimli işlev *T* türünden bir nesneye salt okuma *(read/get/access)* amaçlı erişim talep etmektedir. Böyle fonksiyonlara İngilizcede *getter/accessor/get function* gibi terimler yakıştırıldığını hatırlayalım. *const T** biçiminde tanımlanan parametrelere *"input parameter"* de denmektedir.
++ `getter` isimli işlev `T` türünden bir nesneye salt okuma `(read/get/access)` amaçlı erişim talep etmektedir. Böyle fonksiyonlara İngilizcede `getter/accessor/get function` gibi terimler yakıştırıldığını hatırlayalım. `const T*` biçiminde tanımlanan parametrelere `"input paramete"` de denmektedir.
 
-+ Ancak *setter* isimli işlev *T* türünden bir nesneye bir değer aktarma onu değiştirme *(write/set/mutate)* amaçlı erişim talep etmektedir. Yine böyle fonksiyonlara İngilizcede *setter/mutator/set function* gibi terimler yakıştırıldığını hatırlayalım. *T** biçiminde tanımlanan parametrelere "output parameter" de denmektedir.
++ Ancak `setter` isimli işlev `T` türünden bir nesneye bir değer aktarma onu değiştirme `(write/set/mutate)` amaçlı erişim talep etmektedir. Yine böyle fonksiyonlara İngilizcede `setter/mutator/set function` gibi terimler yakıştırıldığını hatırlayalım. `T*` biçiminde tanımlanan parametrelere `"output parameter"` de denmektedir.
 
 Arayüzdeki bu farklılık referans semantiği için de geçerlidir:
 
@@ -516,7 +517,7 @@ int &func(int &r)
 }
 ```
 
-Adres döndüren bir fonksiyonun otomatik ömürlü bir nesne adresi döndürmesi tanımsız davranıştır `*(undefined behavior)`. Benzer şekilde referans döndüren bir işlevin de otomatik ömürlü nesneye bağlanmış bir referans döndürmesi tanımsız davranıştır. Sentaks hatası olmayan bu durum derleyicilerin hemen hepsinin lojik kontrolüne takılır ve derleyiciler bir uyarı mesajı verirler.
+Adres döndüren bir fonksiyonun otomatik ömürlü bir nesne adresi döndürmesi tanımsız davranıştır `(undefined behavior)`. Benzer şekilde referans döndüren bir işlevin de otomatik ömürlü nesneye bağlanmış bir referans döndürmesi tanımsız davranıştır. Sentaks hatası olmayan bu durum derleyicilerin hemen hepsinin lojik kontrolüne takılır ve derleyiciler bir uyarı mesajı verirler.
 
 Referans döndüren işlevler
 + Statik ömürlü bir nesneyi `(global bie değişkeni ya da statik bir yerel değişkeni)`
@@ -524,13 +525,13 @@ Referans döndüren işlevler
 + Kendisini çağıran koddan yine referans semantiği ile aldığı bir nesneyi
 döndürebilir. Ancak dinamik ömürlü bir nesnenin döndürülmesi durumunda daha çok gösterici semantiği tercih edilmektedir.
 
-Bir fonksiyonun geri dönüş değeri *const* referans da olabilir:
+Bir fonksiyonun geri dönüş değeri `const` referans da olabilir:
 
 ```
 const T &foo();
 ```
 
-*foo** işlevi bir nesnenin kendisini döndürmekle birlikte onun yalnızca okuma *(read/access/get)* amaçlı kullanımını şart koşmaktadır.
+`foo` işlevi bir nesnenin kendisini döndürmekle birlikte onun yalnızca okuma `(read/access/get)` amaçlı kullanımını şart koşmaktadır.
 Bu durumun gösterici semantiğindeki karşılığının
 
 ```
@@ -577,7 +578,7 @@ int main()
 }
 ```
 
-Yukarıdaki kodda yer alan `display` isimli fonksiyona yalnızca `10` elemanlı bir `int` dizi gönderilebilir. Örneğin `display` fonksiyonuna *b* dizisinin gönderilmesi bir sentaks hatasıdır.
+Yukarıdaki kodda yer alan `display` isimli fonksiyona yalnızca `10` elemanlı bir `int` dizi gönderilebilir. Örneğin `display` fonksiyonuna `b` dizisinin gönderilmesi bir sentaks hatasıdır.
 
 + Elemanları gösterici olan bir dizi `(pointer array)` olabilir ama elemanları referans olan bir dizi olamaz.
 
@@ -641,17 +642,17 @@ int main()
 ## `NULL` adresi ve referanslar
 
 C'de değeri `NULL` adresi olan bir gösterici değişkenin hiçbir nesneyi göstermeyen bir gösterici değişken olduğunu hatırlayalım.
-`NULL` adresinin C'de ne kadar yaygın bir biçimde kullanıldığını biliyorsunuz. Bu arada C++11 standartları ile artık modern C++'ta NULL pointer olarak `nullptr` sabiti kullanılmaktadır. `(ileride ayrıntılı olarak göreceğiz).` 
-`nullptr` C++'ta bir anahtar sözcüktür ve türü `nullptr_t` olan bir sabittir `(constant)`.
+`NULL` adresinin `C`'de ne kadar yaygın bir biçimde kullanıldığını biliyorsunuz. Bu arada `C++11` standartları ile artık modern C++'ta `NULL pointer` olarak `nullptr` sabiti kullanılmaktadır. `(ileride ayrıntılı olarak göreceğiz).` 
+`nullptr` `C++`'ta bir anahtar sözcüktür ve türü `nullptr_t` olan bir sabittir `(constant)`.
 
-+ C'de bir fonksiyonun bir adres döndürmesi durumunda başarısızlık belirtmek amacıyla `NULL` adresi döndürmesi çok yaygın bir konvensiyondur. Örneğin standart C fonksiyonu olan *fopen* bir dosyayı açamaz ise `NULL` adresi döndürür. Standart C fonksiyonu *malloc* başarısız olduğunda `NULL pointer` döndürür.
++ C'de bir fonksiyonun bir adres döndürmesi durumunda başarısızlık belirtmek amacıyla `NULL` adresi döndürmesi çok yaygın bir konvensiyondur. Örneğin standart C fonksiyonu olan *fopen* bir dosyayı açamaz ise `NULL` adresi döndürür. Standart C fonksiyonu `malloc` başarısız olduğunda `NULL pointer` döndürür.
 
 + C Dilinde bir veri yapısında arama yapan fonsiyonlar aranan değeri buamadıklarında tipik olarak `NULL` gösterici döndürürler. Örneğin standart bir C işlevi olan `strchr` işlevinde bir yazı içinde bir karakter arar. Aranan karakteri yazıda bulursa bulduğu yerin adresini bulamazsa `NULL` adresi döndürür.
 
-+ Çağıran koddan bir nesne adresi isteyen bir fonksiyon kendisine *NULL* adresi gönderilmesini çağıran koda bir seçenek olarak verebilir. Örneğin standart C fonksiyonu olan time kendisine `NULL` adresi gönderilirse takvim zamanı değerini yani `time_t` türünden değeri bir nesneye yazmaz yalnızca geri dönüş değeri olarak üretir. 
++ Çağıran koddan bir nesne adresi isteyen bir fonksiyon kendisine `NULL` adresi gönderilmesini çağıran koda bir seçenek olarak verebilir. Örneğin standart `C` fonksiyonu olan time kendisine `NULL` adresi gönderilirse takvim zamanı değerini yani `time_t` türünden değeri bir nesneye yazmaz yalnızca geri dönüş değeri olarak üretir. 
 
-+ Yine C'de `NULL` adresi bir gösterici için bir bayrak değeri olarak kullanılabilir. Örneğin bir kontrol deyiminde bir göstericinin değerinin `NULL` adresi olup olmamasına göre farklı işler yapılabilir.
++ Yine `C`'de `NULL` adresi bir gösterici için bir bayrak değeri olarak kullanılabilir. Örneğin bir kontrol deyiminde bir göstericinin değerinin `NULL` adresi olup olmamasına göre farklı işler yapılabilir.
 
 Bu tür temaların hiçbirinde referans semantiği kullanılamaz. Hiçbir nesnenin yerine geçmeyen bir referans tanımlanamaz. `NULL` referans diye bir kavram yoktur. Bir referans tanımlandığı zaman bir nesnenin yerine geçmelidir. 
 
-C++'ta referans semantiğinin bulunması göstericilere olan tüm ihtiyacı ortadan kaldırmamıştır. Ancak C++ dilinin C dilinde olmayan birçok aracıyla uyumlu olması için gösterici yerine referans kullanımı tercih edilir.
+`C++`'ta referans semantiğinin bulunması göstericilere olan tüm ihtiyacı ortadan kaldırmamıştır. Ancak `C++` dilinin `C` dilinde olmayan birçok aracıyla uyumlu olması için gösterici yerine referans kullanımı tercih edilir.
