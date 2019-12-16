@@ -160,7 +160,7 @@ enum BufferSize{DefaultSize = 10000000, LargeSize = 20000000};
 ```
 Yukarıdaki bildirimde ise BufferSize türü için derleyici baz tür olarak `C++03`'te `int` türünü seçecektir. Numaralandırma türlerine ilişkin baz türlerinin derleyiciden derleyiciye değişebilmesi hem taşınabilirlik sorunları oluşturuyor hem de bir numaralandırma türünün ön bildiriminin `(forward declaration)` yapılmasını engelliyor.
 
-C++11 standartlarıyla bu konuda önemli değişiklikler yapıldı:
+`C++11` standartlarıyla bu konuda önemli değişiklikler yapıldı:
 
 + Hem düz numaralandırma türleri hem de numaralandırma sınıfları için bildirimde ya da tanımda baz tür belirlenebiliyor. Aşağıdaki örneklere bakalım:
 
@@ -183,13 +183,13 @@ enum class ImageWidth : unsigned long;
 ```
 Yukarıdaki kodda tanımlanan düz `enum Suit` türünün baz türü olarak `unsigned char` türü seçilmiş. Baz türün `enum` etiketi olarak seçilen isimden sonra gelen `":"` atomunu izlediğini görüyorsunuz.
 Numaralandırma sınıfı olarak tanımlanan `BufferSize` türünde ise baz tür olarak `unsigned int` seçilmiş.
-Düz numaralandırma türü olan `Color` yalnızca bildirilmiş ancak tanımlanmamış. `C++11` öncesinde numaralandırma türlerine ilişkin ön bildirim yapılamıyordu. Bildirimde baz tür olarak unsigned char türü seçilmiş.
+Düz numaralandırma türü olan `Color` yalnızca bildirilmiş ancak tanımlanmamış. `C++11` öncesinde numaralandırma türlerine ilişkin ön bildirim yapılamıyordu. Bildirimde baz tür olarak `unsigned char` türü seçilmiş.
 Düz numaralandırma türü olan `Font` yalnızca bildirilmiş ancak tanımlanmamış. Bildirimde baz tür belirtilmediği için bildirim geçersiz.
 Numaralandırma sınıfı olarak bildirilen `ErrorCode` türünde baz tür belirtilmemiş. Baz tür varsayılan biçimde `int` türü kabul edilecek.
-Numaralandırma sınıfı olarak bildirilen `ImageWidth` türünde baz tür olarak unsigned long türünün seçildiği belirtilmiş.
+Numaralandırma sınıfı olarak bildirilen `ImageWidth` türünde baz tür olarak `unsigned long` türünün seçildiği belirtilmiş.
 
 ## ön bildirim neden önemli?
-Kodla tanımlanan türler (user defined types) söz konusu olduğunda derleyici bir türün tanımını görmese de o türün bildirimine dayanarak belirli bağlamlarda kullanımını geçerli kabul eder. Derleyicinin varlığından haberdar olduğu ancak henüz tanımını görmediği bir türe "tamamlanmamış tür" (incomplete type) denir. Tamamlanmamış türlerden gösterici değişkenler tanımlanabilir ya da tamamlanmamış türler işlev bildirimlerinde kullanılabilir. Tamamlanmamış türleri belirli bağlamlarda kullanabilmek için derleyici bu türlerin ön bildirimini görmelidir. Bir türü ön bildirimle kullanabildiğimiz durumlarda bu türün tanımını içeren başlık dosyasını kendi kodumuza dahil etmemiz gerekmez. Bu durumda başlık dosyalarının birbirine bağımlılığı ortadan kaldırıldığı gibi derleme süreleri kısalır. Ayrıca başlık dosyasından gelecek isimlerin çakışma riski ortadan kalkmış olur. Aslında tıpki gösterici değişkenlerde olduğu gibi numaralandırma türlerinden değişkenleri de numaralandırma türünün tanımını derleyiciye göstermeden tanımlayabiliriz. Ancak bunun için derleyicinin söz konusu numaralandırma türü için bellekte kaç byte yer ayrılacağını bilmesi gerekir. Aşağıdaki koda bakalım:
+Kodla tanımlanan türler `(user defined types)` söz konusu olduğunda derleyici bir türün tanımını görmese de o türün bildirimine dayanarak belirli bağlamlarda kullanımını geçerli kabul eder. Derleyicinin varlığından haberdar olduğu ancak henüz tanımını görmediği bir türe "tamamlanmamış tür" `(incomplete type)` denir. Tamamlanmamış türlerden gösterici değişkenler tanımlanabilir ya da tamamlanmamış türler işlev bildirimlerinde kullanılabilir. Tamamlanmamış türleri belirli bağlamlarda kullanabilmek için derleyici bu türlerin ön bildirimini görmelidir. Bir türü ön bildirimle kullanabildiğimiz durumlarda bu türün tanımını içeren başlık dosyasını kendi kodumuza dahil etmemiz gerekmez. Bu durumda başlık dosyalarının birbirine bağımlılığı ortadan kaldırıldığı gibi derleme süreleri kısalır. Ayrıca başlık dosyasından gelecek isimlerin çakışma riski ortadan kalkmış olur. Aslında tıpki gösterici değişkenlerde olduğu gibi numaralandırma türlerinden değişkenleri de numaralandırma türünün tanımını derleyiciye göstermeden tanımlayabiliriz. Ancak bunun için derleyicinin söz konusu numaralandırma türü için bellekte kaç `byte` yer ayrılacağını bilmesi gerekir. Aşağıdaki koda bakalım:
 
 ```
 //fileoperations.h
@@ -202,7 +202,7 @@ private:
 	///
 };
 ```
-fileoperations.h isimli başlık dosyasında tanımlanan File isimli sınıfın private veri öğelerinden biri ErrorCode numaralandırma türünden. ErrorCode türünün ön bildirimi yapılmış ve bildirimde baz türün unsigned int türü olduğu belirtilmiş. C++11 öncesinde File sınıfının tanımının geçerli olabilmesi için derleyicinin ErrorCode türünün de tanımını görmesi gerekirdi. ErrorCode türünün error.h isimli bir başlık dosyasında tanımlandığını kabul edelim. Bu durumda fileoperations.h başlık dosyası error.h başlık dosyasını dahil edecekti:
+`fileoperations.h` isimli başlık dosyasında tanımlanan `File` isimli sınıfın `private` veri öğelerinden biri `ErrorCode` numaralandırma türünden. `ErrorCode` türünün ön bildirimi yapılmış ve bildirimde baz türün `unsigned int` türü olduğu belirtilmiş. `C++11` öncesinde `File` sınıfının tanımının geçerli olabilmesi için derleyicinin `ErrorCode` türünün de tanımını görmesi gerekirdi. `ErrorCode` türünün `error.h` isimli bir başlık dosyasında tanımlandığını kabul edelim. Bu durumda `fileoperations.h` başlık dosyası `error.h` başlık dosyasını dahil edecekti:
 
 ```
 //fileoperations.h
@@ -215,9 +215,9 @@ private:
 	///
 };
 ```
-Oysa C++11 kurallarına göre artık ErrorCode türünün ön bildirimi bu türden bir veri öğesini kullanabilmemiz için yeterli. Şimdi kazandığımız avantajlara bir bakalım:
-fileoperations.h başlık dosyasını dahil eden müşteri kodları ErrorCode türünün tanımını içeren başlık dosyasını dahil etmeyecekler. Böylece
-i) Derleme süresi kısalacak.
-ii) error.h başlık dosyasında tanımlanan numaralandırma sabitleri olan isimler müşteri kodlar tarafından görülmeyeceği için isim çakışması riski söz konusu olmayacak: ErrorCode türünde onlarca numaralandırma sabiti tanımlanmış olabilir, değil mi?
-iii) error.h başlık dosyasındaki değişimler fileoperations.h dosyasını dahil eden kodların değiştirilmesini ya da bu kodların yeniden derlenmesini gerektirmeyecek.
+Oysa `C++11` kurallarına göre artık `ErrorCode` türünün ön bildirimi bu türden bir veri öğesini kullanabilmemiz için yeterli. Şimdi kazandığımız avantajlara bir bakalım:
+`fileoperations.h` başlık dosyasını dahil eden müşteri kodları `ErrorCode` türünün tanımını içeren başlık dosyasını dahil etmeyecekler. Böylece
++ Derleme süresi kısalacak.
++ `error.h` başlık dosyasında tanımlanan numaralandırma sabitleri olan isimler müşteri kodlar tarafından görülmeyeceği için isim çakışması riski söz konusu olmayacak: `ErrorCode` türünde onlarca numaralandırma sabiti tanımlanmış olabilir, değil mi?
++ `error.h` başlık dosyasındaki değişimler `fileoperations.h` dosyasını dahil eden kodların değiştirilmesini ya da bu kodların yeniden derlenmesini gerektirmeyecek.
 
