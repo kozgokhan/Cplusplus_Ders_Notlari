@@ -227,5 +227,225 @@ int main()
 ```
 
 Bir `unique_ptr` nesnesine `nullptr` değerinin atanması nesnenin `reset` işlevinin çağrılmasına eşdeğerdir.
-devam edecek
+
+#### nesne kaynağı ve boşaltım havuzu
+Sahipliğin devredilebilmesi `unique_ptr` nesnelerine özel bir kullanım alanı sunar: İşlevler dinamik nesnelerin sahipliğini `unique_ptr` nesneleri ile başka işlevlere aktarabilirler.
+
+Bu iki ayrı yolla olabilir:
+
+1. Bir işlev bir veri boşaltım havuzu `(sink)` olarak kullanılabilir.
+
+Bu durumda, çağrılan işlevin parametre değişkeni kendisine sağ taraf değeri olarak gönderilen `unique_ptr` nesnesinin kaynağını devralır. Böylece, işlev sahipliğini devraldığı nesnenin sahipliğini yeniden bir başka koda devretmez ise işlevin kodunun çalışması sonlandığunda `unique_ptr` nesnesinin sahiplendiği dinamik nesne silinir:
+
+```
+#include <memory>
+
+class Myclass {
+	//
+};
+
+void sink(std::unique_ptr<Myclass> up) // sink işlevi sahipliği devralır
+{
+	///
+}
+
+int main()
+{
+	std::unique_ptr<Myclass>up(new Myclass);
+	sink(std::move(up)); // up nesnesi sahipliği bırakır
+	//
+}
+```
+
+2. Bir işlev nesne kaynağı `(factory)` olarak davranabilir. `unique_ptr` geri döndürüldüğünde geri döndürülen sınıf nesnesinin sahipliği işlevi çağıran koda devredilir. Aşağıdaki örnek bu tekniği gösteriyor:
+
+```
+#include <memory>
+
+class Myclass {
+	//
+};
+
+std::unique_ptr<Myclass> source()
+{
+	std::unique_ptr<Myclass> ptr(new Myclass); // ptr dinamik nesnenin sahibi
+	///
+	return ptr; // sahiplik çağıran işleve devrediliyor.
+}
+
+void g()
+{
+	std::unique_ptr<Myclass> p;
+
+	for (int i = 0; i<10; ++i) {
+		p = source(); // p geri döndürülen nesnenin sahipliğini alır 
+		//f işlevinin geri döndürdüğü bir önceki nesne silinir
+
+	}
+	// p'nin son sahip olduğu nesne silinir.
+}
+```
+`source` işlevi her çağrıldığında `new` işleciyle dinamik bir Myclass nesnesi yaratılmış olur ve source işlevi bu nesneyi sahipliği ile birlikte kendisini çağıran koda gönderir.
+İşlevin geri dönüş değerinin `p` isimli unique_ptr nesnesine atanması dinamik nesnenin mülkiyetini bu nesneye devreder. Döngünün ikinci ve daha sonraki turlarında `p` nesnesine yapılan her atama `p`'nin daha önce sahiplendiği dinamik nesneyi siler.
+
+`g` işlevinin çıkışında p nesneninin ömrü sona erdiğinden `p` için çağrılan sonlandırıcı işlevin çağrılması `p`'nin sahipliğini üstlendiği son dinamik `Myclass` nesnesinin de `delete` edilmesini sağlar. Bir kaynak sızıntısı mümkün değildir. İşlev içinden bir hata nesnesi gönderilse dahi, bir `unique_ptr` nesnesinin sahibi olduğu dinamik nesne silinecektir.
+
+#### unique_ptr nesnelerinin veri öğesi olarak kullanılması
+`unique_ptr` nesnelerinin sınıfların veri öğeleri yapılmasıyla kaynak sızıntıları engellenebilir. Ham göstericiler yerine akıllı göstericilerin kullanılması durumunda sonlandırıcı işleve gerek kalmaz. Nesnenin ömrünün bitmesiyle, veri elemanı olan akıllı gösterici nesnelerinin de hayatı sonlanacak bu da dinamik nesnelerin delete edilmesini sağlayacaktır. Ayrıca `unique_ptr` nesnelerinin kullanılmasıyla bir sınıf nesnesinin hayat başlama sürecinde bir hata nesnesini gönderilmesi durumunda kaynak sızıntısı engellenmiş olur. Bir sınıf nesnesi için sonlandırıcı işlevin çağrılabilmesi için söz konusu nesnenin kurucu işlevinin kodu tamamen çalışmış olmalıdır. Kurucu işlev içinden bir hata nesnesi gönderilirse yalnızca kurulumu tamamlanmış veri öğeleri olan sınıf nesneleri için sonlandırıcı işlev çağrılacaktır. Eğer sınıfın birden fazla ham gösterici veri öğesi var ise, birinci `new` işlemi başarılı olduktan sonra ikincisi başarısız olursa kaynak sızıntısı oluşur.
+
+Örneğin:
+
+```
+class A {
+public:
+	A(int);
+};
+
+class B {
+private:
+	A* ptr1; // gösterici veri öğeleri
+	A* ptr2;
+public:
+	// göstericilere ilk değer veren kurucu işlev 
+	// - ikinci new hata nesnesi gönderirse kaynak sızıntısı oluşur.
+
+	B(int val1, int val2) : ptr1(new A(val1)), ptr2(new A(val2)) {}
+	// kopyalayan kurucu işlev
+	// ikinci new hata gönderirse kaynak sızıntısı olur
+	B(const B& x) : ptr1(new A(*x.ptr1)), ptr2(new A(*x.ptr2)) {}
+
+	// atama işlevi
+	const B& operator= (const B& x) 
+	{
+		*ptr1 = *x.ptr1;
+		*ptr2 = *x.ptr2;
+		return *this;
+	}
+
+	~B()
+	{
+		delete ptr1;
+		delete ptr2;
+	}
+};
+```
+
+Bu tür bir kaynak sızınıtısını önlemek için `unique_ptr` sınıf nesneleri kullanılabilir:
+
+```
+#include<memory>
+
+class A {
+public:
+	A(int);
+};
+
+class B {
+private:
+	std::unique_ptr<A>ptr1; // unique_ptr veri öğeleri
+	std::unique_ptr<A>ptr2; // unique_ptr veri öğeleri
+public:
+	// kurucu işlevler unique_ptr veri öğelerine ilk değer verir
+	// kaynak sızıntısı mümkün değildir
+	B(int val1, int val2): ptr1(new A(val1)), ptr2(new A(val2)) {}
+
+	// kopyalayan kurucu işlev
+	// kaynak sızıntısı mümkün değildir
+	B(const B &x) : ptr1(new A(*x.ptr1)), ptr2(new A(*x.ptr2)) {}
+	// atama işlevi
+	const B& operator= (const B&x)
+	{
+		*ptr1 = *x.ptr1;
+		*ptr2 = *x.ptr2;
+		return *this;
+	}
+	// sonlandırıcı işleve gereke kalmaz
+	// Derleyici tarafından yazılan sonlandırıcı işlev
+	//ptr1 ve ptr2 göstericilerinin nesnelerini delete eder
+};
+```
+
+Artık sonlandırıcı işleve gerek kalmaz çünkü `unique_ptr` nesnelerinin sonlandırıcı işlevleri dinamik `A` nesnelerinin delete edilmesini sağlar.
+`B` sınıfı için kopyalayan kurucu işlevin ve kopyalayan atama işlevinin de yazılması gerekir. Çünkü öğe olarak kullanılan unique_ptr nesneleri derleyicini yazacağı kodla kopyalanamaz. Eğer bu işlevler tanımlanamaz ise B sınıfı türünden nesneler kopyalanamaz yalnızca taşınabilir.
+
+#### unique_ptr ve diziler
+Bir `unique_ptr` nesnesi aşağıdaki durumlarda sahip olduğu nesneyi `delete` eder:
+
+* `unique_ptr` nesnesinin hayatı sona erdiğinde
+* `unique_ptr` nesnesine yeni bir `unique_ptr` değeri atandığında
+* `unique_ptr` nesnesine `nullptr` değeri atandığında
+* `unique_ptr` nesnesi için sınıfın `reset` işlevi çağrıldığında
+
+Bu durumlarda silme işlemi `delete` işleci ile yapılmaktadır.
+Ne yazık ki C dilinden gelen kurallar nedeniyle bir göstericinin tek bir nesneyi mi yoksa bir diziyi mi gösterdiği bilinemez. Ancak dinamik dizilerin silinmesi `delete` işleci ile değil `delete[]` işleci ile yapılmalıdır. Dinamik bir dizinin `delete` işleci ile sonlandırılması çalışma zamanı hatasıdır. Aşağıdaki kod geçerli olsa da çalışma zamanı hatasına neden olur:
+
+```
+std::unique_ptr<std::string>up(new std::string[10]); // çalışma zamanı hatası
+```
+
+`shared_ptr` sınıfı için diziler için silme işlemini gerçekleştirecek özel bir `deleter` türünün kullanılması zorunludur. İstersek `unique_ptr` sınıfı için de bu araçla bir `deleter` oluşturabiliriz. Ama buna gerek yoktur.
+C++ standard kütüphanesi `unique_ptr` sınıfını dizi türleri için özelleştirmiştir . Dizi türleri için yapılan özelleştirme sahiplik sona erdiğinde delete işleci yerine `delete[]` işlecini kullanır.
+Eğer bir `unique_ptr` nesnesi dinamik bir diziyi gösterecekse bildirim aşağıdaki gibi yapılmalıdır:
+
+```
+std::unique_ptr<std::string[]> up(new std::string[10]); // OK
+```
+
+Ancak bu özelleştirmede sunulan arayüz birincil şablondakinden  farklıdır.  `operator*` ve `operator->' işlevleri yerine 'operator[]` işlevi sunulmuştır.
+
+```
+std::unique_ptr<std::string[]> up(new std::string[10]); //
+std::cout << *up << std::endl; //Geçersiz * işlemi diziler için tanımlı değil.
+std::cout << up[0] << std::endl; // Geçerli
+```
+Köşeli parantez işlevine gönderilen indisin geçerli bir değerde olmasından programcı sorumludur. Geçersiz bir indis değeri çalışma zamanı hatasına neden olur.
+Bu özelleştirilmiş sınıf taban sınıf türünden bir akıllı  göstericinin türemiş sınıf türünden bir diziyle başlatılmasına da izin vermez. Yani çalışma zamanı çokbiçimliliği dizilerde `unique_ptr` sınıfı yoluyla desteklenmemektedir.
+
+#### default_delete sınıfı
+`unique_ptr` sınıf şablonunun (basitleştirilmiş) tanımı aşağıdaki gibidir:
+
+```
+namespace std {
+	// birincil şablon
+	template <typename T, typename D = default_delete<T>>
+	class unique_ptr
+	{
+	public:
+		T& operator*() const;
+		T* operator->() const noexcept;
+	};
+
+// dizi türleri için kısmi özellştirme:
+	template<typename T, typename D>
+	class unique_ptr<T[], D>
+	{
+	public:
+		T& operator[](size_t i) const;
+	};
+}
+```
+
+Yukarıdaki kodda `unique_ptr` sınıfının diziler için özelleştirilmesi görülüyor. Tanımdan da görüldüğü gibi özelleştirilmiş sınıfın arayüzünde `operator*` işlevi ve `operator->` işlevi yer almamakta fakat `operator[]` işlevi bulunmaktadır. `unique_ptr` sınıfının standart kütüphanede bulunan gerçekleştirimi `operator*` ve `operator->` işlevlerini geri dönüş değerleri türlerinin tam olarak elde edilebilmesi için bazı şablon hileleri kullandığından biraz daha karmaşıktır.
+Özelleştirilmiş sınıf için kullanılacak `std::default_delete<>` sınıfı silme işlemini delete yerine `delete[]` ile yapar:
+
+```
+namespace std {
+	// birincil şablon
+	template<typename T>
+	class default_delete {
+	public:
+		void operator()(T* p) const; // delete p işlemini yapar
+	};
+
+	// dizi türleri için kısmi özelleştirme:
+	template <typename T>
+	class default_delete<T[]> {
+	public:
+		void operator()(T* p) const; // delete[] p işlemini yapar
+	};
+}
+```
+
+Varsayılan şablon tür argumanları otomatik olarak özelleştirmelere de uygulanmaktadır.
+
 
