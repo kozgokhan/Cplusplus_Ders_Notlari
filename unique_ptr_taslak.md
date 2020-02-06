@@ -122,21 +122,20 @@ if (uptr) { // uptr dinamik bir nesneye sahip ise
 	std::cout << *uptr << std::endl;
 }
 ```
-Bir unique_ptr nesnesinin dinamik bir nesnenin sahibi olup olmadığı unique_ptr nesnesninin nullptr değerine eşitliği ile de sınanabilir:
+Bir `unique_ptr` nesnesinin dinamik bir nesnenin sahibi olup olmadığı `unique_ptr` nesnesninin `nullptr` değerine eşitliği ile de sınanabilir:
 
 ```
 if (uptr != nullptr) // uptr dinamik bir nesneye sahip ise
 ```
 
-unique_ptr nesnesininin veri elemanı olarak tuttuğu ham göstericinin değerinin nullptr değerine eşitliğiyle de aynı sınama gerçekleştirilebilir:
+`unique_ptr` nesnesininin veri elemanı olarak tuttuğu ham göstericinin değerinin `nullptr` değerine eşitliğiyle de aynı sınama gerçekleştirilebilir:
 ```
 if (uptr.get() != nullptr) // uptr bir nesneye sahip ise
 ```
 
-unique_ptr ile sahipliğin devredilmesi
-unique_ptr sınıfı tek sahiplik semantiğini uygular.
-Sınıfın kopyalayan kurucu işlevi (copy constructor) ve kopyalayan atama işlevi (copy assignment function) delete edilerek sınıf kopyalamaya karşı kapatılmıştır.
-Ancak birden fazla unique_ptr nesnesinin aynı dinamik nesnesini adresiyle başlatılmaması programcının sorumluluğundadır:
+#### unique_ptr ile sahipliğin devredilmesi
+`unique_ptr` sınıfı tek sahiplik semantiğini uygular.
+Sınıfın kopyalayan kurucu işlevi `(copy constructor)` ve kopyalayan atama işlevi `(copy assignment function)` `delete` edilerek sınıf kopyalamaya karşı kapatılmıştır. Ancak birden fazla `unique_ptr` nesnesinin aynı dinamik nesnesini adresiyle başlatılmaması programcının sorumluluğundadır:
 
 ```
 #include <string>
@@ -153,8 +152,7 @@ int main()
 ```
 
 Yukarıdaki gibi bir kod çalışma zamanı hatasına neden olur. Kodlayıcıların böyle hatalardan kaçınması gerekir.
-Peki, unique_ptr sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama semantiğiyle hayata başlatamamayız ve bir unique_ptr nesnesine kopyalama semantiğiyle atama yapamayız.
-unique_ptr sınıfında taşıma semantiği kullanılmaktadır. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin devredilmesini sağlar:
+Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama semantiğiyle hayata başlatamamayız ve bir `unique_ptr` nesnesine kopyalama semantiğiyle atama yapamayız. `unique_ptr` sınıfında taşıma semantiği kullanılmaktadır. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin devredilmesini sağlar:
 
 Kopyalayan kurucu işlevin kullanıldığını düşünelim:
 
@@ -170,8 +168,8 @@ std::unique_ptr<Myclass> up2(up1); // Geçersiz
 std::unique_ptr<Myclass> up3(std::move(up1)); // Geçerli
 ```
 	
-İlk deyimden sonra, up1 new işleciyle hayata getirilmiş nesnenin sahibi olur.
-Kopyalayan kurucu işlev gerektiren ikinci deyim sentaks hatasıdır. İkinci bir unique_ptr nesnesinin aynı dinamik Myclass nesnesinin sahipliğini almasına izin verilmez. Aynı zamanda tek bir sahibe izin verilmektedir. Ancak üçüncü deyimle sahiplik up1 nesnesinden up3 nesnesine devredilir. Artık up1 nesnesi sahipliği bırakmıştır.  new işleciyle hayata getirilmiş Myclass nesnesi up3′ün hayatının bitmesiyle delete edilir. Atama işleci de benzer şekilde davranır:
+İlk deyimden sonra, `up1` `new` işleciyle hayata getirilmiş nesnenin sahibi olur.
+Kopyalayan kurucu işlev gerektiren ikinci deyim sentaks hatasıdır. İkinci bir `unique_ptr` nesnesinin aynı dinamik `Myclass` nesnesinin sahipliğini almasına izin verilmez. Aynı zamanda tek bir sahibe izin verilmektedir. Ancak üçüncü deyimle sahiplik `up1` nesnesinden `up3` nesnesine devredilir. Artık `up1` nesnesi sahipliği bırakmıştır.  new işleciyle hayata getirilmiş `Myclass` nesnesi `up3`'ün hayatının bitmesiyle delete edilir. Atama işleci de benzer şekilde davranır:
 
 ```
 #include <memory>
@@ -189,9 +187,7 @@ int main()
 }
 ```
 	
-Burada atama operatör işlevi sahipliği up1 nesnesinden up2 nesnesine devreder. Sonuç olarak, daha önce sahibi up1 olan dinamik nesnenin artık yeni sahibi up2‘dir.
-C++11 öncesinde kullanılan auto_ptr sınıfında bu işlem doğrudan kopyalama semantiği ile yapılıyor bu da bir çok soruna neden oluyordu.
-Eger up2 nesnesi atamadan önce bir dinamik nesnenin sahibi olsa idi bu dinamik nesne atamadan önce delete edilecekti:
+Burada atama operatör işlevi sahipliği `up1` nesnesinden `up2` nesnesine devreder. Sonuç olarak, daha önce sahibi `up1` olan dinamik nesnenin artık yeni sahibi `up2`'dir. `C++11` öncesinde kullanılan `auto_ptr` sınıfında bu işlem doğrudan kopyalama semantiği ile yapılıyor bu da bir çok soruna neden oluyordu. Eger `up2` nesnesi atamadan önce bir dinamik nesnenin sahibi olsa idi bu dinamik nesne atamadan önce delete edilecekti:
 
 ```
 #include <memory>
@@ -211,8 +207,8 @@ int main()
 }
 ```
 	
-Yeni bir sahiplik edinmeden sahip olduğu nesneyi bırakan bir unique_ptr nesnesi hiçbir nesneyi göstermez.
-Bir unique_ptr nesnesnine başka bir unique_ptr nesnesinin değeri taşınarak tanmalıdır. unique_ptr nesnelerine normal adresler atanamaz.
+Yeni bir sahiplik edinmeden sahip olduğu nesneyi bırakan bir `unique_ptr` nesnesi hiçbir nesneyi göstermez.
+Bir `unique_ptr` nesnesnine başka bir `unique_ptr` nesnesinin değeri taşınarak tanmalıdır. `unique_ptr` nesnelerine normal adresler atanamaz.
 
 ```
 #include <memory>
@@ -230,6 +226,6 @@ int main()
 }
 ```
 
-Bir unique_ptr nesnesine nullptr değerinin atanması nesnenin reset işlevinin çağrılmasına eşdeğerdir.
+Bir `unique_ptr` nesnesine `nullptr` değerinin atanması nesnenin `reset` işlevinin çağrılmasına eşdeğerdir.
 devam edecek
 
