@@ -29,4 +29,31 @@ Böyle bir işlev sorunlara yol açabilir. Sorunlardan biri dinamik nesnenin hay
 Başlangıçta kolayca görülüyor olmasa da bir başka sorun da bir fonksiyondan hata nesnesinin `(exception)` gönderilmesidir. Bir hata nesnesi gönderildiğinde programın akışı işlevden çıkacak böylece `delete` deyimi yürütülmeyecektir. Bu durum bir bellek sızıntısına `(memory leak)` neden olabileceği gibi daha genel olarak bir kaynak sızıntısına `(resource leak)` yol açabilir.
 
 Gönderilebilecek tüm hata nesnelerinin yine işlev tarafından yakalanması oluşabilecek kaynak sızıntısı engelleyebilir:
+```
+void f()
+{
+	class ResourceUser *ptr = new class ResourceUser; // bir nesne oluşturuluyor
+	try {
+		// bazı işlemler yapılıyor
+	}
+	catch (...) { // hata nesneleri yakalanıyor
+		delete ptr; // kaynaklar geri veriliyor
+		throw; // hata nesnesi yeniden gönderiliyor
+	}
+ 
+	delete ptr; // işlevden normal olarak çıkılırsa dinamik nesnenin hayatı sonlandırılıyor.
+}
+```
+
+Bir hata nesnesinin gönderilmesi durumunda da kaynakların güvenli bir şekilde geri verilmesi sağlanmak istenirse hem daha fazla kod yazılması gerekir hem de  yazılan kod çok daha karmaşık hale gelir. Dinamik olarak yaratılan nesnelerin sayısı birden fazla ise çok daha karışık bir durumun oluşacağı açıktır. Hata oluşumuna açık olan ve gereksiz bir karmaşıklığa neden olan bu kötü kodlama stilinden kaçınılmalıdır.
+
+Bu amaçla tasarlanabilecek bir akıllı gösterici `(smart pointer)` sınıfı sorunu çözebilir. Bir akıllı gösterici nesnesinin kendi sonlandırıcı işlevinin çağrılmasıyla, akıllı göstericinin yönettiği dinamik nesnenin de hayatı sonlandırılabilir. Yerel bir akıllı gösterici nesnesi söz konusu olacağından artık işlevden ister normal yollarla ister bir hata nesnesi gönderilmesi yoluyla `(exception)` çıkılsın akıllı gösterici nesnesine bağlanmış olan dinamik nesnenin hayatı sonlanacak, böylece kaynak sızıntısı oluşmayacaktır.
+İşte `unique_ptr` sınıfı bu amaçla tanımlanmış bir akıllı gösterici sınıfıdır.
+
+`unique_ptr` sınıfı türünden bir nesne, gösterdiği dinamik nesnenin tek sahibi durumundadır.
+`unique_ptr` nesnenin hayatı sonlandığında yani bir unique_ptr nesnesinin sonlandırıcı işlevi çağrıldığında bu nesnenin sahip olduğu dinamik nesnenin de hayatı sonlandırılır, yani o dinamik nesne `delete` edilir.
+
+`unique_ptr` nesnesinin mülkiyetindeki dinamik nesnenin tek bir sahibi vardır ve bu semantik yapı kullanıcı kodlar tarafından da sürdürülmeli ve korunmalıdır.
+
+Daha önceki örneğe geri dönüyouz:
 
