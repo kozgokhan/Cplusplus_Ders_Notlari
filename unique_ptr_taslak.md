@@ -66,5 +66,28 @@ void f()
     // işlemler yapılıyor
 }
 ```
+Hepsi bu kadar. Artık hata yakalamaya ilişkin deyimlere gerek kalmadığı gibi `delete` işleci de kullanılmıyor.
 
+#### bir unique_ptr nesnesinin kullanımı
+`unique_ptr` sınıf şablonu bir göstericinin özelliklerini destekleyen bir arayüze sahiptir:
+İçerik `(dereferencing)` işlecinin kullanılmasıyla `unique_ptr` nesnesinin gösterdiği dinamik nesneye erişilebilir.
+`unique_ptr` nesnesinin gösterdiği dinamik nesnenin öğelerine ok işleciyle erişmek de mümkündür. Aşağıdaki kodu inceleyin:
+```
+#include <iostream>
+#include <string>
+#include <memory>
+ 
+int main()
+{
+	// oluşturulan unique_ptr nesnesine dinamik bir string nesnesi ile ilkdeğer veriliyor:
+ 
+	std::unique_ptr<std::string> uptr(new std::string("Maya"));
+	(*uptr)[0] = 'K'; // Yazının ilk karakteri değiştiriliyor
+	uptr->append("can"); // Yazının sonuna karakterler ekleniyor.
+	std::cout << *uptr << std::endl; // yazı yazdırılıyor.
+ 
+	return 0;
+}
+```
+devam edecek
 
