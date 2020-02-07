@@ -443,4 +443,361 @@ namespace std {
 
 Varsayılan şablon tür argumanları otomatik olarak özelleştirmelere de uygulanmaktadır.
 
+#### make_unique işlev şablonu
+Hatırlayacağımız gibi `unique_ptr` sınıf şablonu dile `C++1` standartlarıyla eklenmişti. Ancak `C++11` standartlarında `make_unique` işlev şablonu yer almıyordu. Bu eksiklik `C++14` standartlarıyla karşılandı. Mükemmel gönderim `(perfect forwarding)` mekanizmasından faydalanan `make_unique` değişken sayıda parametreli `(variadic)` işlev şablonu, bir `unique_ptr` nesnesini sarmalayarak geri döndürüyor:
 
+```
+template <class T, class... Args>
+unique_ptr<T> make_unique(Args&&... args);
+```
+
+Bu işlev şablonunun aşağıdaki gibi gerçeklendiğini düşünebiliriz:
+
+```
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+	return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+```
+
+
+İşleve kontrol edilecek dinamik nesnenin kurucu işlevinin kullanacağı argümanlar gönderiliyor. Aşağıdaki örneğe bakalım:
+
+```
+#include <memory>
+#include <string>
+#include <iostream>
+
+int main()
+{
+        using namespace std;
+	auto up = make_unique<string>(10, 'A');
+	cout << *up << "\n";
+	//...
+}
+```
+
+Yukarıdaki kodda `make_unique` işlev şablonundan üretilecek bir işlevle `string` sınıfının `size_t` ve `char` parametreli kurucu işlevine `10` ve `'A'` değerleri gönderilerek önce dinamik ömürlü bir `string` nesnesi hayata getiriliyor. Daha sonra hayata gelen dinamik nesneyi kontrol eden bir `unique_ptr` nesnesi geri döndürülüyor.
+
+#### unique_ptr::get üye işlevi
+`unique_ptr` sınıfının `get` işlevinin geri dönüş değeri kontrol edilen dinamik nesnenin adresi. `unique_ptr` nesnemizin yaşamını kontrol ettiği bir dinamik nesne yoksa işlev `nullptr` adresini döndürüyor:
+
+```
+#include <memory>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	auto up = make_unique<string>(10, 'A');
+	cout << *up << "\n";
+	string *ptr = up.get();
+	cout << ptr->size() << "\n";
+}
+```
+
+Bu işlev dikkatli kullanılmalı. Örneğin bu işlevden elde edilen adresle yeni bir `unique_ptr` nesnesinin oluşturulması ya da bu adresteki nesnenin `delete` edilmesi çalışma zamanı hatasına neden olurdu:
+
+```
+int main()
+{
+	auto up1 = make_unique<string>(10, 'A');
+	string *ptr = up1.get();
+	unique_ptr<string> up2(ptr); 
+
+}
+```
+
+Yukarıdaki kodda hem `up1` hem de `up2` `unique_ptr` nesneleri aynı dinamik `string` nesnesini kontrol ediyor hale geliyor, böylece tek sahiplik `(exclusive ownwership)` ilkesi çiğneniyor. Her iki nesnenin de sonlandırıcı işlevi aynı dinamik `string` nesnesini `delete` edecek `(double deletion)` ve bu durumda çalışma zamanı hatası oluşacak. Benzer hataya aşağıdaki gibi bir kodla da düşülebilir:
+
+```
+int main()
+{
+	auto up = make_unique<string>(10, 'A');
+	string *ptr = up.get();
+	delete ptr;
+	//...
+}
+```
+
+Yukarıdaki kodda `get` işlevinden adresi alınan dinamik nesne `delete` ediliyor. `up` nesnesinin sonlandırıcı işlevi çağrıldığında aynı nesneyi yeniden `delete` edecek. Bu tanımsız davranış oluşturacak.
+
+#### deleter şablon tür parametresi
+`unique_ptr` sınıf şablonunun tanımını bir hatırlayalım:
+
+```
+template<
+    typename T,
+    typename Deleter = std::default_delete<T>
+> class unique_ptr;
+```
+
+Şablonumuzun ikinci tür parametresi olan `Deleter` türüne bağlı işleve yapılan çağrı hayatı kontrol edilen nesnenin `delete` edilmesini sağlıyor. Bu şablon tür parametresinin varsayılan tür argumanı olarak standart `default_delete` şablonunu aldığını görüyorsunuz. Bu durumda
+
+```
+std::unique_ptr<std::string> up;
+```
+
+gibi bir tanımlama
+
+```
+std::unique_ptr<std::string, std::default_delete<std::string>> up;
+```
+
+biçiminde bir tanımlamaya eşdeğer.
+
+`default_delete` sınıf şablonunun (basitleştirilmiş) kodunun şu şekilde olduğunu düşünebilirsiniz:
+
+```
+template <typename T>
+class default_delete {
+public:
+	void operator()(T* p) const
+	{
+		delete p;
+	}
+};
+```
+
+
+`default_delete` sınıf şablonu dizi türleri için kısmi özelleştirmeye `(partial specialization)` tabi tutulmuş. Bu özelleştirmeye ilişkin kodun aşağıdaki gibi olduğunu düşünebilirsiniz:
+
+```
+template <typename T>
+class default_delete<T[]> {
+public:
+	void operator()(T* p) const 
+	{
+		delete[]p;
+	}
+	//...
+};
+```
+
+
+Bu da şu anlama geliyor: `default_delete` sınıf şablonlarının kullanılmasıyla, `unique_ptr` nesnelerinin kontrol ettiği nesnelerin hayatları uygun biçimde `delete` ve `delete[]` işleçleriyle sonlandırılıyor.
+Eğer yaşamı kontrol edilen dinamik nesnenin hayatının sonlandırılması özelleştirilmiş bir şekilde gerçekleşecek ise bu durumda kendi deleter türümüzü şablon tür argümanı olarak kullanmak zorundayız. Bu amaçla global bir işlev, bir işlev sınıfı `(functor class)`, bir `lambda`, ya da bir işlev nesnesi kullanabiliriz. İlk örneğimizde global bir işlev kullanıyoruz:
+
+```
+#include <iostream>
+#include <memory>
+#include <string>
+
+class A {
+public:
+	A() { std::cout << "A ctor\n"; }
+	~A() { std::cout << "A dtor\n"; }
+	//..
+};
+
+void fdel(A *p)
+{
+	std::cout << p << " adresindeki nesne delete ediliyor\n";
+	delete p;
+}
+
+int main()
+{
+	using namespace std;
+
+	{
+		unique_ptr<A, void(*)(A *)> up(new A, &fdel);
+	}
+
+	cout << "main devam ediyor\n";
+	//...
+}
+```
+
+Yukarıdaki kodda `deleter` olarak kullandığımız global `fdel` isimli işlev, `delete` işleminden önce `delete` edilecek nesnenin adresini standart çıkış akımına yazdırıyor. Şimdi de aynı iş için bir `lambda` ifadesi kullanıyoruz:
+
+```
+int main()
+{
+	using namespace std;
+	auto f = [](A *p) {
+                 cout << p << " adresindeki nesne delete ediliyor\n"; delete p; };
+	{
+		unique_ptr<A, decltype(f)> up(new A, f);
+	}
+
+	cout << "main devam ediyor\n";
+	//...
+}
+```
+
+
+`lambda`'ya ilişkin kapanış sınıfının `(closure)` tür bilgisi için `decltype` işlecinin kullanımına dikkat ediniz. Şüphesiz bu iş için kendimiz de bir `functor` sınıf oluşturabilirdik:
+
+```
+struct ADeleter {
+	void operator()(A *p)const
+	{
+		std::cout << p << " adresindeki nesne delete ediliyor\n";
+		delete p;
+	}
+};
+
+int main()
+{
+	using namespace std;
+	{
+		unique_ptr<A, ADeleter> up(new A);
+	}
+
+	cout << "main devam ediyor\n";
+	//...
+}
+```
+
+Şimdi de `deleter` olarak `std::function` sınıf şablonunu kullanıyoruz:
+
+```
+#include <iostream>
+#include <memory>
+#include <string>
+#include <functional>
+
+class A {
+public:
+	A() { std::cout << "A ctor\n"; }
+	~A() { std::cout << "A dtor\n"; }
+	//..
+};
+
+struct ADeleter {
+	void operator()(A *p)const
+	{
+		std::cout << p << " adresindeki nesne delete ediliyor\n";
+		delete p;
+	}
+};
+
+void fdel(A *p)
+{
+	std::cout << p << " adresindeki nesne delete ediliyor\n";
+	delete p;
+}
+
+auto f = [](A *p) {
+	std::cout << p << " adresindeki nesne delete ediliyor\n"; delete p; };
+
+template<typename T>
+using UniquePtr = std::unique_ptr<T, std::function<void(T *)>>;
+
+int main()
+{
+	using namespace std;
+	{
+		UniquePtr<A> uptr1(new A, fdel);
+		UniquePtr<A> uptr2(new A, f);
+		UniquePtr<A> uptr3(new A, ADeleter());
+	}
+
+	cout << "main devam ediyor\n";
+	//...
+}
+```
+
+Yukarıdaki kodda yapılan şablon eş isim bildirimine dikkat ediniz. Bu bildirim ile `T` bir tür olmak üzere,
+
+```
+UniquePtr<T>
+```
+
+açılımı
+
+```
+std::unique_ptr<T, std::function<void(T *)>>
+```
+
+açılımına karşılık geliyor. "deleter" olarak
+
+```
+std::function<void (A *)>
+```
+
+sınıfının kullanılması ile artık `deleter` olarak uygun parametrik yapıda işlev sağlayan herhangi bir çağrılabilir varlık `(callable)` kullanılabilir hale geliyor.
+
+Bir `unique_ptr` nesnesinin yaşamını kontrol ettiği kaynağın `new` işleciyle oluşturulması zorunlu değil. Aşağıdaki kodda `unique_ptr` nesneleri standart `fopen` işleviyle oluşturulan dosyaları kontrol ediyor:
+
+```
+#include <cstdio>
+#include <cstdlib>
+#include <memory>
+
+using namespace std;
+
+FILE *fopen_write(const char *pfname)
+{
+	FILE *f = fopen(pfname, "w");
+	if (!f) {
+		fprintf(stderr, "%s dosyasi olusturulamadi\n", pfname);
+		exit(EXIT_FAILURE);
+	}
+	return f;
+}
+
+struct FileCloser {
+	void operator()(FILE *f) 
+	{
+		fclose(f);
+	}
+};
+
+void file_close(FILE *f)
+{
+	fclose(f);
+}
+
+int main()
+{
+	unique_ptr<FILE, void(*)(FILE *)> up1(fopen_write("necati.txt"), 
+                                          &file_close);
+	auto fc = [](FILE *f) {fclose(f); };
+	unique_ptr<FILE, decltype(fc)> up2(fopen_write("kaan.txt"), fc);
+	unique_ptr<FILE, FileCloser> up3(fopen_write("oguz.txt"));
+
+	fprintf(up1.get(), "necati ergin");
+	fprintf(up2.get(), "kaan aslan");
+	fprintf(up3.get(), "oguz karan");
+
+}
+```
+
+
+Yukarıdaki kodda `up1` nesnesi için `deleter` olarak standart `fclose` işlevini sarmalayan global file_close işlevini kullanılıyor. `up2` nesnesi için ise `deleter` olarak bir `lambda`'nın kullanıldığını görüyorsunuz. `up3` nesnesi ise `deleter` türü olarak `FileCloser` `functor` sınıfını kullanıyor.
+
+#### unique_ptr nesnelerinin kaplarda tutulması
+Dinamik ömre sahip nesneleri `STL` kaplarında tutmanın bir yolu da `unique_ptr` sınıf şablonunu kullanmak. Aşağıdaki kodu inceleyelim:
+
+```
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+using UpStrvec = std::vector<std::unique_ptr<std::string>>;
+
+int main()
+{
+	using namespace std;
+
+	unique_ptr<string> up{ new string {"kayhancan"} };
+	UpStrvec myvec;
+
+	myvec.push_back(move(up));
+	myvec.emplace_back(new string{ "necati" });
+	myvec.push_back(unique_ptr<string>{new string{ "kaan" }});
+	myvec.push_back(make_unique<string>(*myvec[0], 1, 5)); 
+
+	for (auto &up : myvec)
+		cout << *up << "\n";
+
+}
+```
+
+Yukarıdaki kodda önce içinde `std::unique_ptr<std::string>` sınıf nesnleri tutacak `std::vector` sınıf şablonu açılımına `UpStrvec` eş ismi veriliyor. `main` işlevi içinde `myvec` isimli bir `vector` nesnesinin oluşturulduğunu görüyorsunuz. `vector` sınıfının `push_back` ve `emplace_back` işlevleriyle `vector`'e sırasıyla kayhancan, `necati`, `kaan` ve `ayhan` isimleri ekleniyor. `myvec` nesnesi için sonlandırıcı işlev çağrıldığında kapta tutulmakta olan `unique_ptr` nesnelerinin de sonlandırıcı işlevleri çağrılacak ve böylece dinamik `string` nesneleri `delete` edilecek.
