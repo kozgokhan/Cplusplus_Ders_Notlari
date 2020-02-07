@@ -50,10 +50,10 @@ Bir hata nesnesinin gönderilmesi durumunda da kaynakların güvenli bir şekild
 Bu amaçla tasarlanabilecek bir akıllı gösterici `(smart pointer)` sınıfı sorunu çözebilir. Bir akıllı gösterici nesnesinin kendi sonlandırıcı işlevinin çağrılmasıyla, akıllı göstericinin yönettiği dinamik nesnenin de hayatı sonlandırılabilir. Yerel bir akıllı gösterici nesnesi söz konusu olacağından artık işlevden ister normal yollarla ister bir hata nesnesi gönderilmesi yoluyla `(exception)` çıkılsın akıllı gösterici nesnesine bağlanmış olan dinamik nesnenin hayatı sonlanacak, böylece kaynak sızıntısı oluşmayacaktır.
 İşte `unique_ptr` sınıfı bu amaçla tanımlanmış bir akıllı gösterici sınıfıdır.
 
-`unique_ptr` sınıfı türünden bir nesne, gösterdiği dinamik nesnenin tek sahibi durumundadır.
-`unique_ptr` nesnenin hayatı sonlandığında yani bir unique_ptr nesnesinin sonlandırıcı işlevi çağrıldığında bu nesnenin sahip olduğu dinamik nesnenin de hayatı sonlandırılır, yani o dinamik nesne `delete` edilir.
+`unique_ptr` sınıfı türünden bir nesne, gösterdiği dinamik ömürlü nesnenin tek sahibi durumundadır.
+`unique_ptr` nesnesinin hayatı sonlandığında yani bir `unique_ptr` nesnesinin sonlandırıcı işlevi çağrıldığında onun sahip olduğu dinamik nesnenin de hayatı sonlandırılır, yani o dinamik nesne `delete` edilir.
 
-`unique_ptr` nesnesinin mülkiyetindeki dinamik nesnenin tek bir sahibi vardır ve bu semantik yapı kullanıcı kodlar tarafından da sürdürülmeli ve korunmalıdır.
+Bir `unique_ptr` nesnesinin gösterdiği dinamik ömürlü nesneyi gösteren başka bir gösterici yoktur" ve bu semantik yapı kullanıcı kodlar tarafından da sürdürülmeli ve korunmalıdır.
 
 Daha önceki örneğe geri dönüyouz:
 ```
@@ -152,7 +152,7 @@ int main()
 ```
 
 Yukarıdaki gibi bir kod çalışma zamanı hatasına neden olur. Kodlayıcıların böyle hatalardan kaçınması gerekir.
-Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama semantiğiyle hayata başlatamamayız ve bir `unique_ptr` nesnesine kopyalama semantiğiyle atama yapamayız. `unique_ptr` sınıfında taşıma semantiği kullanılmaktadır. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin devredilmesini sağlar:
+Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama yoluyla hayata başlatamamayız ve bir `unique_ptr` nesnesine kopyalama yoluyla atama yapamayız. `unique_ptr` sınıfında yalnızca taşıma semantiği kullanılmaktadır. `unique_ptr`nesneleri kopyalanamaz ama taşınabilir. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin başka bir göstericiye devredilmesini sağlar:
 
 Kopyalayan kurucu işlevin kullanıldığını düşünelim:
 
@@ -208,7 +208,7 @@ int main()
 ```
 	
 Yeni bir sahiplik edinmeden sahip olduğu nesneyi bırakan bir `unique_ptr` nesnesi hiçbir nesneyi göstermez.
-Bir `unique_ptr` nesnesnine başka bir `unique_ptr` nesnesinin değeri taşınarak tanmalıdır. `unique_ptr` nesnelerine normal adresler atanamaz.
+Bir `unique_ptr` nesnesine başka bir `unique_ptr` nesnesinin değeri taşınarak atanmalıdır. `unique_ptr` nesnelerine adresler doğrudan atanamaz.
 
 ```
 #include <memory>
@@ -285,13 +285,12 @@ void g()
 	// p'nin son sahip olduğu nesne silinir.
 }
 ```
-`source` işlevi her çağrıldığında `new` işleciyle dinamik bir Myclass nesnesi yaratılmış olur ve source işlevi bu nesneyi sahipliği ile birlikte kendisini çağıran koda gönderir.
-İşlevin geri dönüş değerinin `p` isimli unique_ptr nesnesine atanması dinamik nesnenin mülkiyetini bu nesneye devreder. Döngünün ikinci ve daha sonraki turlarında `p` nesnesine yapılan her atama `p`'nin daha önce sahiplendiği dinamik nesneyi siler.
+`source` işlevi her çağrıldığında `new` işleciyle dinamik bir `Myclass` nesnesi yaratılmış olur ve source işlevi bu nesneyi sahipliği ile birlikte kendisini çağıran koda gönderir. İşlevin geri dönüş değerinin `p` isimli `unique_ptr` nesnesine atanması dinamik nesnenin mülkiyetini bu nesneye devreder. Döngünün ikinci ve daha sonraki turlarında `p` nesnesine yapılan her atama `p`'nin daha önce sahiplendiği dinamik nesneyi siler.
 
-`g` işlevinin çıkışında p nesneninin ömrü sona erdiğinden `p` için çağrılan sonlandırıcı işlevin çağrılması `p`'nin sahipliğini üstlendiği son dinamik `Myclass` nesnesinin de `delete` edilmesini sağlar. Bir kaynak sızıntısı mümkün değildir. İşlev içinden bir hata nesnesi gönderilse dahi, bir `unique_ptr` nesnesinin sahibi olduğu dinamik nesne silinecektir.
+`g` işlevinin çıkışında `p` nesneninin ömrü sona erdiğinden `p` için çağrılan sonlandırıcı işlevin çağrılması `p`'nin sahipliğini üstlendiği son dinamik `Myclass` nesnesinin de `delete` edilmesini sağlar. Bir kaynak sızıntısı mümkün değildir. İşlev içinden bir hata nesnesi gönderilse dahi, bir `unique_ptr` nesnesinin sahibi olduğu dinamik nesne silinecektir.
 
 #### unique_ptr nesnelerinin veri öğesi olarak kullanılması
-`unique_ptr` nesnelerinin sınıfların veri öğeleri yapılmasıyla kaynak sızıntıları engellenebilir. Ham göstericiler yerine akıllı göstericilerin kullanılması durumunda sonlandırıcı işleve gerek kalmaz. Nesnenin ömrünün bitmesiyle, veri elemanı olan akıllı gösterici nesnelerinin de hayatı sonlanacak bu da dinamik nesnelerin delete edilmesini sağlayacaktır. Ayrıca `unique_ptr` nesnelerinin kullanılmasıyla bir sınıf nesnesinin hayat başlama sürecinde bir hata nesnesini gönderilmesi durumunda kaynak sızıntısı engellenmiş olur. Bir sınıf nesnesi için sonlandırıcı işlevin çağrılabilmesi için söz konusu nesnenin kurucu işlevinin kodu tamamen çalışmış olmalıdır. Kurucu işlev içinden bir hata nesnesi gönderilirse yalnızca kurulumu tamamlanmış veri öğeleri olan sınıf nesneleri için sonlandırıcı işlev çağrılacaktır. Eğer sınıfın birden fazla ham gösterici veri öğesi var ise, birinci `new` işlemi başarılı olduktan sonra ikincisi başarısız olursa kaynak sızıntısı oluşur.
+`unique_ptr` nesnelerinin sınıfların veri öğeleri yapılmasıyla kaynak sızıntıları engellenebilir. Ham göstericiler yerine akıllı göstericilerin kullanılması durumunda sonlandırıcı işleve gerek kalmaz. Nesnenin ömrünün bitmesiyle, veri elemanı olan akıllı gösterici nesnelerinin de hayatı sonlanacak bu da dinamik nesnelerin `delete` edilmesini sağlayacaktır. Ayrıca `unique_ptr` nesnelerinin kullanılmasıyla bir sınıf nesnesinin hayat başlama sürecinde bir hata nesnesini gönderilmesi durumunda kaynak sızıntısı engellenmiş olur. Bir sınıf nesnesi için sonlandırıcı işlevin çağrılabilmesi için söz konusu nesnenin kurucu işlevinin kodu tamamen çalışmış olmalıdır. Kurucu işlev içinden bir hata nesnesi gönderilirse yalnızca kurulumu tamamlanmış veri öğeleri olan sınıf nesneleri için sonlandırıcı işlev çağrılacaktır. Eğer sınıfın birden fazla ham gösterici veri öğesi var ise, birinci `new` işlemi başarılı olduktan sonra ikincisi başarısız olursa kaynak sızıntısı oluşur.
 
 Örneğin:
 
@@ -365,8 +364,7 @@ public:
 };
 ```
 
-Artık sonlandırıcı işleve gerek kalmaz çünkü `unique_ptr` nesnelerinin sonlandırıcı işlevleri dinamik `A` nesnelerinin delete edilmesini sağlar.
-`B` sınıfı için kopyalayan kurucu işlevin ve kopyalayan atama işlevinin de yazılması gerekir. Çünkü öğe olarak kullanılan unique_ptr nesneleri derleyicini yazacağı kodla kopyalanamaz. Eğer bu işlevler tanımlanamaz ise B sınıfı türünden nesneler kopyalanamaz yalnızca taşınabilir.
+Artık sonlandırıcı işleve gerek kalmaz çünkü `unique_ptr` nesnelerinin sonlandırıcı işlevleri dinamik `A` nesnelerinin `delete` edilmesini sağlar. `B` sınıfı için kopyalayan kurucu işlevin ve kopyalayan atama işlevinin de yazılması gerekir. Çünkü öğe olarak kullanılan `unique_ptr` nesneleri derleyicini yazacağı kodla kopyalanamaz. Eğer bu işlevler tanımlanamaz ise `B` sınıfı türünden nesneler kopyalanamaz yalnızca taşınabilir.
 
 #### unique_ptr ve diziler
 Bir `unique_ptr` nesnesi aşağıdaki durumlarda sahip olduğu nesneyi `delete` eder:
@@ -383,23 +381,20 @@ Ne yazık ki C dilinden gelen kurallar nedeniyle bir göstericinin tek bir nesne
 std::unique_ptr<std::string>up(new std::string[10]); // çalışma zamanı hatası
 ```
 
-`shared_ptr` sınıfı için diziler için silme işlemini gerçekleştirecek özel bir `deleter` türünün kullanılması zorunludur. İstersek `unique_ptr` sınıfı için de bu araçla bir `deleter` oluşturabiliriz. Ama buna gerek yoktur.
-C++ standard kütüphanesi `unique_ptr` sınıfını dizi türleri için özelleştirmiştir . Dizi türleri için yapılan özelleştirme sahiplik sona erdiğinde delete işleci yerine `delete[]` işlecini kullanır.
-Eğer bir `unique_ptr` nesnesi dinamik bir diziyi gösterecekse bildirim aşağıdaki gibi yapılmalıdır:
+`shared_ptr` sınıfı için diziler için silme işlemini gerçekleştirecek özel bir `deleter` türünün kullanılması zorunludur. İstersek `unique_ptr` sınıfı için de bu araçla bir `deleter` oluşturabiliriz. Ama buna gerek yoktur. `C++` standart kütüphanesi `unique_ptr` sınıfını dizi türleri için özelleştirmiştir `(specialization)`. Dizi türleri için yapılan özelleştirme sahiplik sona erdiğinde `delete` işleci yerine `delete[]` işlecini kullanır. Eğer bir `unique_ptr` nesnesi dinamik bir diziyi gösterecekse bildirim aşağıdaki gibi yapılmalıdır:
 
 ```
 std::unique_ptr<std::string[]> up(new std::string[10]); // OK
 ```
 
-Ancak bu özelleştirmede sunulan arayüz birincil şablondakinden  farklıdır.  `operator*` ve `operator->' işlevleri yerine 'operator[]` işlevi sunulmuştır.
+Ancak bu özelleştirmede sunulan arayüz birincil şablondakinden farklıdır.  `operator*` ve `operator->' işlevleri yerine 'operator[]` işlevi sunulmuştır.
 
 ```
 std::unique_ptr<std::string[]> up(new std::string[10]); //
 std::cout << *up << std::endl; //Geçersiz * işlemi diziler için tanımlı değil.
 std::cout << up[0] << std::endl; // Geçerli
 ```
-Köşeli parantez işlevine gönderilen indisin geçerli bir değerde olmasından programcı sorumludur. Geçersiz bir indis değeri çalışma zamanı hatasına neden olur.
-Bu özelleştirilmiş sınıf taban sınıf türünden bir akıllı  göstericinin türemiş sınıf türünden bir diziyle başlatılmasına da izin vermez. Yani çalışma zamanı çokbiçimliliği dizilerde `unique_ptr` sınıfı yoluyla desteklenmemektedir.
+Köşeli parantez işlevine gönderilen indisin geçerli bir değerde olmasından programcı sorumludur. Geçersiz bir indis değeri çalışma zamanı hatasına neden olur. Bu özelleştirilmiş sınıf taban sınıf türünden bir akıllı  göstericinin türemiş sınıf türünden bir diziyle başlatılmasına da izin vermez. Yani çalışma zamanı çokbiçimliliği dizilerde `unique_ptr` sınıfı yoluyla desteklenmemektedir.
 
 #### default_delete sınıfı
 `unique_ptr` sınıf şablonunun (basitleştirilmiş) tanımı aşağıdaki gibidir:
@@ -426,7 +421,7 @@ namespace std {
 ```
 
 Yukarıdaki kodda `unique_ptr` sınıfının diziler için özelleştirilmesi görülüyor. Tanımdan da görüldüğü gibi özelleştirilmiş sınıfın arayüzünde `operator*` işlevi ve `operator->` işlevi yer almamakta fakat `operator[]` işlevi bulunmaktadır. `unique_ptr` sınıfının standart kütüphanede bulunan gerçekleştirimi `operator*` ve `operator->` işlevlerini geri dönüş değerleri türlerinin tam olarak elde edilebilmesi için bazı şablon hileleri kullandığından biraz daha karmaşıktır.
-Özelleştirilmiş sınıf için kullanılacak `std::default_delete<>` sınıfı silme işlemini delete yerine `delete[]` ile yapar:
+Özelleştirilmiş sınıf için kullanılacak `std::default_delete<>` sınıfı silme işlemini `delete` yerine `delete[]` ile yapar:
 
 ```
 namespace std {
