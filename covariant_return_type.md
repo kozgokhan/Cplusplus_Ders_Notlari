@@ -1,3 +1,5 @@
+## eş değişken geri dönüş değeri türü (covariant return type)
+
 Türemiş bir sınıfın taban sınıfının bir sanal işlevini ezecek `(override)` bir işlevinin, taban sınıf işleviyle hem aynı imzaya hem de aynı geri dönüş türüne sahip olması gerekir:
 
 ```
