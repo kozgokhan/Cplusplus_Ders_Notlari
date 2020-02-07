@@ -117,7 +117,7 @@ iter, `"bidirectional iterator"` arayüzüne sahip bir adımlayıcı olmak üz
 ```
 prev(iter)
 ```
-ifadesi ile iter konumundan bir önceki öğenin konumunu elde ediyoruz.
+ifadesi ile `iter` konumundan bir önceki öğenin konumunu elde ediyoruz.
 
 ```
 prev(iter, n)
