@@ -1,6 +1,6 @@
 ## std::bind işlev uyumlandırıcısı
 
-`C++11` ile standart kütüphaneye eklenen ve `functional` başlık dosyasında yer alan bind işlev şablonu genel amaçlı bir işlev uyumlandırıcısı `(function adapter)`. `std::bind`, standart kütüphanede önceden beri var olan, kullanımı daha zahmetli ve biraz da sorunlu olan, `ptr_fun`, `mem_fun`, `mem_fun_ref`, `bind1st` ve `bind2nd` uyumlandırıcılarının yerine geldi. `bind` uyumlandırıcısı bunların görevlerinin tamamını tek başına yerine getirebiliyor.
+`C++11` ile standart kütüphaneye eklenen ve `functional` başlık dosyasında yer alan `bind` işlev şablonu genel amaçlı bir işlev uyumlandırıcısı `(function adapter)`. `std::bind`, standart kütüphanede önceden beri var olan, kullanımı daha zahmetli ve biraz da sorunlu olan, `ptr_fun`, `mem_fun`, `mem_fun_ref`, `bind1st` ve `bind2nd` uyumlandırıcılarının yerine geldi. `bind` uyumlandırıcısı bunların görevlerinin tamamını tek başına yerine getirebiliyor.
 `bind` işlevinin dile eklenmesiyle bu uyumlandırıcılar artık standartlar tarafından eskimiş `(deprecated)` kabul edildi.
 `bind` uyumlandırıcısı, bir işlev göstericisi `(function pointer)` ve bu işlev göstericisinin gösterdiği işleve yapılacak çağrıda arguman olarak kullanılacak değerleri veri öğelerinde tutan bir işlev nesnesi `(function object)` oluşturuyor. `bind`'ın oluşturduğu sınıf nesnesinin işlev çağrı operatörü, veri öğesi olan işlev göstericisinde adresi tuturulan işlevi, yine veri öğelerinde tutulan değerlerle çağırıyor. Basit bir örnekle başlayalım:
 
@@ -119,7 +119,7 @@ int main()
 `bind` işlevine `cout` nesnesini argüman olarak göndermemiz sentaks hatası oluştururdu. `std::ostream` sınıfının kopyalayan kurucu işlevinin `delete` edilmiş olduğunu hatırlayalım. (`ref` ve `cref` işlevlerini ve bu işlevin geri dönüş değeri olan `reference_wrapper` sınıfını bir başka yazımızda ele alacağız.)
 
 #### placeholders nesneleri
-`bind` işlevine geçilen bağlanmış argümanlar listesinde yer tutucu `(placeholders)` denilen özel değişkenleri kullanabiliyoruz. Yer tutucu değişkenler isim çakışmasından kaçınmak için `std` isim alanı içinde yer alan `placeholders` isimli bir içsel isim alanında `(nested namespace)` tanımlanmış ve yine isim çakışmasından kaçınmak için `_1, _2, _3, ...` biçiminde isimlendirilmişler.
+`bind` işlevine geçilen bağlanmış argümanlar listesinde yer tutucu `(placeholders)` denilen özel değişkenleri kullanabiliyoruz. Yer tutucu değişkenler isim çakışmasından kaçınmak için `std` isim alanı içinde yer alan `placeholders` isimli bir içsel isim alanında `(nested namespace)` tanımlanmış ve kodun kolay anlaşılmasını sağlamak için `_1, _2, _3, ...` biçiminde isimlendirilmişler.
 
 Bu değişkenleri
 
@@ -135,10 +135,10 @@ _1
 biçiminde kullanabilmek için bir `"using namespace"` bildirimi yapabiliriz:
 
 ```
-using namespace std::placeholders
+using namespace std::placeholders;
 ```
 
-Yer tutucu nesnelerinin kullanım notasyonunu anlamak başlangıçta biraz zor olabilir. Bir yer tutucu değişkenin ismi, bağlanacak argüman listesinde hangi sırada kullanılmış ise, işlev nesnesi ile yapılan çağrıda bu ismin işaret ettiği sırada kullanılan argümanın, sarmalanan işlevin bu sıradaki parametresine argüman olarak geçileceği anlamına geliyor. Örneğin, `_1` ismi bind'a geçilen bağlanacak argümanlar listesinde üçüncü sırada kullanılmış ise oluşturulan işlev nesnesi ile yapılan çağrıda kullanılan birinci argüman sarmalanan işlevin üçüncü parametresine aktarılır. `_2` ismi `bind`'a geçilen bağlanacak argümanlar listesinde birinci sırada kullanılmış ise oluşturulan işlev nesnesi ile yapılan çağrıda kullanılan ikinci argüman sarmalanan işlevin birinci parametresine aktarılır.
+Yer tutucu nesnelerinin kullanım notasyonunu anlamak başlangıçta biraz zor olabilir. Bir yer tutucu değişkenin ismi, bağlanacak argüman listesinde hangi sırada kullanılmış ise, işlev nesnesi ile yapılan çağrıda bu ismin işaret ettiği sırada kullanılan argümanın, sarmalanan işlevin bu sıradaki parametresine argüman olarak geçileceği anlamına geliyor. Örneğin, `_1` ismi `bind`'a geçilen bağlanacak argümanlar listesinde üçüncü sırada kullanılmış ise oluşturulan işlev nesnesi ile yapılan çağrıda kullanılan birinci argüman sarmalanan işlevin üçüncü parametresine aktarılır. `_2` ismi `bind`'a geçilen bağlanacak argümanlar listesinde birinci sırada kullanılmış ise oluşturulan işlev nesnesi ile yapılan çağrıda kullanılan ikinci argüman sarmalanan işlevin birinci parametresine aktarılır.
 
 ```
 #include <iostream>
@@ -169,9 +169,9 @@ int main()
 
 `f2` işlev nesnesi için yapılan `bind` çağrısında, `func` işlevine bağlanacak argümanlar listesinde birinci sırada `_1` ismi yer alıyor. Bu, `f2` işlev nesnesi ile yapılacak işlev çağrısında kullanılan birinci argümanın `func` işlevinin birinci parametresine gönderileceği anlamına geliyor. İkinci sırada ise `_2` isminin kullanıldığını görüyorsunuz. Bu da `f2` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ikinci argümanın `func` işlevinin ikinci parametresine gönderileceği anlamına geliyor. `f2` ile yapılacak çağrıda `func` işlevinin üçüncü parametresine ise `5` değeri gönderilecek. `f2` işlev nesnesi ile yapılan çağrıda `2`'den az ya da `2`'den fazla sayıda argüman kullanılsaydı sentaks hatası oluşurdu.
 
-`f3` işlev nesnesi için yapılan `bind` çağrısında, `func` işlevine bağlanacak argümanlar listesinde birinci sırada `10` değeri yer alıyor. Bu, f1 ile yapılacak işlev çağrısında func işlevinin birinci parametresine `10` değerinin gönderileceği anlamına geliyor. İkinci sırada ise `_2` isminin kullanıldığını görüyorsunuz. Bu da `f3` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ikinci argümanın `func` işlevinin ikinci parametresine gönderileceği anlamına geliyor. Bağlanacak argümanlar listesinde üçüncü sırada ise `_1` isminin yer aldığını görüyorsunuz. Bu da `f3` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ilk argümanın func işlevinin üçüncü parametresine gönderileceği anlamına geliyor.
+`f3` işlev nesnesi için yapılan `bind` çağrısında, `func` işlevine bağlanacak argümanlar listesinde birinci sırada `10` değeri yer alıyor. Bu, `f1` ile yapılacak işlev çağrısında `func` işlevinin birinci parametresine `10` değerinin gönderileceği anlamına geliyor. İkinci sırada ise `_2` isminin kullanıldığını görüyorsunuz. Bu da `f3` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ikinci argümanın `func` işlevinin ikinci parametresine gönderileceği anlamına geliyor. Bağlanacak argümanlar listesinde üçüncü sırada ise `_1` isminin yer aldığını görüyorsunuz. Bu da `f3` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ilk argümanın `func` işlevinin üçüncü parametresine gönderileceği anlamına geliyor.
 
-`f4` işlev nesnesi için yapılan `bind` çağrısında, `func` işlevine bağlanacak argümanlar listesinde birinci sırada `_3` ismi  yer alıyor. Bu, `f4` ile yapılacak işlev çağrısında kullanılan üçüncü argümanın `func` işlevinin birinci parametresine gönderileceği anlamına geliyor. İkinci sırada ise `_1` isminin kullanıldığını görüyorsunuz. Bu da `f4` işlev nesnesi ile yapılacak işlev çağrısında kullanılan birinci argümanın `func` işlevinin ikinci parametresine gönderileceği anlamına geliyor. Son olarak bağlanacak argümanlar listesinde üçüncü sırada ise `_2` isminin yer aldığını görüyorsunuz. Bu da `f4` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ikinci argümanın `func` işlevinin üçüncü parametresine gönderileceği anlamına geliyor. `f4` işlev nesnesi ile yapılan çağrıda `3`'den az ya da `3`'den fazla sayıda argüman kullanılsaydı sentaks hatası oluşurdu.
+`f4` işlev nesnesi için yapılan `bind` çağrısında, `func` işlevine bağlanacak argümanlar listesinde birinci sırada `_3` ismi  yer alıyor. Bu, `f4` ile yapılacak işlev çağrısında kullanılan üçüncü argümanın `func` işlevinin birinci parametresine gönderileceği anlamına geliyor. İkinci sırada ise `_1` isminin kullanıldığını görüyorsunuz. Bu da `f4` işlev nesnesi ile yapılacak işlev çağrısında kullanılan birinci argümanın `func` işlevinin ikinci parametresine gönderileceği anlamına geliyor. Son olarak bağlanacak argümanlar listesinde üçüncü sırada ise `_2` isminin yer aldığını görüyorsunuz. Bu da `f4` işlev nesnesi ile yapılacak işlev çağrısında kullanılan ikinci argümanın `func` işlevinin üçüncü parametresine gönderileceği anlamına geliyor. `f4` işlev nesnesi ile yapılan çağrıda `3`'den az sayıda argüman kullanılsaydı sentaks hatası oluşurdu.
 
 `place_holders` nesneleri bağlanacak argümanlar listesinde birden fazla yerde de kullanılabilir:
 
@@ -196,7 +196,7 @@ int main()
 Yukarıdaki `main` işlevinde `bind` işlevine çağrıda kullanılan bağlanacak argüman listesinde hem birinci, hem ikinci hem de üçüncü sırada `_1` isminin kullanıldığını görüyorsunuz. Bu durumda `f` işlev nesnesiyle yapılan çağrıda kullanılan argüman olan `1.5` değeri `func` işlevinin `3` parametresinin her birine argüman olarak gönderiliyor.
 
 #### iç içe bind çağrıları
-Bir `bind` çağrısına başka bir bind çağrısından elde ettiğimiz bir işlev nesnesini geçebiliriz. Aşağıdaki kodu inceleyelim:
+Bir `bind` çağrısına başka bir `bind` çağrısından elde ettiğimiz bir işlev nesnesini geçebiliriz. Aşağıdaki kodu inceleyelim:
 
 ```
 #include <iostream>
@@ -331,7 +331,7 @@ f2(30);
 ```
 çağrısı `x` nesnesinin kendisi için yapılır ve `x` nesnesi işleve gönderilen `30` değerini alır.
 
-`f3 bind` nesnesinin oluştulmasında ise bağlanacak argüman listesinde birinci sırada `_1` nesnesinin, ikinci sırada ise `100` sabitinin kullanıldığını görüyorsunuz. Bu durumda f3 ile yapılacak çağrıya bir `Myclass` nesnesi gönderilmeli. Sınıfın set işlevinde `*this` olarak bu nesne kullanılacak ve `set` üye işlevine bağlanmış argüman olarak `100` değeri gönderilecek.
+`f3 bind` nesnesinin oluştulmasında ise bağlanacak argüman listesinde birinci sırada `_1` nesnesinin, ikinci sırada ise `100` sabitinin kullanıldığını görüyorsunuz. Bu durumda `f3` ile yapılacak çağrıya bir `Myclass` nesnesi gönderilmeli. Sınıfın set işlevinde `*this` olarak bu nesne kullanılacak ve `set` üye işlevine bağlanmış argüman olarak `100` değeri gönderilecek.
 
 ```
 f3(x);
@@ -418,4 +418,4 @@ int main()
 }
 ```
 
-Özellikle `C++14` ve `C++17` ile lambda ifadelerine getirilen ek özelliklerle, artık `bind` işlev uyumlandırıcısı ile yapabildiğimiz her işi `lambda` ifadeleri ile de gerçekleştirebiliyoruz. Bir başka yazımızda lambda ifadeleri ile `bind` uyumlandırıcısını karşılaştıracağız.
+Özellikle `C++14` ve `C++17` ile lambda ifadelerine getirilen ek özelliklerle, artık `bind` işlev uyumlandırıcısı ile yapabildiğimiz her işi `lambda` ifadeleri ile de gerçekleştirebiliyoruz. Bir başka yazımızda `lambda` ifadeleri ile `bind` uyumlandırıcısını karşılaştıracağız.
