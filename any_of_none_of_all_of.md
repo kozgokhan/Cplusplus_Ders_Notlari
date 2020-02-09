@@ -119,7 +119,7 @@ template<class InIter, class UnPred>
 bool all_of(InIter first, InIter last, UnPred f)
 {
 	while (first != last) {
-		if (f(first))
+		if (!f(first))
 			return false;
 		++first;
 	}
