@@ -19,10 +19,10 @@ public:
 
 Yukarıdaki özel işlevlerden herhangi biri aşağıdaki durumlardan birinde olabilir.
 
-a) Hiç bildirilmeyebilir `(not declared)`. Bu durumda söz konusu işlev yoktur.
-b) Derleyici tarafından örtülü olarak bildirilebilir `(implicitly declared)`. 
+a. Hiç bildirilmeyebilir `(not declared)`. Bu durumda söz konusu işlev yoktur.
+b. Derleyici tarafından örtülü olarak bildirilebilir `(implicitly declared)`. 
 Bu durum söz konusu işlevin derleyici tarafından `default` edilmesi ya da delete edilmesi ile mümkündür.
-c) Programcı tarafından bildirilebilir `(user declared)`. 
+c. Programcı tarafından bildirilebilir `(user declared)`. 
 Bu durum söz konusu işlevin programcı tarafından bildirilmesi, tanımlanması, `default` edilmesi ya da `delete` edilmesi ile mümkündür.
 
 Aşağıda `A` isimli bir sınıfın varsayılan kurucu işlevinin `(default constructor)` programcı tarafından bildirilme senaryoları gösteriliyor:
