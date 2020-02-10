@@ -76,3 +76,130 @@ Bu durumda `A` sınıfı türünden bir nesnenin varsayılan şekilde hayata get
 
 Peki hangi durumlarda özel işlevler derleyici tarafından örtülü `(implicit)` olarak bildirilirler?
 Bir sınıf için ne bir özel işlev ne de bir (özel olmayan) kurucu işlev bildirilmiş ise sınıfın tüm özel işlevleri `default` edilmiş olur. Yani
+```
+class A{
+public:
+};
+```
+
+gibi sınıf tanımı ile
+
+```
+class A {
+public:
+	A() = default;
+	~A() = default; 
+	A(const A &) = default;
+	A &operator=(const A &) = default;
+	A(A &&) = default;
+	A &operator=(A &&) = default;
+};
+```
+
+yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir. 
+Bir başka deyişle bu durumda sınıfın tüm özel işlevleri derleyici tarafından örtülü olarak bildirilir.
+
+Eğer programcı tarafından sınıf için özel olmayan bir kurucu işlev bildirilirse bu durumda derleyici, varsayılan kurucu işlev dışında tüm işlevleri `default eder`.
+
+```
+class A{
+public:
+    A(int);
+};
+```
+
+gibi bir sınıf tanımı ile
+
+```
+class A {
+public:
+	A(int);
+	~A() = default; 
+	A(const A &) = default;
+	A &operator=(const A &) = default;
+	A(A &&) = default;
+	A &operator=(A &&) = default;
+};
+```
+
+yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir.
+
+Programcı tarafından bir varsayılan kurucu işlevin bildirilmesi durumunda yine diğer tüm özel işlevler derleyici tarafından `default` edilir.
+
+```
+class A{
+public:
+    A();
+};
+```
+
+gibi bir sınıf tanımı ile
+
+```
+class A {
+public:
+	A();
+	~A() = default; 
+	A(const A &) = default;
+	A &operator=(const A &) = default;
+	A(A &&) = default;
+	A &operator=(A &&) = default;
+};
+```
+
+yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir.
+
+Eğer programcı tarafından sınıfın sonlandırıcı işlevi bildirilirse derleyici sınıfın taşıma işlevleri `(move members)` dışındaki tüm özel işlevlerini `default` eder.
+
+```
+class A{
+public:
+    ~A();
+};
+```
+
+gibi bir sınıf tanımı ile
+
+```
+class A {
+public:
+	A() = default;
+	~A();
+	A(const A &) = default;
+	A &operator=(const A &) = default;
+};
+```
+
+
+yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir. 
+Bu durumda sınıfın taşıma işlevleri bildirilmemiş durumdadır. 
+Aslına bakılırsa sonlandırıcı işlevin bildirilmesi durumunda derleyicinin sınıfın kopyalayan işlevlerini `default` etmesi doğru sayılmamalıdır. 
+Eğer programcı sınıfın sonlandırıcı işlevini bildirmişse muhtemelen sınıfın kopyalayan işlevlerinin de programcı tarafından yazılması için bir gereklilik söz konusudur. 
+Bu yüzden bu durum `C++11` standartlları tarafından eskimiş `(deprecated)` olarak değerlendirilmektedir. Gelecekteki standartlarda bu kuralın değiştirilrmesi gündemdedir. 
+Yani programcı tarafından bir sonlandırıcı işlevin bildirilmesi durumunda gelecekteki standartlara göre, derleyici ileride bu durumda sınıfın kopyalayan işlevlerini de `default` etmeyecektir.
+
+Eğer programcı tarafından sınıfın kopyalayan kurucu işlevi bildirirse derleyici sınıfın kopyalayan atama işlevini ve sonlandırıcı işlevlerini `default` eder. 
+Bu durumda sınıfın varsayılan kurucu işlevi ve taşıyan işlevleri bildirilmemiş durumdadır.
+
+```
+class A{
+public:
+    A(const A &);
+};
+```
+
+gibi bir sınıf tanımı ile
+
+```
+class A {
+public:
+	~A() = default; 
+	A(const A &);
+	A &operator=(const A &) = default;
+};
+```
+
+yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir.
+Eğer programcı tarafından sınıfın kopyalayan atama işlevi bildirilirse derleyici sınıfın varsayılan kurucu işlevini, kopyalayan kurucu işlevini ve sınıfın sonlandırıcı işlevini `default` eder.
+Bu durumda sınıfın ve taşıyan işlevleri yine bildirilmemiş durumdadır.
+
