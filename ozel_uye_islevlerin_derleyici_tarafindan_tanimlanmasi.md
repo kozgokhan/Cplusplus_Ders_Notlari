@@ -205,8 +205,6 @@ yukarıdaki gibi bir sınıf tanımı birbirine eşdeğerdir.
 Eğer programcı tarafından sınıfın kopyalayan atama işlevi bildirilirse derleyici sınıfın varsayılan kurucu işlevini, kopyalayan kurucu işlevini ve sınıfın sonlandırıcı işlevini `default` eder.
 Bu durumda sınıfın ve taşıyan işlevleri yine bildirilmemiş durumdadır.
 
-
-******************
 ```
 class A{
 public:
