@@ -128,15 +128,15 @@ Her bir `X` aynı zamanda bir `Y`'dir. Yani `Y` nesnesi gereken her yerde bir 
 
 Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak `private` ve `protected` kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık `"is a"` ilişkisi söz konusu değil.
 
-Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede "composition" deniyor. 
-Composition, nesne yönelimli programlamanın en önemli araçlarından biri. 
-Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak "has a" ilişkisi deniyor:
+Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede `"composition"` deniyor. 
+`Composition`, nesne yönelimli programlamanın en önemli araçlarından biri. 
+Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak `"has a"` ilişkisi deniyor:
 
-Eğer her X'in bir Y türünden bir öğesi var ise, bir X nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu Y nesnesini kullanabilir:
+Eğer her `X`'in bir `Y` türünden bir öğesi var ise, bir `X` nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu `Y` nesnesini kullanabilir:
 
-Bilgisayarın ana kartı var.
-Savaşçının silahları var.
-Arabanın motoru var.
+Bilgisayarın ana kartı var.<br>
+Savaşçının silahları var.<br>
+Arabanın motoru var.<br>
 
 C++ gibi bir dilde `composition` ilişkisini kodlamanın en basit ve en sık tercih edilen yolu bir sınıfın başka bir sınıf türünden veri öğesi ya da öğelerine sahip olması. Gelin bu yola "içerme" `(containment)` diyelim. Her arabanın bir motoru var, değil mi?
 
@@ -178,8 +178,7 @@ public:
 };
 ```
 
-Şimdi bu iki yapıyı, yani içerme ile `private` kalıtımını birbiriyle karşılaştıralım. 
-Önce ortak noktalara değinelim:
+Şimdi bu iki yapıyı, yani içerme ile `private` kalıtımını birbiriyle karşılaştıralım. Önce ortak noktalara değinelim:
 
 1. İki yapıda da her `Car` nesnesinin içinde bir `Engine` nesnesi var ve `Car` nesnesi bu engine nesnesini kullanabiliyor.
 2. İki yapıda da `Car` sınıfının müşterilerine için `Car *` türünden `Engine *` türüne dönüşüm izini verilmiyor. (Çünkü her araba aynı zamanda bir motor değildir).
