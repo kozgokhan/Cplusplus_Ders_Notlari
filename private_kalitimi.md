@@ -1,13 +1,6 @@
-Java, C# gibi dillerden biraz farklı olarak C++ dilinde 3 ayrı kalıtım (inheritance) biçimi var: public, private ve protected kalıtımları.
-Aslında bunlardan yalnızca public kalıtımı, Nesne Yönelimli Programlama'daki kalıtım kavramına karşı geliyor. 
-public kalıtımı ile ingilizcede "is a" ilişkisi denilen modeli gerçekliyoruz. 
-private ve protected kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. 
-Daha sonra bu konuya geri dönmek üzere önce private kalıtımına ilişkin kuralları bir gözden geçirelim:
+Java, C# gibi dillerden biraz farklı olarak `C++` dilinde 3 ayrı kalıtım `(inheritance)` biçimi var: `public`, `private` ve `protected` kalıtımları. Aslında bunlardan yalnızca `public` kalıtımı, `Nesne Yönelimli Programlama`'daki kalıtım kavramına karşı geliyor. `public` kalıtımı ile ingilizcede "`is a"` ilişkisi denilen modeli gerçekliyoruz. `private` ve `protected` kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce `private` kalıtımına ilişkin kuralları bir gözden geçirelim:
 
-C++'da kalıtımın hiçbir biçiminde taban sınıfın private bölümüne türemiş sınıfların erişim hakkı yok. 
-Yani taban sınıfın private bölümü hem taban sınıfın (parent class) kendi müşterilerine (clients) hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara (child classes) kapalı. 
-private kalıtımında taban sınıfın public ve protected bölümleri türemiş sınıfın private bölümü gibi ele alınıyor. 
-Taban sınıfın public ya da protected bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
+`C++`'da kalıtımın hiçbir biçiminde taban sınıfın `private` bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın `private` bölümü hem taban sınıfın `(parent class)` kendi müşterilerine `(clients)` hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara `(child classes)` kapalı. `private` kalıtımında taban sınıfın `public` ve `protected` bölümleri türemiş sınıfın `private` bölümü gibi ele alınıyor.  Taban sınıfın `public` ya da `protected` bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
 
 ```
 class Base {
@@ -39,9 +32,7 @@ int main()
 }
 ```
 
-Der sınıfı Base sınıfından private kalıtımı yoluyla oluşturulmuş. 
-: atomundan sonra private anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak private kalıtımı anlamına gelecekti. 
-Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi private:
+`Der` sınıfı `Base` sınıfından private kalıtımı yoluyla oluşturulmuş. `':'` atomundan sonra `private` anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak private kalıtımı anlamına gelecekti. Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi `private`:
 
 ```
 class Base {
@@ -51,6 +42,7 @@ class Base {
 class Der : Base {  //private kalıtımı
 //
 };
+
 Yapılar için ise varsayılan kalıtım biçimi public:
 
 class Base {
@@ -62,7 +54,7 @@ struct Der : Base {  //public kalıtımı
 };
 ```
 
-public kalıtımında türemiş sınıf türünden bir nesne aynı zamanda taban sınıf türünden bir nesne kabul edildiğinden türemiş sınıftan taban sınıfa (upcasting) dönüşüme izin veriliyor:
+`public` kalıtımında türemiş sınıf türünden bir nesne aynı zamanda taban sınıf türünden bir nesne kabul edildiğinden türemiş sınıftan taban sınıfa `(upcasting)` dönüşüme izin veriliyor:
 
 ```
 class Base {
@@ -82,7 +74,7 @@ int main()
 }
 ```
 
-Ancak private kalıtımında bu tür dönüşümler yalnızca taban sınıfın arkadaşları olan ya da taban sınıftan türeyen sınıflar için geçerli:
+Ancak `private` kalıtımında bu tür dönüşümler yalnızca taban sınıfın arkadaşları olan ya da taban sınıftan türeyen sınıflar için geçerli:
 
 ```
 class Base {
@@ -107,7 +99,7 @@ int main()
 }
 ```
 
-Kalıtım biçiminin public, protected ya da private olması taban sınıfın private olmayan sanal işlevlerinin türemiş sınıflar tarafından ezilmesine (override) engel bir durum değil:
+Kalıtım biçiminin `public`, `protected` ya da `private` olması taban sınıfın `private` olmayan sanal işlevlerinin türemiş sınıflar tarafından ezilmesine `(override)` engel bir durum değil:
 
 ```
 class Base {
@@ -122,7 +114,7 @@ struct Der : private Base {
 };
 ```
 
-Yukarıdaki kodda Base sınıfından private kalıtımı yoluyla elde edilen Der sınıfı Base sınıfının public sanal işlevi olan func işlevini ezmiş (override etmiş).
+Yukarıdaki kodda `Base` sınıfından private kalıtımı yoluyla elde edilen `Der` sınıfı `Base` sınıfının `public` sanal işlevi olan `func` işlevini ezmiş `(override etmiş)`.
 
 #### private kalıtımı neden kullanılır?
 private kalıtımına ilişkin kuralları gözden geçirdiğimize göre artık bu kalıtım biçiminin ne işe yaradığını ya da ne fayda sağladığını incelemeye başlayabiliriz. 
