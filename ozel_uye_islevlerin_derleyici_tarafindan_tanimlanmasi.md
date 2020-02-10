@@ -177,7 +177,7 @@ Bu durumda sınıfın taşıma işlevleri bildirilmemiş durumdadır.
 Aslına bakılırsa sonlandırıcı işlevin bildirilmesi durumunda derleyicinin sınıfın kopyalayan işlevlerini `default` etmesi doğru sayılmamalıdır. 
 Eğer programcı sınıfın sonlandırıcı işlevini bildirmişse muhtemelen sınıfın kopyalayan işlevlerinin de programcı tarafından yazılması için bir gereklilik söz konusudur. 
 Bu yüzden bu durum `C++11` standartlları tarafından eskimiş `(deprecated)` olarak değerlendirilmektedir. 
-Gelecekteki standartlarda bu kuralın değiştirilrmesi gündemdedir. 
+Gelecekteki standartlarda bu kuralın değiştirilmesi gündemdedir. 
 Yani programcı tarafından bir sonlandırıcı işlevin bildirilmesi durumunda gelecekteki standartlara göre, derleyici ileride bu durumda sınıfın kopyalayan işlevlerini de `default` etmeyecektir.
 
 Eğer programcı tarafından sınıfın kopyalayan kurucu işlevi bildirirse derleyici sınıfın kopyalayan atama işlevini ve sonlandırıcı işlevlerini `default` eder. 
