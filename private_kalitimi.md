@@ -1,4 +1,4 @@
-Java, C# gibi dillerden biraz farklı olarak `C++` dilinde 3 ayrı kalıtım `(inheritance)` biçimi var: `public`, `private` ve `protected` kalıtımları. Aslında bunlardan yalnızca `public` kalıtımı, `Nesne Yönelimli Programlama`'daki kalıtım kavramına karşı geliyor. `public` kalıtımı ile ingilizcede "`is a"` ilişkisi denilen modeli gerçekliyoruz. `private` ve `protected` kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce `private` kalıtımına ilişkin kuralları bir gözden geçirelim:
+`Java`, `C#` gibi dillerden biraz farklı olarak `C++` dilinde 3 ayrı kalıtım `(inheritance)` biçimi var: `public`, `private` ve `protected` kalıtımları. Aslında bunlardan yalnızca `public` kalıtımı, `Nesne Yönelimli Programlama`'daki kalıtım kavramına karşı geliyor. `public` kalıtımı ile ingilizcede "`is a"` ilişkisi denilen modeli gerçekliyoruz. `private` ve `protected` kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce `private` kalıtımına ilişkin kuralları bir gözden geçirelim:
 
 `C++`'da kalıtımın hiçbir biçiminde taban sınıfın `private` bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın `private` bölümü hem taban sınıfın `(parent class)` kendi müşterilerine `(clients)` hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara `(child classes)` kapalı. `private` kalıtımında taban sınıfın `public` ve `protected` bölümleri türemiş sınıfın `private` bölümü gibi ele alınıyor.  Taban sınıfın `public` ya da `protected` bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
 
@@ -128,9 +128,7 @@ Her bir `X` aynı zamanda bir `Y`'dir. Yani `Y` nesnesi gereken her yerde bir 
 
 Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak `private` ve `protected` kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık `"is a"` ilişkisi söz konusu değil.
 
-Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede `"composition"` deniyor. 
-`Composition`, nesne yönelimli programlamanın en önemli araçlarından biri. 
-Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak `"has a"` ilişkisi deniyor:
+Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede `"composition"` deniyor. `Composition`, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak `"has a"` ilişkisi deniyor:
 
 Eğer her `X`'in bir `Y` türünden bir öğesi var ise, bir `X` nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu `Y` nesnesini kullanabilir:
 
@@ -158,10 +156,7 @@ public:
 };
 ```
 
-Yukarıdaki kodda `Car` sınıfının `Engine` sınıfı türünden bir öğesi var. 
-`Car` sınıfı kendi müşterilerine hizmet veririken bu iş için `Engine` sınıfının `public` arayüzünü kullanarak `Engine` sınıfının kodlarından faydalanabilir. 
-Eğer `Car` sınıfını `Engine` sınıfından `private` kalıtımı ile elde etsek de sonuç benzer olacak. 
-Yani duruma `Car` sınıfının işlevselliği açısından içerme ile `private` kalıtımı arasında bir fark yok.
+Yukarıdaki kodda `Car` sınıfının `Engine` sınıfı türünden bir öğesi var. `Car` sınıfı kendi müşterilerine hizmet veririken bu iş için `Engine` sınıfının `public` arayüzünü kullanarak `Engine` sınıfının kodlarından faydalanabilir. Eğer `Car` sınıfını `Engine` sınıfından `private` kalıtımı ile elde etsek de sonuç benzer olacak. Yani duruma `Car` sınıfının işlevselliği açısından içerme ile `private` kalıtımı arasında bir fark yok.
 
 ```
 class Engine {
@@ -220,13 +215,11 @@ class Car {
 };
 ```
 
-Şimdi önemli soru şu: `Composition` gereken bir durumda oluşturacağımız sınıfa istediğimiz işlevselliği hem "içerme" hem de "private kalıtımı" ile sağlayabiliyoruz. 
-Bu durumda neden `private` kalıtımını tercih edelim? `Composition` açısından baktığımızda "içerme", `private` kalıtımının bir alt kümesi olarak görülebilir. `Composition`'ı gerçeklerken private kalıtımı bize daha fazla araç sunuyor. İçerme yerine `private` kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
+Şimdi önemli soru şu: `Composition` gereken bir durumda oluşturacağımız sınıfa istediğimiz işlevselliği hem "içerme" hem de `"private kalıtımı"` ile sağlayabiliyoruz. 
+Bu durumda neden `private` kalıtımını tercih edelim? `Composition` açısından baktığımızda "içerme", `private` kalıtımının bir alt kümesi olarak görülebilir. `Composition`'ı gerçeklerken `private` kalıtımı bize daha fazla araç sunuyor. İçerme yerine `private` kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
 
 * Kullanılacak sınıfın `protected` kısmına (özellikle de `protected` kurucu işlevlere) erişmek istiyoruz.
-* Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek `(override)` istiyoruz (ya da buna mecburuz). 
-Eğer arayüzünü kullanacağımız sınıf soyut `(abstract)` ise bu sınıfın tüm saf sanal `(pure virtual)` işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. 
-Sınıfımız türünden nesneler oluşturabilmek `(instantiate)` için somut bir sınıf oluşturmak zorundayız.
+* Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek `(override)` istiyoruz (ya da buna mecburuz). Eğer arayüzünü kullanacağımız sınıf soyut `(abstract)` ise bu sınıfın tüm saf sanal `(pure virtual)` işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. Sınıfımız türünden nesneler oluşturabilmek `(instantiate)` için somut bir sınıf oluşturmak zorundayız.
 
 Eğer bu iki olanaktan faydalanma gibi bir amaç söz konusu değilse tercih edilmesi gereken "içerme" yapısı. Kalıtıma göre sınıfların birbirine bağımılığı bu yapıda daha az. 
 Diğer taraftan `private` kalıtım tek bir öğe sayısıyla sınırlı.
