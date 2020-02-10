@@ -136,7 +136,7 @@ Bilgisayarın ana kartı var.<br>
 Savaşçının silahları var.<br>
 Arabanın motoru var.<br>
 
-C++ gibi bir dilde `composition` ilişkisini kodlamanın en basit ve en sık tercih edilen yolu bir sınıfın başka bir sınıf türünden veri öğesi ya da öğelerine sahip olması. Gelin bu yola "içerme" `(containment)` diyelim. Her arabanın bir motoru var, değil mi?
+`C++` gibi bir dilde `composition` ilişkisini kodlamanın en basit ve en sık tercih edilen yolu bir sınıfın başka bir sınıf türünden veri öğesi ya da öğelerine sahip olması. Gelin bu yola "içerme" `(containment)` diyelim. Her arabanın bir motoru var, değil mi?
 
 ```
 class Engine {
@@ -183,7 +183,7 @@ public:
 Şimdi de farklılıklara bakalım:
 1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda `private` kalıtımının kullanılması çoklu kalıtım gerektirecekti.
 2. `private` kalıtımında `Car` sınıfının kendi kodlarına ve arkadaşlarına `Car *` türünden `Engine *` türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
-3. private türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
+3. `private` türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
 4. İçerme durumunda `Engine` sınıfının `public` arayüzündeki bir işlevi `Car` sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev `(forwarding function)` oluşturmak gerekiyor:
 
 ```
@@ -298,4 +298,4 @@ sizeof(B)   = 4
 ```
 
 Bu şu anlama geliyor. 
-Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden private kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
+Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden `private` kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
