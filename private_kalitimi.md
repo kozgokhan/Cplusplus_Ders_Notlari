@@ -32,7 +32,7 @@ int main()
 }
 ```
 
-`Der` sınıfı `Base` sınıfından `private` kalıtımı yoluyla oluşturulmuş. `':'` atomundan sonra `private` anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak private kalıtımı anlamına gelecekti. Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi `private`:
+`Der` sınıfı `Base` sınıfından `private` kalıtımı yoluyla oluşturulmuş. `':'` atomundan sonra `private` anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak `private` kalıtımı anlamına gelecekti. Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi `private`:
 
 ```
 class Base {
@@ -182,16 +182,15 @@ public:
 Önce ortak noktalara değinelim:
 
 1. İki yapıda da her `Car` nesnesinin içinde bir `Engine` nesnesi var ve `Car` nesnesi bu engine nesnesini kullanabiliyor.
-2. İki yapıda da `Car` sınıfının müşterilerine için `Car *` türünden `Engine *` türüne dönüşüm izini verilmiyor. 
-(Çünkü her araba aynı zamanda bir motor değildir).
+2. İki yapıda da `Car` sınıfının müşterilerine için `Car *` türünden `Engine *` türüne dönüşüm izini verilmiyor. (Çünkü her araba aynı zamanda bir motor değildir).
 3. İki yapıda da `Car` sınıfı `Engine` sınıfının `public` arayüzünü kendi arayüzüne eklemiyor.
 4. İki yapıda da `Car` sınıfı `Engine` sınıfının `public` arayüzünün istediği kısım ya da kısımlarını kendi `public` arayüzüne seçerek katabilir.
 
 Şimdi de farklılıklara bakalım:
-1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda private kalıtımının kullanılması çoklu kalıtım gerektirecekti.
-2. private kalıtımında Car sınıfının kendi kodlarına ve arkadaşlarına Car * türünden Engine * türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
-3. private türetmesinde `Car` sınıfı Engine sınıfının protected bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
-4. İçerme durumunda Engine sınıfının `public` arayüzündeki bir işlevi `Car` sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev `(forwarding function)` oluşturmak gerekiyor:
+1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda `private` kalıtımının kullanılması çoklu kalıtım gerektirecekti.
+2. `private` kalıtımında `Car` sınıfının kendi kodlarına ve arkadaşlarına `Car *` türünden `Engine *` türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
+3. private türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
+4. İçerme durumunda `Engine` sınıfının `public` arayüzündeki bir işlevi `Car` sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev `(forwarding function)` oluşturmak gerekiyor:
 
 ```
 void Car::start()
@@ -200,10 +199,11 @@ void Car::start()
 }
 ```
 
-private kalıtımında ise bu işi bir sınıf içi using bildirimiyle gerçekleştirebiliyoruz:
+`private` kalıtımında ise bu işi bir sınıf içi `using` bildirimiyle gerçekleştirebiliyoruz:
 
-using Engine::start;
-5. private türetmesinde Car sınıfı Engine sınıfının sanal işlevlerini ezebiliyor ama içerme durumunda bu doğrudan mümkün değil. 
+`using Engine::start;`
+
+5. `private` türetmesinde `Car` sınıfı `Engine` sınıfının sanal işlevlerini ezebiliyor ama içerme durumunda bu doğrudan mümkün değil. 
 Bu dolaylı olarak şöyle gerçekleştirebilir:
 
 ```
@@ -222,24 +222,24 @@ class Car {
 ```
 
 Şimdi önemli soru şu: `Composition` gereken bir durumda oluşturacağımız sınıfa istediğimiz işlevselliği hem "içerme" hem de "private kalıtımı" ile sağlayabiliyoruz. 
-Bu durumda neden `private` kalıtımını tercih edelim? Composition açısından baktığımızda "içerme", `private` kalıtımının bir alt kümesi olarak görülebilir. `Composition`'ı gerçeklerken private kalıtımı bize daha fazla araç sunuyor. İçerme yerine `private` kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
+Bu durumda neden `private` kalıtımını tercih edelim? `Composition` açısından baktığımızda "içerme", `private` kalıtımının bir alt kümesi olarak görülebilir. `Composition`'ı gerçeklerken private kalıtımı bize daha fazla araç sunuyor. İçerme yerine `private` kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
 
-* Kullanılacak sınıfın protected kısmına (özellikle de protected kurucu işlevlere) erişmek istiyoruz.
+* Kullanılacak sınıfın `protected` kısmına (özellikle de `protected` kurucu işlevlere) erişmek istiyoruz.
 * Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek `(override)` istiyoruz (ya da buna mecburuz). 
 Eğer arayüzünü kullanacağımız sınıf soyut `(abstract)` ise bu sınıfın tüm saf sanal `(pure virtual)` işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. 
 Sınıfımız türünden nesneler oluşturabilmek `(instantiate)` için somut bir sınıf oluşturmak zorundayız.
 
 Eğer bu iki olanaktan faydalanma gibi bir amaç söz konusu değilse tercih edilmesi gereken "içerme" yapısı. Kalıtıma göre sınıfların birbirine bağımılığı bu yapıda daha az. 
-Diğer taraftan private kalıtım tek bir öğe sayısıyla sınırlı.
+Diğer taraftan `private` kalıtım tek bir öğe sayısıyla sınırlı.
 
-`private` kalıtımı OOP açısından bir kalıtım değil. Kalıtımdaki amaç taban sınıf olarak alınan sınıfın kodlarını kullanmak. 
+`private` kalıtımı `OOP` açısından bir kalıtım değil. Kalıtımdaki amaç taban sınıf olarak alınan sınıfın kodlarını kullanmak. 
 `A` sınıfını `B` sınıfından `private` kalıtımıyla oluşturmak `A`'yı `B` türünden yapmıyor ve `A`'ya `B`'nin arayüzünü katmıyor. 
 Bu yüzden private inheritance tasarım ile değil gerçekleştirim `(implementasyon)` ile ilgili.
 
-Eğer içerme ile private kalıtım arasında tereddütte kalıyorsanız şu ilkeye bağlı kalabilirsiniz: 
+Eğer içerme ile `private` kalıtım arasında tereddütte kalıyorsanız şu ilkeye bağlı kalabilirsiniz: 
 Kullanabildiğiniz her yerde içerme yapısını kullanın yalnızca zorunlu olduğunuz durumlarda `private` kalıtımı kullanın.
 
-private kalıtımın içermeye tercih edileceği bir senaryo daha var:
+`private` kalıtımın içermeye tercih edileceği bir senaryo daha var:
 
 C++'da statik olmayan `(non static)` bir veri öğesine sahip olmayan, yani boş sınıflar `(empty class)` olabiliyor. 
 Standart kütüphane de bazı nedenlerden boş sınıfları kullanıyor. 
@@ -307,5 +307,3 @@ sizeof(B)   = 4
 
 Bu şu anlama geliyor. 
 Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden private kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
-
-Peki ya protected kalıtımı? Onu da başka bir yazımızda ele alacağız.
