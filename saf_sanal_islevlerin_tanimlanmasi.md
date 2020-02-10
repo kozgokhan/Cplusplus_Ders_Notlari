@@ -1,4 +1,4 @@
-##saf sanal işlevlerin tanımlanması
+## saf sanal işlevlerin tanımlanması
 
 `C++` dilinde taban sınıfların saf sanal işlevleri `(pure virtual functions)` kalıtım yoluyla elde edilecek sınıflara bir arayüz `(interface)` 
 sunan ancak bir kod sağlamayan operasyonları temsil ediyor. 
