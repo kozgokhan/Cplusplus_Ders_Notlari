@@ -2,7 +2,7 @@
 
 Bir sınıfın birden fazla kurucu işlevinin olması çok doğal ve çoğu zaman da gerekli. Bu durumda çoğunlukla bu kurucu işlevlerin paylaştığı ortak bir kod söz konusu oluyor. Yine tipik olarak bu ortak kodun bir kısmı sınıfın veri öğelerini ilk değer verici liste ile `(constructor initializer list)` başlatıyor. Ortak kodun farklı noktalarda yeniden yazılmasının kodun bakımını zorlaştırdığını dahası kodlama hatalarına davetiye çıkarttığını biliyorsunuz. `C++11` standartlarından önce bu sorunla başa çıkmak için dil tarafından doğrudan desteklenen bir araç yoktu. `C++11` ile dile eklenen delege eden kurucu işlev `(delegating constructor)` kurucu işlevlerde karşılaşılan bu tipik sorunla başa çıkmak için önemli bir destek sağlıyor.
 
-`C++11` öncesinde kurucu işlevlerin ortak bir koda sahip olması durumunda programcıların tipik başvurduğu yol, ortak kodu sınıfın bir private işlevinde toplamak ve kurucu işlevler içinde de bu işlevi çağırmaktı. Standartlara bu konuda verilen `SC22/WG21/N1986` No'lu öneri belgesindeki örneği inceleyelim:
+`C++11` öncesinde kurucu işlevlerin ortak bir koda sahip olması durumunda programcıların tipik başvurduğu yol, ortak kodu sınıfın bir `private` işlevinde toplamak ve kurucu işlevler içinde de bu işlevi çağırmaktı. Standartlara bu konuda verilen `SC22/WG21/N1986` No'lu öneri belgesindeki örneği inceleyelim:
 
 ```
 class X {
@@ -64,7 +64,7 @@ X::X(int i, W &e) : y_(i), z_(e)
 	/*ortak kod */
 }
 ```
-Bu private işlev `y_` ve `z_` veri öğelerini üye ilk değer verme listesiyle hayata başlattığı gibi, kuruluş sürecinde yapılması gerelen diğer işlemleri de ana bloğundaki kod ile gerçekleştiriyor. Yani bir önceki sürümdeki `init` işlevinin kodunun bu kurucu işlevin ana bloğu içine yerleştirildiğini düşenebilirsiniz. Diğer kurucu işlevler ise tüm işi `private` kurucu işleve yaptırıyorlar (delege ediyorlar).
+Bu `private` işlev `y_` ve `z_` veri öğelerini üye ilk değer verme listesiyle hayata başlattığı gibi, kuruluş sürecinde yapılması gerelen diğer işlemleri de ana bloğundaki kod ile gerçekleştiriyor. Yani bir önceki sürümdeki `init` işlevinin kodunun bu kurucu işlevin ana bloğu içine yerleştirildiğini düşenebilirsiniz. Diğer kurucu işlevler ise tüm işi `private` kurucu işleve yaptırıyorlar (delege ediyorlar).
 
 `SC22/WG21/N1986` No'lu öneride verilen güzel bir örnek de şöyle:
 
@@ -122,11 +122,11 @@ public:
 	A() : A(0), my{0} {}; //geçersiz
 };
 ```
-`A` sınıfının kurucu işlevinin tanımı geçerli olsaydı sınıfın my isimli veri öğesine iki kez ilk değer verilmiş olurdu, değil mi?
+`A` sınıfının kurucu işlevinin tanımı geçerli olsaydı sınıfın `my` isimli veri öğesine iki kez ilk değer verilmiş olurdu, değil mi?
 
 Delege edilen kurucu işlev de aynı sentaksı kullanarak bir başka kurucu işleve delege edebilir. Ancak derleyici böyle bir durumda oluşacak sonsuz bir çevrimi kontrol etmekle yükümlü değil, böyle bir çevrim oluşmasından tamamen programcı sorumlu.
 
-Eğer delege edilen bir kurucu işlev bir hata nesnesi gönderirse gönderilen hata nesnesini delege eden kurucu işlevde oluşturulan bir "işlev try bloğu" `(function try blovk)` ile yakalayabiliyoruz:
+Eğer delege edilen bir kurucu işlev bir hata nesnesi gönderirse gönderilen hata nesnesini delege eden kurucu işlevde oluşturulan bir "işlev try bloğu" `(function try block)` ile yakalayabiliyoruz:
 
 ```
 #include <iostream>
@@ -156,6 +156,6 @@ int main()
 	}
 }
 ```
-Yukarıdaki kodda `A` sınıfının varsayılan kurucu işlevinin bir hata nesnesi gönderdiğini görüyorsunuz. Sınıfın `int` parametreli kurucu işlevi varsayılan kurucu işleve delege ediyor. Varsayılan kurucu işlevden gönderilen hata nesnesi int parametreli kurucu işlevin oluşturduğu `işlev try bloğu` ile yakalanıyor.
+Yukarıdaki kodda `A` sınıfının varsayılan kurucu işlevinin bir hata nesnesi gönderdiğini görüyorsunuz. Sınıfın `int` parametreli kurucu işlevi varsayılan kurucu işleve delege ediyor. Varsayılan kurucu işlevden gönderilen hata nesnesi `int` parametreli kurucu işlevin oluşturduğu `işlev try bloğu` ile yakalanıyor.
 
 Delege eden kurucu işlevler örneklerden de görüldüğü kodu karmaşıklıktan arındırıyor ve kodun bakımını kolaylaştırıyor.
