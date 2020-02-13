@@ -41,3 +41,13 @@ Hatta derleyici `exp1` ve `exp2` ifadelerini geçişli olarak yürütecek bir ko
 ```
 f(g(exp1), h(exp2));
 ```
+
+Yukarıda açıkladığımız kurallardan aşağıdaki sonuçları çıkartabiliriz:
+
+* `exp1` ifadesi programın akışı `g` işlevine girmeden önce yürütülmüş olmalı.
+* `exp2` ifadesi programın akışı `h` işlevine girmeden önce yürütülmüş olmalı.
+* `g` ve `h` işlevlerinin çalışması programın akışı `f` işlevine girmeden önce bitmiş olmalı.
+* `exp1` ve `exp2` ifadeleri birbiriyle geçişli olarak yürütülebilir. 
+Fakat bu ifadelerin birinin yürütülmesi sırasında bir işlev çağrısı gerçekleşirse çağrılan işlevin kodu kesiksiz ve geçişsiz yürütülür. 
+Örneğin `g` işlevinin kodu çalışmakta iken `exp2` ifadesi kısmen yürütülemez. 
+Ancak `g` ya da `h` çağrısının hangisinin daha önce gerçekleşeceği konusunda bir güvence söz konusu değildir.
