@@ -143,3 +143,66 @@ Derleyicinin oluşturduğu kodda işlem sırasının şöyle olduğunu düşüne
 7. `f` işlevi çağrılır.
 
 Yukardaki senaryoda eğer `3.` ya da `4.` adımda bir hata nesnesi gönderilirse aynı problemler ortaya çıkar. Ya da şu senaryoya bakalım:
+1. `T1` türünden nesne için bellek alanı elde edilir.
+2. `T2` türünden nesne için bellek alanı elde edilir.
+3. `T1` nesnesi için kurucu işlev çağrılır.
+4. `T2` nesnesi için kurucu işlev çağrılır.
+5. `unique_ptr<T1>` nesnesi için kurucu işlev çağrılır.
+6. `unique_ptr<T2>` nesnesi için kurucu işlev çağrılır
+7. `f` işlevi çağrılır.
+
+`3.` ya da `4.` adımlarda hata nesnesi gönderilirse yine aynı sorunlar çıkar, değil mi?
+
+Burada sorun `unique_ptr`'nin kullanılması değil yanlış bir şekilde kullanılması.
+Şimdi daha iyi bir kullanımın nasıl olabileceğini inceleyelim:
+
+#### Örnek - 4
+
+Bir başlık dosyasında
+
+```
+void f(std::unique_ptr<T1>, std::unique_ptr<T2>);
+// çağrının yapıldığı yer
+
+f(make_unique<T1>(), make_unique<T2>());
+```
+
+Burada temel fikir, aynı akış içinde çağrılan işlevler kesiksiz çalışmasından faydalanmak. 
+`new` ifadesiyle hayata getirilecek nesnemizin bellek alanını elde ederek bu bellek alanında nensnemizi oluşturacak aynı zamanda `unique_ptr` akıllı gösterici nesnesini oluşturacak bir işlev kullanmak istiyoruz. 
+Böyle bir işlevin her tür için çalışması gerekeceğinden işlevi bir şablon biçiminde ifade etmemiz gerekiyor. 
+İşlevi çağıran kod kurucu işleve argümanları dışarıdan `make_unique` işlevine geçmek zorunda olacağından `new` ifadesinde kullanacağımız kurucu işlev argumanlarını `make_unique` işlevine argüman olarak geçeceğiz. 
+make_unique işlevi aldığı argümanları mükemmel gönderim `(perfect forwarding)` mekanizması ile sınıfın kurucu işlevine gönderecek. 
+Çok gerekmesine karşın `C++11` standartlarında unutulan `make_unique` işlevi `C++14` standartlarıyla dile eklendi. 
+`make_unique` şablonunun kodunun aşağıdaki gibi olduğunu düşünebiliriz:
+
+```
+template<typename T, typename ...Args>
+std::unique_ptr<T> make_unique(Args&& ...args)
+{
+	return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+```
+Bu hata güvenliği sorunlarını çözüyor. Kodumuzda yalnızca `3` işlev çağrısı var. 
+Derleyici hangi sırayla çalışacak kod üretirse üretsin bir sorun olmayacak. 
+İşlem sırasının aşağıdaki gibi olduğunu düşünelim:
+
+1. `make_unique<T1>` işlevi çağrılır.
+2. `make_unique<T2>` işlevi çağrılır.
+3. `f` işlevi çağrılır.
+
+`1.` adımda hata nesnesinin gönderilmesi durumunda, `make_unique` işlevinin kendisi hatalara karşı güvenli olduğu için bir sızıntı olmaz.
+
+Peki, ikinci adımda bir hata nesnesinin gönderilmesi durumunda, birinci adımda oluşturulan `unique_ptr` nesnesi için temizlik işlemleri yapılacak mı? Evet yapılacak. 
+Şimdi aklımıza şu soru gelebilir. Örnek 2`'de de bir `T1` nesnesi yaratılmıştı ve gerekli temizlik işlemleri yapılmadığı için sızıntı olmuştu. Ne fark etti? Bu kez durum aynı değil. 
+Burada oluşturulan `unique_ptr` nesnesi geçici bir nesne `(temporary object)`. Geçici nesneler için temizlik işlemlerinin nasıl yapılacağı standartlarda açıkça belirtilmiş: Standartlar `12.2/3`'de şöyle diyor:
+
+Geçici nesnelerin hayatı, bu nesnelerin oluşturulmasını içeren ifadenin ele alınması bitince, sona erer. 
+Bu kural yürütülen koddan bir hata nesnesi gönderilmesi nedeniyle çıkılması durumunda da geçerlidir.
+
+#### Temel İlkeler:
+
+`shared_ptr` ile yönetilecek dinamik sınıf nesnelerini `make_shared` işlevi ile, `unique_ptr` ile yönetilecek dinamik sınıf nesnelerini `make_unique` işleviyle oluşturun.
+`new` işlecini doğrudan kullanmaktan kaçının. 
+Bunun yerine ham bellek alanının edinilmesini sarmalayan ve başka bir nesneye aktarılmasını sağlayan, yani bir fabrika gibi çalışan bir modeli `make_uniqe` işleviyle gerçekleştirin.
+
+Not: Bu yazı `Herb Sutter`'ın `(exception safety - GotW102)` makalesinin serbest çevirisidir.
