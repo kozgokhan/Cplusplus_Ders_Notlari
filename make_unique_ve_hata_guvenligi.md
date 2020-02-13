@@ -100,3 +100,46 @@ Aşağıdaki gibi bir işlem sırası da söz konusu olabilir:
 4. `T2` nesnesi için kurucu işlev çağrılır.
 
 Böyle bir sıralamada bir değil farklı etkilere neden olabilecek iki ayrı hata güvenliği sorunu var:
+
+Eğer bir hata nesnesi gönderilmesi nedeniyle `3.` adım başarısız olursa, `T1` nesnesi için edinilen bellek alanı geri verilir. 
+Ancak standartlar `T2` nesnesi için edinilen bellek alanın geri verilmesi konusunda bir güvence vermiyor. 
+Yani bu durumda bir bellek sızıntısı olacak.
+Eğer bir hata nesnesi gönderilmesi nedeniyle `4.` adım başarısız olursa, 
+`T1` nesnesi için yer edinilmiş ve bu yerde `T1` nesnesi kurulmuş demektir. 
+Fakat standartlar bu nesne için sonlandırıcı işlevin çağrılmasını ve nesne için ayrılan bellek alanının geri verilmesini zorunlu kılmıyor. 
+Bu da `T1` nesnesi için hem kaynak sızıntısı hem de bellek sızıntısı demek.
+
+Burada akıllara şöyle bir soru gelebilir? 
+Neden derleyici ne yapılması gerekiyorsa bunun yapılmasını sağlayan bir kod üretmiyor? 
+`C++` verimliliği esas alan bir dil. Derleyicinin işlem sırasını istediği gibi belirleyebilmesi daha iyi bir optimizasyon yapabilmesini ve daha verimli bir kod üretebilmesini sağlıyor. 
+Derleyicinin hata güvenliği açısından ne gerekiyorsa o şekilde kod üretmesi, oluşturulacak kodun verimliliğini büyük ölçüde düşürürdü.
+Belki `unique_ptr` gibi bir akıllı gösterici sınıfı bize yardımcı olabilir, değil mi?
+
+Şimdi `Örnek-2'`deki kodun aşağıdaki şekilde değiştirildiğini düşünelim:
+Yukarıdaki işlevin şu şekilde değiştirildiğini düşünelim:
+#### Örnek-3
+
+```
+void f(std::unique_ptr<T1>, std::unique_ptr<T2>);
+```
+İşlev kaynak dosyada bir yerde aşağıdaki gibi çağrılmış olsun:
+
+```
+f(std::unique_ptr<T1>{new T1}, std::unique_ptr<T2>{new T2});
+```
+Acaba böyle bir çağrının `Örnek 2'`deki çağrıya göre bir avantaj sağlıyor mu? 
+Hata güvenliği açısından bir sorun var mı?
+
+Birçok programcı akıllı gösterici kullanmanın hata güvenliğine ilişkin tüm problemleri çözdüğünü sansa da gerçekte bu doğru değil. 
+Evet bir `unique_ptr` nesnesine bağlanan kaynaklar sızıntıya karşı korunmuş oluyor ama problem daha programın akışı daha `unique_ptr` nesnesinn kurucu işlevine girmeden gerçekleşiyor. 
+Derleyicinin oluşturduğu kodda işlem sırasının şöyle olduğunu düşünelim:
+
+1. `T1` türünden nesne için bellek alanı elde edilir.
+2. `T1` nesnesi için kurucu işlev çağrılır.
+3. `T2` türünden nesne için bellek alanı elde edilir.
+4. `T2` nesnesi için kurucu işlev çağrılır.
+5. `unique_ptr<T1>` nesnesi için kurucu işlev çağrılır.
+6. `unique_ptr<T2>` nesnesi için kurucu işlev çağrılır
+7. `f` işlevi çağrılır.
+
+Yukardaki senaryoda eğer `3.` ya da `4.` adımda bir hata nesnesi gönderilirse aynı problemler ortaya çıkar. Ya da şu senaryoya bakalım:
