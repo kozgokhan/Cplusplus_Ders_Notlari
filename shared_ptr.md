@@ -37,4 +37,19 @@ Bir dinamik bellek fonksiyonu `(allocator)` ile yeri elde edilen `(allocate)` ko
 + allocator (bellek alanını elde edecek ve geri verecek sınıf nesnesi)
 + kaynağı gösteren bir gösterici
 
+Aşağıdaki kodda bir shared_ptr nesnesinin sizeof değeri standart çıkış akımına yazdırılıyor:
+```
+#include <memory>
+#include <iostream>
+#include <string>
+
+int main()
+{
+	using namespace std;
+
+	cout << "sizeof (string *)            : " << sizeof(string *) << '\n';
+	cout << "sizeof (sharede_ptr<string>) : " << sizeof(shared_ptr<string>) << '\n';
+}
+```
+
 -bu maddenin yazımı devam ediyor-
