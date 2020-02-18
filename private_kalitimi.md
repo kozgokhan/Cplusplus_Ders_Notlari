@@ -299,3 +299,102 @@ sizeof(B)   = 4
 
 Bu şu anlama geliyor. 
 Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden `private` kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
+
+## private kalıtımının "is a" ilişkisi için kullanılması
+Sözünü edeceğimz duruma popüler olarak "kısıtlı" ya da "kontrollü çok biçimlilik" deniyor.
+Bazı durumlarda çalışma zamanı çok biçimliliğinden yalnızca seçilmiş belirli işlevlerin faydalanmasını ve bu aracın diğer işlevlere kapatılmasını istiyoruz. 
+Aşağıdaki kodu inceleyelim:
+
+```
+class Base {
+public:
+	virtual void vfunc();
+};
+
+class Der : public Base {
+public:
+	void vfunc()override;
+};
+
+void gfunc(Base &r)
+{
+	r.vfunc();
+	//
+}
+
+
+void foo1()
+{
+	Der der;
+	gfunc(der); //geçerli
+	//
+}
+
+void foo2()
+{
+	Der der;
+	gfunc(der); //geçerli
+	//
+}
+```
+
+`Der` sınıfı `public` kalıtımıyla `Base` sınıfından oluşturulmuş ve taban sınıfın sanal vfunc işlevini ezmiş `(override etmiş)`. 
+Global `gfunc` işlevi `Base` nesnelerini çokbiçimli `(polimorfik)` olarak kullanıyor. 
+Şimdi amacımızın şunu sağlamak olduğunu düşünelim: Yalnızca `foo1` işlevi çok biçimlilikten faydalansın fakat diğer işlevler, örneğin `foo2` işlevi, bu yapıdan faydalanamasın. 
+Yukarıdaki kodda hem `foo1` işlevinde hem de `foo2` işlevinde `gfunc` işlevine `Der` türünden nesnelerle yapılan çağrılar geçerli. 
+Oysa biz `foo2` işlevine (ve muhtemelen bazı başka işlevlere) kalıtımla elde edilmiş `Der` sınıf nesnelerinin gönderilmesini geçersiz kılmak istiyoruz.
+Reçete hazır: Der sınıfı Base sınıfından private kalıtımıyla oluşturulsun ve çok biçimlilikten faydalanacak işlevlere arkadaşlık `(friend)` versin. 
+`private` kalıtımında türemiş sınıftan `(child class)` taban sınıfa `(Base class)` otomatik `(implicit)` tür dönüşümlerinin yalnızca türemiş sınıfların kodlarına ve bu sınıfların arkadaşları olan kodlara tanınan bir hak olduğunu hatırlayalım:
+
+```
+class Base {
+public:
+	virtual void vfunc();
+};
+
+class Der : private Base {
+public:
+	void vfunc()override;
+	friend void foo1();
+};
+
+void gfunc(Base &r)
+{
+	r.vfunc();
+	//
+}
+
+void foo1()
+{
+	Der der;
+	gfunc(der); //geçerli
+	//
+}
+
+void foo2()
+{
+	Der der;
+	gfunc(der); //geçersiz
+	//
+}
+```
+
+Bu kez `Der` sınıfı `Base` sınıfından `private` kalıtımıyla oluşturuldu. 
+`Der` sınıfı yine `Base` sınıfının sanal işlevini eziyor. 
+Kalıtımın `private` olmasının taban sınıfın sanal işlevlerini ezmeye engel olmadığını hatırlayalım. 
+`Der` sınıfı artık çok biçimlilikten faydalanacak işlevelere arkadaşlık verebilir. 
+`Der` sınıfı içinde yapılan
+
+```
+friend void foo1();
+```
+
+bildirimiyle `foo1` işlevine arkadaşlık veriliyor. 
+`Der` sınıfınına arkadaş olan işlevlerin `Der` sınıfından `Base` sınıfına dönüşüm izninin olduğunu diğer işlevlerin bu hakka sahip olmadığını biliyoruz. 
+`foo1` işlevinde yapılan
+
+```
+gfunc(der);
+```
+
+çağrısı geçerli iken `foo2` işlevi içinde yapılan aynı çağrı geçerli değil.
