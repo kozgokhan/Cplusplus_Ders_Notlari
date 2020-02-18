@@ -74,7 +74,7 @@ int main()
 }
 ```
 
-Ancak `private` kalıtımında bu tür dönüşümler yalnızca taban sınıfın arkadaşları olan ya da taban sınıftan türeyen sınıflar için geçerli:
+Ancak `private` kalıtımında bu tür dönüşümler yalnızca taban sınıftan türeyen sınıflar ve bunların arkadaşları için geçerli:
 
 ```
 class Base {
