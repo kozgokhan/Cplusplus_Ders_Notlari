@@ -79,4 +79,13 @@ int main()
 }
 ```
 
+`shared_ptr` tarafından gösterilen nesne kendisine ilişkin referans sayacını bilmez.
+Yani referans sayacı, fiziksel olarak gösterilen nesnenin içinde değildir.
+Bu durumda hes nesnenin içinde bir referans sayacı tutmak gerekirdi.(Bu nasıl sağlanırdı?)
+Eğer böyle olsaydı temel türlerden `(int, double, vs.)` dinamik ömürlü nesnelere ilişkin referans sayacı nasıl tutulabilirdi?
+Referans saycı ayrı bir kontrol bloğüu içinde tutulmaktadır.
+
+Bir kaynağı gösterewn ilk `shared_ptr`nesnesi hayata getirildiğinde bir kontrol bloğu oluşturulur.
+Aynı nesneyi göstren `shared_ptr` nesneleri aynı kontrol bloğunun adresini tutarlar.
+
 -bu maddenin yazımı devam ediyor-
