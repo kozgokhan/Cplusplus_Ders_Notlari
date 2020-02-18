@@ -83,9 +83,19 @@ int main()
 Yani referans sayacı, fiziksel olarak gösterilen nesnenin içinde değildir.
 Bu durumda hes nesnenin içinde bir referans sayacı tutmak gerekirdi.(Bu nasıl sağlanırdı?)
 Eğer böyle olsaydı temel türlerden `(int, double, vs.)` dinamik ömürlü nesnelere ilişkin referans sayacı nasıl tutulabilirdi?
-Referans saycı ayrı bir kontrol bloğüu içinde tutulmaktadır.
+Referans saycı ayrı bir kontrol bloğu içinde tutulmaktadır.
 
 Bir kaynağı gösterewn ilk `shared_ptr`nesnesi hayata getirildiğinde bir kontrol bloğu oluşturulur.
 Aynı nesneyi göstren `shared_ptr` nesneleri aynı kontrol bloğunun adresini tutarlar.
+### Kontrol boğu ne zaman oluşturulur?
+`shared_ptr` göstericileri ile hayatı kontrol edilen bir nesneye ilişkin, içinde referans sayacının da bulunduğu bir kontol bloğunun mutlaka oluşturulması gerekmektedir.
+
+
++ Eğer `shared_ptr` nesnesi bir adres ile oluşturulur ise yeni bir kontrol bloğu oluşturulur.
++ Eğer dinamik ömürlü nesne `make_shared` fonksiyonu ile oluşturulur ise hem new operatörü ile dinamik ömürlü nesnenin
+hayata getirilmesi hem de kontrol bloğunun oluşturulması bu fonksiyon tarafından gerçekleştirilir.
+`make_shared` işlevi hem dinamik ömürlü nesnenin kendisinin hem de kontrol bloğunun yer alacağı tek bir bellek bloğu elde ederek dinamik bellek yönetimi maliyetini azaltabilir.
++ Eğer `shared_ptr` nesnesi bir `unique_ptr` nesnesinden ilk değerini alarak hayata getirilirse kontrol bloğu oluşturulur.
+
 
 -bu maddenin yazımı devam ediyor-
