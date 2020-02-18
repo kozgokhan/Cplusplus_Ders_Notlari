@@ -24,4 +24,17 @@ Kaynağı pylaşan her yeni `shared_ptr` nesnesi için referans sayacı bir artt
 Bir `shared_ptr` nesnesinin hayatı bittiğinde eğer bir kaynağı paylaşıyor ise o kaynağa ilişkin refeans sayacı bire eksiltilir.
 Bir `shared_ptr` nesnesi bir kaynağı gösterirken ona başka bir `shared_ptr` nesnesi atanırsa önce göstermekte olduğu kaynağın sayacı bir eksiltilir sonra göstereceği kaynağın referans sayıcı bir arttırılır.
 
+Bir `shared_ptr` nesnesi içinde tipik olarak iki gösterici tutulamaktadır.
+(`C++` standartları böyle bir gerçekleştirimi zorunlu kılmamaktadır.)
+Göstericilerden biri dinamik ömürlü nesneyi gösteririr.
+Eğer `shared_ptr` nesnesi henüz bir kaynağı göstermiyor ise bu göstericinin değeri `nullptr`'dir.
+Diğer gösterici ise "kontrol bloğu" `(control bşlock)` denilen bir bellek bloğunun adresini tutar.
+Bir dinamik bellek fonksiyonu `(allocator)` ile yeri elde edilen `(allocate)` kontrol bloğunda tipik olarak aşağıdaki öğeler yer alır:
+
++ Referans sayacı
++ Zayıf referans sayacı (daha sonra göreceğiz)
++ deleter (kaynağı sonlandırma işini üstlenen)
++ allocator (bellek alanını elde edecek ve geri verecek sınıf nesnesi)
++ kaynağı gösteren bir gösterici
+
 -bu maddenin yazımı devam ediyor-
