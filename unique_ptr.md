@@ -152,7 +152,7 @@ int main()
 ```
 
 Yukarıdaki gibi bir kod çalışma zamanı hatasına neden olur. Kodlayıcıların böyle hatalardan kaçınması gerekir.
-Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama yoluyla hayata başlatamamayız ve bir `unique_ptr` nesnesine kopyalama yoluyla atama yapamayız. `unique_ptr` sınıfında yalnızca taşıma semantiği kullanılmaktadır. `unique_ptr`nesneleri kopyalanamaz ama taşınabilir. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin başka bir göstericiye devredilmesini sağlar:
+Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama yoluyla hayata başlatamayız ve bir `unique_ptr` nesnesine kopyalama yoluyla atama yapamayız. `unique_ptr` sınıfında yalnızca taşıma semantiği kullanılmaktadır. `unique_ptr`nesneleri kopyalanamaz ama taşınabilir. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin başka bir göstericiye devredilmesini sağlar:
 
 Kopyalayan kurucu işlevin kullanıldığını düşünelim:
 
