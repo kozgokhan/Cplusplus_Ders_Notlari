@@ -630,7 +630,7 @@ int main()
 ```
 
 
-`lambda`'ya ilişkin kapanış sınıfının `(closure)` tür bilgisi için `decltype` işlecinin kullanımına dikkat ediniz. Şüphesiz bu iş için kendimiz de bir `functor` sınıf oluşturabilirdik:
+`lambda`'ya ilişkin kapanış sınıfının `(closure)` tür bilgisi için `decltype` işlecinin kullanımına dikkat ediniz. Şüphesiz bu iş için kendimiz de bir `functor` sınıf oluşturabilirdik: 
 
 ```
 struct ADeleter {
