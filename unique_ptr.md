@@ -84,7 +84,7 @@ int main()
 	std::unique_ptr<std::string> uptr(new std::string("Maya"));
 	(*uptr)[0] = 'K'; // Yazının ilk karakteri değiştiriliyor
 	uptr->append("can"); // Yazının sonuna karakterler ekleniyor.
-	std::cout << *uptr << std::endl; // yazı yazdırılıyor.
+	std::cout << *uptr << "\n"; // yazı yazdırılıyor.
  
 	return 0;
 }
@@ -119,7 +119,7 @@ Sınıfın `bool` türüne dönüşüm yapan üye işleviyle bir `unique_ptr` ne
 
 ```
 if (uptr) { // uptr dinamik bir nesneye sahip ise
-	std::cout << *uptr << std::endl;
+	std::cout << *uptr << "\n";
 }
 ```
 Bir `unique_ptr` nesnesinin dinamik bir nesnenin sahibi olup olmadığı `unique_ptr` nesnesninin `nullptr` değerine eşitliği ile de sınanabilir:
@@ -391,8 +391,8 @@ Ancak bu özelleştirmede sunulan arayüz birincil şablondakinden farklıdır. 
 
 ```
 std::unique_ptr<std::string[]> up(new std::string[10]); //
-std::cout << *up << std::endl; //Geçersiz * işlemi diziler için tanımlı değil.
-std::cout << up[0] << std::endl; // Geçerli
+std::cout << *up << "\n"; //Geçersiz * işlemi diziler için tanımlı değil.
+std::cout << up[0] << "\n"; // Geçerli
 ```
 Köşeli parantez işlevine gönderilen indisin geçerli bir değerde olmasından programcı sorumludur. Geçersiz bir indis değeri çalışma zamanı hatasına neden olur. Bu özelleştirilmiş sınıf taban sınıf türünden bir akıllı  göstericinin türemiş sınıf türünden bir diziyle başlatılmasına da izin vermez. Yani çalışma zamanı çokbiçimliliği dizilerde `unique_ptr` sınıfı yoluyla desteklenmemektedir.
 
