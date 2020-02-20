@@ -1,6 +1,6 @@
 # std::initializer_list Sınıf Şablonu
 
-`C++11` standartları ile standart kütüphanemize eklenen çok faydalı sınıf şablonlarından biri initializer_list. `STL`, artık bir çok yerde kendi arayüzünde bu sınıfı kullanıyor. Örneğin birçok kap `(container)` sınıfının bu türden parametresi olan kurucu işlevleri var. Yine bazı kap sınıflarının bu türden parametresi olan ekleme `(insert)` ve atama işlevleri var. Sınıfımız aynı türden istenen sayıda değeri bellekte ardışık olarak bir arada tutuyor. Bu sınıfı kullanarak, aynı türden belirli sayıda değeri, kaynak kodda küme parantezleri içinde, virgüllerle ayrılan bir listeyle oluşturarak bir işleve argüman olarak geçebiliyor ya da bir işlevden geri dönüş değeri olarak onu çağıran işleve iletebiliyoruz. Sınıf şablonumuz `C++11` ile dile eklenen `initializer_list` isimli başlık dosyasında:
+`C++11` standartları ile standart kütüphanemize eklenen çok faydalı sınıf şablonlarından biri `initializer_list`. `STL`, artık bir çok yerde kendi arayüzünde bu sınıfı kullanıyor. Örneğin birçok kap `(container)` sınıfının bu türden parametresi olan kurucu işlevleri var. Yine bazı kap sınıflarının bu türden parametresi olan ekleme `(insert)` ve atama işlevleri var. Sınıfımız aynı türden istenen sayıda değeri bellekte ardışık olarak bir arada tutuyor. Bu sınıfı kullanarak, aynı türden belirli sayıda değeri, kaynak kodda küme parantezleri içinde, virgüllerle ayrılan bir listeyle oluşturarak bir işleve argüman olarak geçebiliyor ya da bir işlevden geri dönüş değeri olarak onu çağıran işleve iletebiliyoruz. Sınıf şablonumuz `C++11` ile dile eklenen `initializer_list` isimli başlık dosyasında:
 
 ```
 #include<initializer_list>
@@ -30,7 +30,7 @@ void display(const vector<int> &vec)
 {
 	for (int i : vec)
 		cout << i << " ";
-	cout << endl;
+	cout << "\n";
 }
 
 int main()
@@ -41,8 +41,6 @@ int main()
 	display(ivec);
 	ivec = { 10, 20, 30 };
 	display(ivec);
-
-	return 0;
 }
 ```
 `main` işlevi içinde `vector` sınıfının `initializer_list<T>` parametreli üç ayrı işlevi çağrılıyor:
@@ -96,7 +94,7 @@ int main()
 	multiset<int> iset{ 3, 7, 3, 4, 5, 6, 1, 8, 1, 9, 2, 7, 9, 2, };
 
 	auto n = erase_vals(iset, { 1, 3, 7, 9 });
-	cout << "n = " << n << endl;
+	cout << "n = " << n << "\n";
 
 	return 0;
 }
@@ -109,12 +107,10 @@ Yukarıdaki kodda `erase_vals` isimli bir işlev şablonunun tanımlandığını
 ```
 #include <vector>
 
-using namespace std;
-
 int main()
 {
-	vector<int> ivec1 = { 1, 4, 6, 'A' }; //geçerli
-	vector<int> ivec2 = { 2, 5, 7.8}; //geçersiz
+	std::vector<int> ivec1 = { 1, 4, 6, 'A' }; //geçerli
+	std::vector<int> ivec2 = { 2, 5, 7.8}; //geçersiz
 
 }
 ```
@@ -154,7 +150,7 @@ void print(std::vector<int> &ivec)
 {
 	for (auto i : ivec)
 		std::cout << i << " ";
-	std::cout << std::endl;
+	std::cout << "\n"
 }
 
 int main()
@@ -176,15 +172,13 @@ Benzer bir durum da `string` sınıfı için söz konusu:
 #include <string>
 #include <iostream>
 
-using namespace std;
-
 int main()
 {
-	string s1(10, 'A');
-	string s2{ 10, 'A' };
+	std::string s1(10, 'A');
+	std::string s2{ 10, 'A' };
 
-	cout << s1.length() << endl; //10
-	cout << s2.length() << endl; //2
+	std::cout << s1.length() << "\n"; //10
+	std::cout << s2.length() << "\n"; //2
 }
 ```
 Sınıfın `begin` ve `end` işlevlerine çağrı yaparak listede tutulan değerlere ilişkin aralığın `(range)` `iterator` değerlerini elde edebiliriz. Aynı `iterator` değerleri global `begin` ve `end` işlevlerinden de elde edilebilir:
@@ -217,10 +211,10 @@ int main()
 
 int main()
 {
-	initializer_list<int> ilist{ 1, 4, 6, 9, 3 };
+	std::initializer_list<int> ilist{ 1, 4, 6, 9, 3 };
 
 	for (auto iter = rbegin(ilist); iter != rend(ilist); ++iter) {
-		cout << *iter << " ";
+		std::cout << *iter << " ";
 	}
 }
 ```
@@ -245,11 +239,9 @@ Yukarıdaki kodda aralık tabanlı döngünün her turunda global `func` işlevi
 #include <iostream>
 #include <initializer_list>
 
-using namespace std;
-
 int main()
 {
-	initializer_list<int> x{ 1, 3, 5, 7, 8 };
+	std::initializer_list<int> x{ 1, 3, 5, 7, 8 };
 
 	for (auto iter = x.begin(); iter != x.end(); ++iter)
 		++*iter; //geçersiz
@@ -263,12 +255,10 @@ int main()
 #include <initializer_list>
 #include <iostream>
 
-using namespace std;
-
 int main()
 {
-	initializer_list<double> dlist{ 1.1, 2.2, 3.3, 4.4 };
-	cout << dlist.size() << endl; //4
+	std::initializer_list<double> dlist{ 1.1, 2.2, 3.3, 4.4 };
+		cout << dlist.size() << "\n"; //4
 }
 ```
 Oluşturabileceğimiz boş bir listeyi de bir işleve geçebiliyoruz:
@@ -277,11 +267,9 @@ Oluşturabileceğimiz boş bir listeyi de bir işleve geçebiliyoruz:
 #include <initializer_list>
 #include <iostream>
 
-using namespace std;
-
-void func(initializer_list<int> y)
+void func(std::initializer_list<int> y)
 {
-	cout << y.size() << endl;
+	std::cout << y.size() << "\n";
 }
 
 int main()
@@ -295,8 +283,6 @@ Bir `initializer_list` nesneninin bir yerden bir yere kopyalanması durumunda li
 #include <initializer_list>
 #include <iostream>
 
-using namespace std;
-
 class Myclass {
 public:
 	Myclass(int) {
@@ -308,14 +294,14 @@ public:
 	}
 };
 
-void func(initializer_list<Myclass> y)
+void func(std::nitializer_list<Myclass> y)
 {
 	//
 }
 
 int main()
 {
-	initializer_list<Myclass> x{ Myclass{ 12 }, Myclass{ 20 } };
+	std::initializer_list<Myclass> x{ Myclass{ 12 }, Myclass{ 20 } };
 	func(x);
 }
 ```
