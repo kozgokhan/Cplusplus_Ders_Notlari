@@ -182,8 +182,11 @@ public:
 
 Şimdi de farklılıklara bakalım:
 1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda `private` kalıtımının kullanılması çoklu kalıtım gerektirecekti.
+
 2. `private` kalıtımında `Car` sınıfının kendi kodlarına ve arkadaşlarına `Car *` türünden `Engine *` türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
+
 3. `private` türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
+
 4. İçerme durumunda `Engine` sınıfının `public` arayüzündeki bir işlevi `Car` sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev `(forwarding function)` oluşturmak gerekiyor:
 
 ```
