@@ -340,4 +340,8 @@ Yukarıdaki kodda tanımlanan `x` değişkeninin `std::initializer_list<int>` t�
 auto x {1, 4, 5};
 auto y{12};
 ```
-Yukarıdaki tanımlamalarda `C++11` ve `C++14` standartlarına göre `x` ve `y` değişkenlerinin türlerinin çıkarımı derleyici tarafından `std::initializer_list<int>` olarak yapılıyordu. Ancak `C++17` standartları ile bu konuda ciddi bir değişiklik yapıldı: `auto` belirteci ile tanımlanan değişkene doğrudan ilk değer verme durumunda küme parantezi içinde yalnızca tek bir değer olabiliyor. Yani yeni standartlara göre yukarıdaki kodda `x` değişkeninin tanımı geçerli değil. Eğer küme parantezi içinde tek bir değer var ise bu durumda `auto` belirteci ile tanıtılan değişkenin türü artık küme parantezi içindeki ifadenin türü kabul ediliyor. Yani yukarıdaki kodda `y` değişkenin türü artık `int`.
+Yukarıdaki tanımlamalarda `C++11` ve `C++14` standartlarına göre `x` ve `y` değişkenlerinin türlerinin çıkarımı derleyici tarafından `std::initializer_list<int>` olarak yapılıyordu. Ancak `C++17` standartları ile bu konuda ciddi bir değişiklik yapıldı: `auto` belirteci ile tanımlanan değişkene doğrudan ilk değer verme durumunda küme parantezi içinde yalnızca tek bir değer olabiliyor. Yani yeni standartlara göre yukarıdaki kodda `x` değişkeninin tanımı geçerli değil. Eğer küme parantezi içinde tek bir değer var ise bu durumda `auto` belirteci ile tanıtılan değişkenin türü artık küme parantezi içindeki ifadenin türü kabul ediliyor. Yani yukarıdaki kodda `y` değişkenin türü artık `int`. auto belirteci ile doğrudan ilk değer verildiğinde küme parantezi içinde birden fazla değer bulunması da artık sentaks hatası:
+
+```
+auto x{ 1, 4, 7 }; //geçersiz
+```
