@@ -2,10 +2,9 @@
 
 `C++11` standartları ile birlikte standart kütüphaneye dahil edilmiş olan `unique_ptr` bir akıllı gösterici `(smart pointer)` sınıfıdır. 
 Bu akıllı gösterici sınıfı genel olarak "tek sahiplik" `(exclusive ownership)` stratejisini gerçekleştirir.
-Bir `unique_ptr` nesnesi bir dinamik sınıf nesnesini gösteren tek bir gösterici olarak kullanılır. `unique_ptr` nesnesi, kendi hayatı sona erince sahibi olduğu dinamik sınıf nesnesinin de hayatını sonlandırarak onun tutmakta olduğu kaynakların serbest bırakılmasını sağlar. 
-Bu sınıfın temel varlık nedenlerinden biri, bir hata nesnesi `(exception)` gönderildiğinde söz konusu olabilecek kaynak sızıntısının `(resource leak)` engellenmesidir.
+Bir `unique_ptr` nesnesi bir kaynağı gösteren tek bir gösterici olarak kullanılır. Bir `unique_ptr` nesnesi bir kaynağı `(resource)` gösteren tek bir gösterici olarak kullanılır. `unique_ptr` nesnesi, kendi hayatı sona erince sahibi olduğu kaynağı geri verir ya da sonlandırır. Bu sınıfın temel varlık nedenlerinden biri, bir hata nesnesi `(exception)` gönderildiğinde söz konusu olabilecek kaynak sızıntısının `(resource leak)` engellenmesidir.
 
-`unique_ptr` sınıfı `C++98` standartlarında var olan ancak dildeki araçların yetersizliğinden kaynaklanan kötü tasarımı nedeniyle eleştirilen `auto_ptr` sınıfının yerine getirilmiştir. `C++11` standartları ile `auto_ptr` sınıfı kullanımdan düşürülmüş `(deprecated)` onun yerine hem daha yalın ve daha net bir arayüze sahip olan hem de daha düşük kodlama hatası riski içeren `unique_ptr` sınıfı standart kütüphaneye eklenmiştir. `auto_ptr` sınıfının tasarlandığı dönemde `C++` dili taşıma semantiği, değişken sayıda tür parametresine sahip şablonlar `(variadic templates)` gibi araçlara sahip değildi. `C++11` standartlarıyla dile kazandırılan bu araçlar `unique_ptr` sınıfının güvenli bir biçimde tasarlanmasına olanak sağlamıştır.
+`unique_ptr` sınıfı `C++98` standartlarında var olan ancak dildeki araçların yetersizliğinden kaynaklanan kötü tasarımı nedeniyle eleştirilen `auto_ptr` sınıfının yerine getirilmiştir. `C++11` standartları ile `auto_ptr` sınıfı kullanımdan düşürülmüş `(deprecated)` onun yerine hem daha yalın ve daha net bir arayüze sahip olan hem de daha düşük kodlama hatası riski içeren `unique_ptr` sınıfı standart kütüphaneye eklenmiştir. `auto_ptr` sınıfının tasarlandığı dönemde `C++` dili taşıma semantiği, değişken sayıda tür parametresine sahip şablonlar `(variadic templates)` gibi araçlara sahip değildi. `C++11` standartlarıyla dile kazandırılan bu araçlar `unique_ptr` sınıfının güvenli bir biçimde tasarlanmasına olanak sağlamıştır. auto_ptr sınıfı C++17 standartları ile dilden kaldırılmıştır.
 
 
 #### unique_ptr sınıfının kullanımı
@@ -15,25 +14,26 @@ Bazı işlevler işlerini şu şekilde görür:
 * Sonra yüklendikleri işleri gerçekleştirirler.
 * İşlerini tamamladıktan sonra edindikleri kaynakları geri verirler.
 
-İşlev içinde edinilen kaynaklar, işlev içinde tanımlanan yerel sınıf nesnelerine bağlanmışlarsa, işlevin kodundan çıkıldığında yerel sınıf nesnelerinin sonlandırıcı işlevinin çağrılmasıyla tutulan kaynaklar geri verilmiş olur. Ancak kaynaklar yerel bir sınıf nesnesine bağlanmadan dinamik olarak dışsal biçimde edinildiğinde dinamik sınıf nesnesini yöneten gösterici değişkenler tarafından kontrol edilirler. Bu durumda dinamik nesnenin hayatı `delete` ifadesi ile sonlandırılır. Aşağıdaki örneği inceleyin:
+İşlev içinde edinilen kaynaklar, işlev içinde tanımlanan yerel sınıf nesnelerine bağlanmışlarsa, işlevin kodundan çıkıldığında yerel sınıf nesnelerinin sonlandırıcı işlevinin çağrılmasıyla tutulan kaynaklar geri verilmiş olur. Ancak kaynaklar yerel bir sınıf nesnesine bağlanmak yerine normal gösterici değişkenler ile kontrol edilirlerse bu durumda ilgili kaynakların geri verilmesi için fiilen bu gösterici değişkenler kullanılmalıdır. Örneğin kaynak `new` ifadesi ile elde edilmiş ise `delete` ifadesi ile sonladırılmalıdır. Aşağıdaki kodu inceleyin:
+
 ```
 void func()
 {
     class ResourceUser *pd = new ResoruceUse; // dinamik bir nesne oluşturuluyor
     // kaynaklar kullanılarak bazı işlemler gerçekleştiriliyor.
-    delete pd; // Dinamik nesnenin ömrü sonlandırılarak kaynaklar geri veriliyor.
+    delete pd; // Kaynaklar geri veriliyor.
 }
 ```
 
 Böyle bir işlev sorunlara yol açabilir. Sorunlardan biri dinamik nesnenin hayatının sonlandırılmasının `(delete edilmesinin)` unutulmasıdır. Örneğin `delete` işleminden önce bir `return` deyimi yürütülürse dinamik nesnenin hayatı sonlandırılmayacaktır.
 
-Başlangıçta kolayca görülüyor olmasa da bir başka sorun da bir fonksiyondan hata nesnesinin `(exception)` gönderilmesidir. Bir hata nesnesi gönderildiğinde programın akışı işlevden çıkacak böylece `delete` deyimi yürütülmeyecektir. Bu durum bir bellek sızıntısına `(memory leak)` neden olabileceği gibi daha genel olarak bir kaynak sızıntısına `(resource leak)` yol açabilir.
+Koddan kolayca görülmüyor olsa da bir başka sorun da bir fonksiyondan bir hata nesnesinin `(exception)` gönderilmesidir. Bir hata nesnesi gönderildiğinde programın akışı işlevden çıkacak böylece `delete` deyimi yürütülmeyecektir. Bu durum bir bellek sızıntısına `(memory leak)` neden olabileceği gibi daha genel olarak bir kaynak sızıntısına `(resource leak)` yol açabilir.
 
-Gönderilebilecek tüm hata nesnelerinin yine işlev tarafından yakalanması oluşabilecek kaynak sızıntısı engelleyebilir:
+Gönderilebilecek tüm hata nesnelerinin yine aynı işlev tarafından yakalanması oluşabilecek kaynak sızıntısını engelleyebilir:
 ```
 void f()
 {
-	class ResourceUser *ptr = new class ResourceUser; // bir nesne oluşturuluyor
+	class ResourceUser *ptr = new class ResourceUser; // kaynak ediniliyor
 	try {
 		// bazı işlemler yapılıyor
 	}
@@ -42,17 +42,15 @@ void f()
 		throw; // hata nesnesi yeniden gönderiliyor
 	}
  
-	delete ptr; // işlevden normal olarak çıkılırsa dinamik nesnenin hayatı sonlandırılıyor.
+	delete ptr; // işlevden normal olarak çıkılırsa kaynak sonlandırılıyor.
 }
 ```
 
 Bir hata nesnesinin gönderilmesi durumunda da kaynakların güvenli bir şekilde geri verilmesi sağlanmak istenirse hem daha fazla kod yazılması gerekir hem de  yazılan kod çok daha karmaşık hale gelir. Dinamik olarak yaratılan nesnelerin sayısı birden fazla ise çok daha karışık bir durumun oluşacağı açıktır. Hata oluşumuna açık olan ve gereksiz bir karmaşıklığa neden olan bu kötü kodlama stilinden kaçınılmalıdır.
 
-Bu amaçla tasarlanabilecek bir akıllı gösterici `(smart pointer)` sınıfı sorunu çözebilir. Bir akıllı gösterici nesnesinin kendi sonlandırıcı işlevinin çağrılmasıyla, akıllı göstericinin yönettiği dinamik nesnenin de hayatı sonlandırılabilir. Yerel bir akıllı gösterici nesnesi söz konusu olacağından artık işlevden ister normal yollarla ister bir hata nesnesi gönderilmesi yoluyla `(exception)` çıkılsın akıllı gösterici nesnesine bağlanmış olan dinamik nesnenin hayatı sonlanacak, böylece kaynak sızıntısı oluşmayacaktır.
-İşte `unique_ptr` sınıfı bu amaçla tanımlanmış bir akıllı gösterici sınıfıdır.
+Bu amaçla tasarlanabilecek bir akıllı gösterici `(smart pointer)` sınıfı sorunu çözebilir. Bir akıllı gösterici nesnesinin kendi sonlandırıcı işlevinin çağrılmasıyla, akıllı göstericinin yönettiği kaynak da sonlandırılabilir. Yerel bir akıllı gösterici nesnesi söz konusu olacağından artık işlevden ister normal yollarla ister bir hata nesnesi gönderilmesi yoluyla `(exception)` çıkılsın akıllı gösterici nesnesine bağlanmış olan kaynak delete edilecek (ya da sonlandırılacak) böylece kaynak sızıntısı oluşmayacaktır. İşte `unique_ptr` bu amaçla tanımlanmış bir akıllı gösterici sınıfıdır.
 
-`unique_ptr` sınıfı türünden bir nesne, gösterdiği dinamik ömürlü nesnenin tek sahibi durumundadır.
-`unique_ptr` nesnesinin hayatı sonlandığında yani bir `unique_ptr` nesnesinin sonlandırıcı işlevi çağrıldığında onun sahip olduğu dinamik nesnenin de hayatı sonlandırılır, yani o dinamik nesne `delete` edilir.
+Bir `unique_ptr` nesnesi gösterdiği kaynağın `(örneğin dinamik ömürlü bir nesnenin)` tek sahibi durumundadır. `unique_ptr` nesnesinin hayatı sonlandığında yani bir `unique_ptr` nesnesinin sonlandırıcı işlevi çağrıldığında onun sahip olduğu dinamik nesnenin de hayatı sonlandırılır, yani o dinamik nesne `delete` edilir.
 
 Bir `unique_ptr` nesnesinin gösterdiği dinamik ömürlü nesneyi gösteren başka bir gösterici yoktur" ve bu semantik yapı kullanıcı kodlar tarafından da sürdürülmeli ve korunmalıdır.
 
@@ -62,7 +60,7 @@ Daha önceki örneğe geri dönüyouz:
  
 void f()
 {
-    // bir unique_ptr nesnesi oluşturuluyor ve bu nesneye ilk değer veriliyor.
+    // bir unique_ptr nesnesine ilk değer veriliyor.
     std::unique_ptr<ResourceUser>(new resourceUser);
     // işlemler yapılıyor
 }
@@ -70,9 +68,8 @@ void f()
 Hepsi bu kadar. Artık hata yakalamaya ilişkin deyimlere gerek kalmadığı gibi `delete` işleci de kullanılmıyor.
 
 #### bir unique_ptr nesnesinin kullanımı
-`unique_ptr` sınıf şablonu bir göstericinin özelliklerini destekleyen bir arayüze sahiptir:
-İçerik `(dereferencing)` işlecinin kullanılmasıyla `unique_ptr` nesnesinin gösterdiği dinamik nesneye erişilebilir.
-`unique_ptr` nesnesinin gösterdiği dinamik nesnenin öğelerine ok işleciyle erişmek de mümkündür. Aşağıdaki kodu inceleyin:
+`unique_ptr` sınıfı bir göstericinin özelliklerini destekleyen bir arayüze sahiptir: İçerik `(dereferencing)` işlecinin kullanılmasıyla `unique_ptr` nesnesinin gösterdiği dinamik nesneye erişilebilir. `unique_ptr` nesnesinin gösterdiği dinamik nesnenin öğelerine ok `(member selection - arrow)` operatörü ile erişmek de mümkündür. Aşağıdaki kodu inceleyin:
+
 ```
 #include <iostream>
 #include <string>
@@ -80,7 +77,7 @@ Hepsi bu kadar. Artık hata yakalamaya ilişkin deyimlere gerek kalmadığı gib
  
 int main()
 {
-	// oluşturulan unique_ptr nesnesine dinamik bir string nesnesi ile ilkdeğer veriliyor:
+	// unique_ptr nesnesine dinamik bir string nesnesi ile ilkdeğer veriliyor:
  
 	std::unique_ptr<std::string> uptr(new std::string("Maya"));
 	(*uptr)[0] = 'K'; // Yazının ilk karakteri değiştiriliyor
@@ -90,13 +87,13 @@ int main()
 	return 0;
 }
 ```
-`unique_ptr` sınıfının kurucu işlevi `explicit` olduğundan bu türden bir nesne kopyalayan ilk değer verme `(copy initialization)` sözdizimiyle başlatılamaz.
+`unique_ptr` sınıfının kurucu işlevi explicit olduğundan nesne "kopyalayan ilk değer verme" `(copy initialization)` sentaksı ile oluşturulamaz.
 
 ```
 std::unique_ptr<int> uptr = new int; // Geçersiz
 std::unique_ptr<int> uptr(new int); // Geçerli
 ```
-Bir `unique_ptr` nesnesi dinamik bir nesneye sahip olmadan da varlığını sürdürebilir. Varsayılan kurucu işlev ile hayata getirilen `unique_ptr` nesnesi hiçbir dinamik nesnenin sahibi değildir.
+Bir `unique_ptr` nesnesi bir kaynağa sahip olmadan da varlığını sürdürebilir. Varsayılan kurucu işlev ile hayata getirilen `unique_ptr` nesnesi hiçbir kaynağın sahibi değildir. Değeri `nullptr`'dir.
 
 ```
 std::unique_ptr<std::string> up;
@@ -116,27 +113,28 @@ Sınıfın `release` isimli üye işlevi bir `unique_ptr` nesnesinin sahip oldu�
 std::unique_ptr<std::string> up(new std::string("Kaan Aslan"));
 std::string* sp = uptr.release(); // uptr sahipliği bırakıyor
 ```
-Sınıfın `bool` türüne dönüşüm yapan üye işleviyle bir `unique_ptr` nesnesinin dinamik bir nesneyi kontrol edip etmediği sınanabilir:
+Sınıfın `bool` türüne dönüşüm yapan üye işleviyle bir `unique_ptr` nesnesinin bir kaynağa sahip olup olmadığı sınanabilir:
 
 ```
 if (uptr) { // uptr dinamik bir nesneye sahip ise
 	std::cout << *uptr << "\n";
 }
 ```
-Bir `unique_ptr` nesnesinin dinamik bir nesnenin sahibi olup olmadığı `unique_ptr` nesnesninin `nullptr` değerine eşitliği ile de sınanabilir:
+Bir `unique_ptr` nesnesinin bir kaynağa sahip olup olmadığı `nullptr` değerine eşitliği ile de sınanabilir:
 
 ```
-if (uptr != nullptr) // uptr dinamik bir nesneye sahip ise
+if (uptr != nullptr) // uptr bir kaynağa sahip ise
 ```
 
-`unique_ptr` nesnesininin veri elemanı olarak tuttuğu ham göstericinin değerinin `nullptr` değerine eşitliğiyle de aynı sınama gerçekleştirilebilir:
+Aynı amaçla `unique_ptr` nesnesinin veri elemanı olarak tuttuğu ham göstericinin `nullptr` değerinde olup olmadığı da sınanabilir.
+
 ```
-if (uptr.get() != nullptr) // uptr bir nesneye sahip ise
+if (uptr.get() != nullptr) // uptr bir kaynağa sahip ise
 ```
 
 #### unique_ptr ile sahipliğin devredilmesi
 `unique_ptr` sınıfı tek sahiplik semantiğini uygular.
-Sınıfın kopyalayan kurucu işlevi `(copy constructor)` ve kopyalayan atama işlevi `(copy assignment function)` `delete` edilerek sınıf kopyalamaya karşı kapatılmıştır. Ancak birden fazla `unique_ptr` nesnesinin aynı dinamik nesnesini adresiyle başlatılmaması programcının sorumluluğundadır:
+Sınıfın kopyalayan kurucu işlevi `(copy constructor)` ve kopyalayan atama işlevi `(copy assignment function)` `delete` edilerek sınıf kopyalamaya karşı kapatılmıştır. Ancak birden fazla `unique_ptr` nesnesinin aynı dinamik nesnenin adresiyle başlatılmaması programcının sorumluluğundadır:
 
 ```
 #include <string>
@@ -152,10 +150,7 @@ int main()
 }
 ```
 
-Yukarıdaki gibi bir kod çalışma zamanı hatasına neden olur. Kodlayıcıların böyle hatalardan kaçınması gerekir.
-Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama işlecinin kodu nasıl olmalı? Bir unique_ptr nesnesini kopyalama yoluyla hayata başlatamayız ve bir `unique_ptr` nesnesine kopyalama yoluyla atama yapamayız. `unique_ptr` sınıfında yalnızca taşıma semantiği kullanılmaktadır. `unique_ptr`nesneleri kopyalanamaz ama taşınabilir. Taşıyan kurucu işlev ve taşıyan atama işlevi sahipliğin başka bir göstericiye devredilmesini sağlar:
-
-Kopyalayan kurucu işlevin kullanıldığını düşünelim:
+Yukarıdaki gibi bir kod tanımsız davranıştır. Kaynak hem paylaşılacak hem de iki kez `delete` edilecektir. Kodlayıcıların böyle hatalardan kaçınması gerekir. Peki, `unique_ptr` sınıfının kopyalayan kurucu işlevi ve atama operatör fonksiyonunun kodu nasıl olmalı? Bir `unique_ptr` nesnesini kopyalama yoluyla hayata başlatamayız ve bir `unique_ptr` nesnesine kopyalama yoluyla atama yapamayız. `unique_ptr` sınıfında yalnızca taşıma semantiği `(move semantics)` kullanılmaktadır. `unique_ptr` nesneleri kopyalanamaz ama taşınabilir. Taşıyan kurucu işlev `(move constructor)` ve taşıyan atama işlevi `(move assignment)` sahipliğin başka bir göstericiye devredilmesini sağlar. Kopyalayan kurucu işlevin kullanıldığını düşünelim:
 
 ```
 #include <memory>
