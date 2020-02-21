@@ -165,7 +165,7 @@ std::unique_ptr<Myclass> up3(std::move(up1)); // Geçerli
 ```
 	
 İlk deyimden sonra, `up1` `new` işleciyle hayata getirilmiş nesnenin sahibi olur.
-Kopyalayan kurucu işlev gerektiren ikinci deyim sentaks hatasıdır. İkinci bir `unique_ptr` nesnesinin aynı dinamik `Myclass` nesnesinin sahipliğini almasına izin verilmez. Aynı zamanda tek bir sahibe izin verilmektedir. Ancak üçüncü deyimle sahiplik `up1` nesnesinden `up3` nesnesine devredilir. Artık `up1` nesnesi sahipliği bırakmıştır.  new işleciyle hayata getirilmiş `Myclass` nesnesi `up3`'ün hayatının bitmesiyle delete edilir. Atama işleci de benzer şekilde davranır:
+Kopyalayan kurucu işlev gerektiren ikinci deyim sentaks hatasıdır. İkinci bir `unique_ptr` nesnesinin aynı dinamik `Myclass` nesnesinin sahipliğini almasına izin verilmez. Bir kaynağın tek bir sahibi olabilir. Ancak üçüncü deyimle sahiplik `up1` nesnesinden `up3` nesnesine devredilir. Artık `up1` nesnesi sahipliği bırakmıştır.  `new` ifadesi ile hayata getirilmiş `Myclass` nesnesi `up3`'ün hayatının bitmesiyle `delete` edilir. Atama operatörü de benzer şekilde davranır:
 
 ```
 #include <memory>
@@ -179,32 +179,32 @@ int main()
 	std::unique_ptr<Myclass> up1(new Myclass);
 	std::unique_ptr<Myclass> up2; 
 	//up2 = up1; // geçersiz
-	up2 = std::move(up1); //  sahiplik up1 nesnsinden up2 nesnesine devredilir.
+	up2 = std::move(up1); //  sahiplik up1 nesnesinden up2 nesnesine devredilir.
 }
 ```
 	
-Burada atama operatör işlevi sahipliği `up1` nesnesinden `up2` nesnesine devreder. Sonuç olarak, daha önce sahibi `up1` olan dinamik nesnenin artık yeni sahibi `up2`'dir. `C++11` öncesinde kullanılan `auto_ptr` sınıfında bu işlem doğrudan kopyalama semantiği ile yapılıyor bu da bir çok soruna neden oluyordu. Eger `up2` nesnesi atamadan önce bir dinamik nesnenin sahibi olsa idi bu dinamik nesne atamadan önce delete edilecekti:
+Burada atama operatör işlevi sahipliği `up1` nesnesinden `up2` nesnesine devreder. Sonuç olarak, daha önce sahibi `up1` olan dinamik nesnenin artık yeni sahibi `up2`'dir. `C++11` öncesinde kullanılan `auto_ptr` sınıfında bu işlem doğrudan kopyalama semantiği ile yapılıyor bu da bir çok soruna neden oluyordu. Eger `up2` nesnesi atamadan önce bir dinamik nesnenin sahibi olsa idi bu dinamik nesne atamadan önce `delete` edilecekti:
 
 ```
 #include <memory>
  
 class Myclass {
-	//
+    //...
 };
  
 int main() 
 {
-	// bir unique_ptr nesnesine dinamik bir nesneyle ilk değer veriliyor.
-	std::unique_ptr<Myclass> up1(new Myclass);
-	// bir başka unique_ptr nesnesine dinamik bir nesneyle ilk değer veriliyor
-	std::unique_ptr<Myclass> up2(new Myclass);
-	up2 = std::move(up1); // taşıyan atama işlevi up2'nin daha önce sahip olduğu nesne sonlandırılır.
-	// Sahiplik up1'den up2'ye devredilir
+    // unique_ptr nesnesi dinamik bir nesneyle başlatılıyor.
+    std::unique_ptr<Myclass> up1(new Myclass);
+    //Yeni bir unique_ptr nesnesi dinamik bir nesneyle başlatılıyor.
+    std::unique_ptr<Myclass> up2(new Myclass);
+    up2 = std::move(up1); // taşıyan atama işlevi ile up2'nin daha     önce sahip olduğu nesne sonlandırılır.
+    // Sahiplik up1'den up2'ye devredilir
 }
 ```
 	
 Yeni bir sahiplik edinmeden sahip olduğu nesneyi bırakan bir `unique_ptr` nesnesi hiçbir nesneyi göstermez.
-Bir `unique_ptr` nesnesine başka bir `unique_ptr` nesnesinin değeri taşınarak atanmalıdır. `unique_ptr` nesnelerine adresler doğrudan atanamaz.
+Bir `unique_ptr` nesnesine başka bir `unique_ptr` nesnesinin değeri taşınarak atanmalıdır. `unique_ptr` nesnelerine doğrudan adresler atanamaz.
 
 ```
 #include <memory>
@@ -222,16 +222,15 @@ int main()
 }
 ```
 
-Bir `unique_ptr` nesnesine `nullptr` değerinin atanması nesnenin `reset` işlevinin çağrılmasına eşdeğerdir.
+Bir `unique_ptr` nesnesine `nullptr` değerinin atanması, nesnenin `reset` işlevinin (arüman gönderilmeden ya da `nullptr` değeri ile) çağrılmasına eşdeğerdir.
 
 #### nesne kaynağı ve boşaltım havuzu
 Sahipliğin devredilebilmesi `unique_ptr` nesnelerine özel bir kullanım alanı sunar: İşlevler dinamik nesnelerin sahipliğini `unique_ptr` nesneleri ile başka işlevlere aktarabilirler.
 
 Bu iki ayrı yolla olabilir:
 
-1. Bir işlev bir veri boşaltım havuzu `(sink)` olarak kullanılabilir.
-
-Bu durumda, çağrılan işlevin parametre değişkeni kendisine sağ taraf değeri olarak gönderilen `unique_ptr` nesnesinin kaynağını devralır. Böylece, işlev sahipliğini devraldığı nesnenin sahipliğini yeniden bir başka koda devretmez ise işlevin kodunun çalışması sonlandığunda `unique_ptr` nesnesinin sahiplendiği dinamik nesne silinir:
+1. Bir işlev bir veri boşaltım havuzu (sink) olarak kullanılabilir.
+Bu durumda, çağrılan işlevin parametre değişkeni kendisine sağ taraf değeri olarak gönderilen `unique_ptr` nesnesinin kaynağını devralır. Böylece işlevin kodunun çalışması sonlandığında `unique_ptr` nesnesinin sahiplendiği dinamik nesne silinir:
 
 ```
 #include <memory>
@@ -253,7 +252,7 @@ int main()
 }
 ```
 
-2. Bir işlev nesne kaynağı `(factory)` olarak davranabilir. `unique_ptr` geri döndürüldüğünde geri döndürülen sınıf nesnesinin sahipliği işlevi çağıran koda devredilir. Aşağıdaki örnek bu tekniği gösteriyor:
+2.Bir işlev nesne üretecek bir kaynak `(factory)` olarak davranabilir. `unique_ptr` geri döndürüldüğünde geri döndürülen sınıf nesnesinin sahipliği işlevi çağıran koda devredilir. Aşağıdaki örnek bu tekniği gösteriyor:
 
 ```
 #include <memory>
@@ -281,9 +280,8 @@ void g()
 	// p'nin son sahip olduğu nesne silinir.
 }
 ```
-`source` işlevi her çağrıldığında `new` işleciyle dinamik bir `Myclass` nesnesi yaratılmış olur ve source işlevi bu nesneyi sahipliği ile birlikte kendisini çağıran koda gönderir. İşlevin geri dönüş değerinin `p` isimli `unique_ptr` nesnesine atanması dinamik nesnenin mülkiyetini bu nesneye devreder. Döngünün ikinci ve daha sonraki turlarında `p` nesnesine yapılan her atama `p`'nin daha önce sahiplendiği dinamik nesneyi siler.
-
-`g` işlevinin çıkışında `p` nesneninin ömrü sona erdiğinden `p` için çağrılan sonlandırıcı işlevin çağrılması `p`'nin sahipliğini üstlendiği son dinamik `Myclass` nesnesinin de `delete` edilmesini sağlar. Bir kaynak sızıntısı mümkün değildir. İşlev içinden bir hata nesnesi gönderilse dahi, bir `unique_ptr` nesnesinin sahibi olduğu dinamik nesne silinecektir.
+`source` işlevi her çağrıldığında `new` ifadesi ile dinamik bir `Myclass` nesnesi oluşturulur ve source işlevi bu nesnenin sahipliğini kendisini çağıran koda devreder. İşlevin geri dönüş değerinin `p` isimli `unique_ptr` nesnesine atanması ile kaynağın mülkiyeti devredilir. Döngünün ikinci ve daha sonraki turlarında `p` nesnesine yapılan her atama `p`'nin daha önce sahiplendiği dinamik nesneyi siler.
+`g` işlevinin çıkışında `p` nesnesinin ömrü sona erdiğinden `p` için çağrılan sonlandırıcı işlev `p`'nin sahipliğini üstlendiği son `Myclass` nesnesinin de `delete` edilmesini sağlar. Bir kaynak sızıntısı mümkün değildir. İşlev içinden bir hata nesnesi gönderilse dahi, `unique_ptr` nesnesinin sahibi olduğu dinamik nesne silinecektir.
 
 #### unique_ptr nesnelerinin veri öğesi olarak kullanılması
 `unique_ptr` nesnelerinin sınıfların veri öğeleri yapılmasıyla kaynak sızıntıları engellenebilir. Ham göstericiler yerine akıllı göstericilerin kullanılması durumunda sonlandırıcı işleve gerek kalmaz. Nesnenin ömrünün bitmesiyle, veri elemanı olan akıllı gösterici nesnelerinin de hayatı sonlanacak bu da dinamik nesnelerin `delete` edilmesini sağlayacaktır. Ayrıca `unique_ptr` nesnelerinin kullanılmasıyla bir sınıf nesnesinin hayat başlama sürecinde bir hata nesnesini gönderilmesi durumunda kaynak sızıntısı engellenmiş olur. Bir sınıf nesnesi için sonlandırıcı işlevin çağrılabilmesi için söz konusu nesnenin kurucu işlevinin kodu tamamen çalışmış olmalıdır. Kurucu işlev içinden bir hata nesnesi gönderilirse yalnızca kurulumu tamamlanmış veri öğeleri olan sınıf nesneleri için sonlandırıcı işlev çağrılacaktır. Eğer sınıfın birden fazla ham gösterici veri öğesi var ise, birinci `new` işlemi başarılı olduktan sonra ikincisi başarısız olursa kaynak sızıntısı oluşur.
