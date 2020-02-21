@@ -797,7 +797,8 @@ int main()
 Yukarıdaki kodda önce içinde `std::unique_ptr<std::string>` sınıf nesnleri tutacak `std::vector` sınıf şablonu açılımına `UpStrvec` eş ismi veriliyor. `main` işlevi içinde `myvec` isimli bir `vector` nesnesinin oluşturulduğunu görüyorsunuz. `vector` sınıfının `push_back` ve `emplace_back` işlevleriyle `vector`'e sırasıyla kayhancan, `necati`, `kaan` ve `ayhan` isimleri ekleniyor. `myvec` nesnesi için sonlandırıcı işlev çağrıldığında kapta tutulmakta olan `unique_ptr` nesnelerinin de sonlandırıcı işlevleri çağrılacak ve böylece dinamik `string` nesneleri `delete` edilecek.
 
 #### unique_ptr<> nesnelerinin karşılaştırılması
-`unique_ptr<>` nesneleri karşılaşırma operatörleriyle karşılaştırılabilir. Bu durumda karşılaştırılan `unique_ptr<>` nesnelerinin sarmaladığı adreslerdir:
+`unique_ptr<>` nesneleri karşılaştırma operatörleriyle karşılaştırılabilir. Bu durumda karşılaştırılan `unique_ptr<>` nesnelerinin sarmaladığı adreslerdir:
+
 ```
 #include <memory>
 #include <iostream>
