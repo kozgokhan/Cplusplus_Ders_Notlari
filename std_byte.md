@@ -1,8 +1,8 @@
 # std::byte Türü
 
-`C++17` standartları ile dile eklenen yeni türlerden biri std::byte. Yazdığımız programlar bellekteki `byte`'ları kullanıyor. `std::byte` türünün amacı bu bellek `byte`'larını oldukları gibi temsil etmek. Burada amaç `byte`'lardaki tutulan değerlere ne karakter kodu olarak bakmak (ki bunun için zaten `char` türleri var) ne de onları doğrudan tam sayı değerleri olarak kullanmak (bunun için de tam sayı türlerimiz var). Amaçlanan ham bellek byte'larını temsil etmek. Sayısal bir hesaplamanın söz konusu olmadığı durumlarda, `std::byte` türünün kullanılması ile derleme zamanına yönelik katı bir tür kontrolü hedefleniyor.
+_C++17_ standartları ile dile eklenen yeni türlerden biri __std::byte__. Yazdığımız programlar bellekteki _byte_'ları kullanıyor. __std::byte__ türünün amacı bu bellek _byte_'larını oldukları gibi temsil etmek. Burada amaç _byte_'lardaki tutulan değerlere ne karakter kodu olarak bakmak (ki bunun için zaten _char_ türleri var) ne de onları doğrudan tam sayı değerleri olarak kullanmak (bunun için de tam sayı türlerimiz var). Amaçlanan ham bellek _byte_'larını temsil etmek. Sayısal bir hesaplamanın söz konusu olmadığı durumlarda, _std::byte_ türünün kullanılması ile derleme zamanına yönelik katı bir tür kontrolü hedefleniyor.
 
-`std::byte` türüne ilişkin sentaks kurallarını ve bu türün kullanım olanaklarını tam olarak kavrayabilmek için öncelikle `C++17` standartları ile `enum` türleri konusunda temel sentaksa yapılan bir eklentiyi anlamamız gerekiyor: Artık baz türü `(underlying type)` belirli olan bir `enum` nesnesine küme parantezi içinde doğrudan enumarator olmayan bir tam sayı ile ilk değer verilebiliyor. Aşağıdaki koda bakalım:
+_std::byte_ türüne ilişkin sentaks kurallarını ve bu türün kullanım olanaklarını tam olarak kavrayabilmek için öncelikle _C++17_ standartları ile _enum_ türleri konusunda temel sentaksa yapılan bir eklentiyi anlamamız gerekiyor: Artık baz türü _(underlying type)_ belirli olan bir _enum_ nesnesine küme parantezi içinde doğrudan _enumarator_ olmayan bir tam sayı ile ilk değer verilebiliyor. Aşağıdaki koda bakalım:
 
 ```
 enum Color : unsigned char {red, green, yellow};
@@ -17,8 +17,8 @@ int main()
 ```` 
 Bu şekilde ilk değer vermenin geçerli olabilmesi için
 
-Baz türün belirlenmiş olması gerekiyor. Geleneksel `enum`'lar söz konusu olduğunda baz tür bildirimde belirtilmeli. `enum class`'lar söz konusu olduğunda ise baz tür belirtilmese de varsayılan baz türün `int` kabul edildiğini hatırlayalım.
-Bildirimde ilk değer küme parantezi içinde ve doğrudan verilmeli. Küme parantezi içinde ilk değer verme `(brace initialization)` kuralları gereği daraltıcı bir tür dönüşümü `(narrowing conversion)` söz konusu olmamalı. Aşağıdaki kodu inceleyelim:
+Baz türün belirlenmiş olması gerekiyor. Geleneksel _enum_ türleri söz konusu olduğunda baz tür bildirimde belirtilmeli. _enum class_'lar söz konusu olduğunda ise baz tür belirtilmese de varsayılan baz türün _int_ kabul edildiğini hatırlayalım.
+Bildirimde ilk değer küme parantezi içinde ve doğrudan verilmeli. Küme parantezi içinde ilk değer verme _(brace initialization)_ kuralları gereği daraltıcı bir tür dönüşümü _(narrowing conversion)_ söz konusu olmamalı. Aşağıdaki kodu inceleyelim:
 
 ```
 enum Nec : char { };
@@ -44,15 +44,16 @@ BitFlag flag{ 0 }; // halen geçersiz (baz tür belli degil)
 enum Erg : char { };
 Erg i5{ 42.2 }; //geçersiz (daraltıcı dönüşüm)
 ```
-Yukarıdaki kodda enum nesnelerine ilk değer vermede `(initialization)` yeni kurallar, geçerli ve geçersiz bildirimlerle örnekleriyle gösteriliyor. Başlangıçta en azından tuhaf olarak karşılanacak bu yeni sentaksın ana amacı `std::byte` türünün (ya da ileride oluşturulacak özel bazı türlerin) gerçekleştirimine olanak sağlamak.
 
-`std::byte` aslında aşağıdaki gibi tanımlanmış bir `enum class` türü:
+Yukarıdaki kodda _enum_ nesnelerine ilk değer vermede _(initialization)_ yeni kurallar, geçerli ve geçersiz bildirimlerle örnekleriyle gösteriliyor. Başlangıçta en azından tuhaf olarak karşılanacak bu yeni sentaksın ana amacı _std::byte_ türünün (ya da ileride oluşturulacak özel bazı türlerin) gerçekleştirimine olanak sağlamak.
+
+_std::byte_ aslında aşağıdaki gibi tanımlanmış bir _enum class_ türü:
 
 ```
 enum class byte : unsigned char {};
 ```
 
-Tanımdan da görüldüğü gibi `std::byte` için baz tür olarak unsigned char türü seçilmiş. Bu durumda `td::byte` türünden bir nesneye ilk değer verebilmek için çok sınırlı sayıda seçenek söz konusu. Zaten `std::byte` türü ile hedeflenen bu şekilde katı bir tür denetimi sağlamak:
+Tanımdan da görüldüğü gibi _std::byte_ için baz tür olarak _unsigned char_ türü seçilmiş. Bu durumda _std::byte_ türünden bir nesneye ilk değer verebilmek için çok sınırlı sayıda seçenek söz konusu. Zaten _std::byte_ türü ile hedeflenen bu şekilde katı bir tür denetimi sağlamak:
 
 ```
 #include <cstddef>
@@ -71,8 +72,7 @@ int main()
 	std::byte b10 = { 45 }; //geçersiz
 }
 ```
-İlk değer verilmemiş otomatik ömürlü bir `std::byte` nesnesinin tanımlanması geçerli olsa da böyle bir nesnenin hayata belirlenmemiş bir değer ile `(indetermined value)` geldiğine dikkat etmemiz gerekiyor.
-Öğeleri `std::byte` türünden olan bir diziye de tam sayılarla ilk değer veremiyoruz:
+İlk değer verilmemiş otomatik ömürlü bir _std::byte_ nesnesinin tanımlanması geçerli olsa da böyle bir nesnenin hayata belirlenmemiş bir değer ile _(indetermined value)_ geldiğine dikkat etmemiz gerekiyor. Öğeleri _std::byte_ türünden olan bir diziye de tam sayılarla ilk değer veremiyoruz:
 
 ```
 #include <cstddef>
