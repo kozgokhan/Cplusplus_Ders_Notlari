@@ -15,9 +15,7 @@ int main()
 	//...
 }
 ```` 
-Bu şekilde ilk değer vermenin geçerli olabilmesi için
-
-Baz türün belirlenmiş olması gerekiyor. Geleneksel _enum_ türleri söz konusu olduğunda baz tür bildirimde belirtilmeli. _enum class_'lar söz konusu olduğunda ise baz tür belirtilmese de varsayılan baz türün _int_ kabul edildiğini hatırlayalım.
+Bu şekilde ilk değer vermenin geçerli olabilmesi için baz türün belirlenmiş olması gerekiyor. Geleneksel _enum_ türleri söz konusu olduğunda baz tür bildirimde belirtilmeli. _enum class_'lar söz konusu olduğunda ise baz tür belirtilmese de varsayılan baz türün _int_ kabul edildiğini hatırlayalım.
 Bildirimde ilk değer küme parantezi içinde ve doğrudan verilmeli. Küme parantezi içinde ilk değer verme _(brace initialization)_ kuralları gereği daraltıcı bir tür dönüşümü _(narrowing conversion)_ söz konusu olmamalı. Aşağıdaki kodu inceleyelim:
 
 ```
