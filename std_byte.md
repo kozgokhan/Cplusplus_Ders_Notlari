@@ -45,7 +45,7 @@ enum Erg : char { };
 Erg i5{ 42.2 }; //geçersiz (daraltıcı dönüşüm)
 ```
 
-Yukarıdaki kodda _enum_ nesnelerine ilk değer vermede _(initialization)_ yeni kurallar, geçerli ve geçersiz bildirimlerle örnekleriyle gösteriliyor. Başlangıçta en azından tuhaf olarak karşılanacak bu yeni sentaksın ana amacı _std::byte_ türünün (ya da ileride oluşturulacak özel bazı türlerin) gerçekleştirimine olanak sağlamak.
+Yukarıdaki kodda _enum_ nesnelerine ilk değer vermede _(initialization)_ yeni kurallar, geçerli ve geçersiz bildirimlerle örnekleriyle gösteriliyor. Başlangıçta en azından tuhaf olarak karşılanacak bu yeni sentaksın ana amacı _std::byte_ türünün (ya da ileride oluşturulacak özel bazı türlerin) gerçekleştirilmesine olanak sağlamak.
 
 _std::byte_ aslında aşağıdaki gibi tanımlanmış bir _enum class_ türü:
 
@@ -85,15 +85,15 @@ int main()
 ```
 
 ## std::byte sizeof değeri
-`std::byte` baz türü `unsigned char` olan bir enum türü olduğundan `sizeof` değerinin `1` olması garanti altında. `unsigned char` sistemlerin çoğunda `8` bitlik bir tam sayı türü. Ancak farklı sistemlerde `char` türlerinin bit sayısı farklı olabileceğinden bu değerin kullanılması gereken durumlarda taşınabilirlik sağlamak amacıyla standart `<limits>` başlık dosyasında tanımlanan
+_std::byte_ baz türü _unsigned char_ olan bir enum türü olduğundan _sizeof_ değerinin _1_ olması garanti altında. _unsigned char_ sistemlerin çoğunda _8_ bitlik bir tam sayı türü. Ancak farklı sistemlerde _char_ türlerinin bit sayısı farklı olabileceğinden bu değerin kullanılması gereken durumlarda taşınabilirlik sağlamak amacıyla standart _<limits>_ başlık dosyasında tanımlanan
 
 ```
 std::numeric_limits<unsigned char>::digits
 ```
-`static constexpr` değeri kullanılmalı.
+_static constexpr_ sabiti kullanılmalı.
 
 ## `to_integer<>` işlev şablonu
-`std::byte` türünden tam sayı türlerine ve tam sayı türlerinden `std::byte` türüne otomatik tür dönüşümü `(implicit type conversion)` yok. Ancak bir `std::byte` nesnesini herhangi bir tam sayı türüne dönüştürmek için `to_integer` isimli işlev şablonunu kullanabiliyoruz:
+_std::byte_ türünden tam sayı türlerine ve tam sayı türlerinden _std::byte_ türüne otomatik tür dönüşümü _(implicit type conversion)_ yok. Ancak bir _std::byte_ nesnesini herhangi bir tam sayı türüne dönüştürmek için _to_integer_ isimli işlev şablonunu kullanabiliyoruz:
 
 ```
 #include <cstddef>
@@ -107,7 +107,7 @@ int main()
 	std::cout << "ival = " << ival << '\n';
 }
 ```
-`std::byte` türünden `bool` türüne de otomatik tür dönüşümü olmadığından lojik ifade beklenen yerlerde `std::byte` nesnelerini doğrudan kullanamıyoruz:
+_std::byte_ türünden _bool_ türüne de otomatik tür dönüşümü olmadığından lojik ifade beklenen yerlerde _std::byte_ nesnelerini doğrudan kullanamıyoruz:
 
 ```
 #include <cstddef>
@@ -125,8 +125,8 @@ int main()
 ```
 
 ## bitsel işlemler
-Bir `std::byte` nesnesine yalnızca atama ya da kopyalama yapabilir ya da onu bitsel işlemlere sokabiliriz.
-`std:byte` türü için bitsel işlemler, operatör yüklemesi `(operator overloading)` mekanizması ile mümkün kılınmış:
+Bir _std::byte_ nesnesine yalnızca atama ya da kopyalama yapabilir ya da onu bitsel işlemlere sokabiliriz.
+_std:byte_ türü için bitsel işlemler, operatör yüklemesi _(operator overloading)_ mekanizması ile mümkün kılınmış:
 
 ```
 template<typename Integer>
@@ -168,7 +168,7 @@ int main()
 ```
 
 ## std::byte türü ve formatlı giriş çıkış işlemleri
-`std::byte` türü için standart kütüphanenin sağladığı formatlı giriş ve çıkış işlevleri `(inserter / extractor)` bulunmuyor:
+_std::byte_ türü için standart kütüphanenin sağladığı formatlı giriş ve çıkış işlevleri _(inserter / extractor)_ bulunmuyor:
 
 ```
 #include <cstddef>
@@ -205,7 +205,7 @@ int main()
 }
 ```
 
-Şimdi de formatlı giriş işlemi için bir işlev `(extractor)` tanımlayalım:
+Şimdi de formatlı giriş işlemi için bir işlev _(extractor)_ tanımlayalım:
 
 ```
 #include <istream>
@@ -236,7 +236,7 @@ int main()
 	std::cout << "deger : " << std::to_integer<int>(b);
 }
 ```
-`std::bitset` sınıfını kullanarak `std::byte` nesnesinin taşıdığı değeri `std::string` olarak da ifade edebiliriz:
+_std::bitset_ sınıfını kullanarak _std::byte_ nesnesinin taşıdığı değeri _std::string_ olarak da ifade edebiliriz:
 
 ```
 #include <cstddef>
@@ -249,7 +249,7 @@ using bitset_b = std::bitset<std::numeric_limits<unsigned char>::digits>;
 auto str = bitset_b{ std::to_integer<unsigned char>(b) }.to_string();
 ```
 
-Standart kütüphanenin std::byte türü için bir "sabit operatör işlevi"  `(literal operator function)` tanımlaması belki iyi bir fikir olabilirdi. Böyle bir ihtiyaç söz konusu olduğunda kendi std::byte sabitlerimizi oluşturabilmek için bir işlev tanımlayabiliriz. Aşağıdaki kodu inceleyelim:
+Standart kütüphanenin _std::byte_ türü için bir "sabit operatör işlevi"  _(literal operator function)_ tanımlaması belki iyi bir fikir olabilirdi. Böyle bir ihtiyaç söz konusu olduğunda kendi _std::byte_ sabitlerimizi oluşturabilmek için bir işlev tanımlayabiliriz. Aşağıdaki kodu inceleyelim:
 
 ```
 #include <cstddef>
