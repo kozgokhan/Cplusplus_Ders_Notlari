@@ -114,19 +114,19 @@ struct Der : private Base {
 };
 ```
 
-Yukarıdaki kodda `Base` sınıfından `private` kalıtımı yoluyla elde edilen `Der` sınıfı `Base` sınıfının `public` sanal işlevi olan `func` işlevini ezmiş `(override etmiş)`.
+Yukarıdaki kodda _Base_ sınıfından _private_ kalıtımı yoluyla elde edilen _Der_ sınıfı _Base_ sınıfının _public_ sanal işlevi olan _func_ işlevini ezmiş _(override etmiş)_.
 
 #### private kalıtımı neden kullanılır?
-`private` kalıtımına ilişkin kuralları gözden geçirdiğimize göre artık bu kalıtım biçiminin ne işe yaradığını ya da ne fayda sağladığını incelemeye başlayabiliriz. `public` kalıtımı ile bir taban sınıfın `(parent class)` `public `arayüzünü devralan yeni bir sınıf `(child class)` oluşturuyoruz.  Böyle iki sınıf arasındaki ilişkiye ingilizcede popüler olarak `"is a" ilişkisi deniyor. 
+_private_ kalıtımına ilişkin kuralları gözden geçirdiğimize göre artık bu kalıtım biçiminin ne işe yaradığını ya da ne fayda sağladığını incelemeye başlayabiliriz. _public_ kalıtımı ile bir taban sınıfın _(parent class)_ _public_ arayüzünü devralan yeni bir sınıf _(child class)_ oluşturuyoruz.  Böyle iki sınıf arasındaki ilişkiye İngilizcede popüler olarak _"is a"_ ilişkisi deniyor. 
 
-Eğer `X` sınıfı `Y` sınıfından kalıtım yoluyla elde edildi ise<br>
-Her bir `X` aynı zamanda bir `Y`'dir. Yani `Y` nesnesi gereken her yerde bir `X` nesnesi de kullanılabilir:
+Eğer _X_ sınıfı _Y_ sınıfından kalıtım yoluyla elde edildi ise<br>
+Her bir _X_ aynı zamanda bir _Y_'dir. Yani _Y_ nesnesi gereken her yerde bir _X_ nesnesi de kullanılabilir:
 
-- Her satış görevlisi bir çalışandır<br>
-- Her aslan bir hayvandır.<br>
-- Her politikacı bir yalancıdır. <br>
+* Her satış görevlisi bir çalışandır<br>
+* Her aslan bir hayvandır.<br>
+* Her politikacı bir yalancıdır. <br>
 
-Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak `private` ve `protected` kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık `"is a"` ilişkisi söz konusu değil.
+Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak _private_ ve _protected_ kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık _"is a"_ ilişkisi söz konusu değil.
 
 Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede _"composition"_ deniyor. _Composition_, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak _"has a"_ ilişkisi deniyor:
 
@@ -156,7 +156,10 @@ public:
 };
 ```
 
-Yukarıdaki kodda `Car` sınıfının `Engine` sınıfı türünden bir öğesi var. `Car` sınıfı kendi müşterilerine hizmet veririken bu iş için `Engine` sınıfının `public` arayüzünü kullanarak `Engine` sınıfının kodlarından faydalanabilir. Eğer `Car` sınıfını `Engine` sınıfından `private` kalıtımı ile elde etsek de sonuç benzer olacak. Yani duruma `Car` sınıfının işlevselliği açısından içerme ile `private` kalıtımı arasında bir fark yok.
+Yukarıdaki kodda _Car_ sınıfının _Engine_ sınıfı türünden bir öğesi var. 
+_Car_ sınıfı kendi müşterilerine hizmet veririken bu iş için _Engine_ sınıfının _public_ arayüzünü kullanarak _Engine_ sınıfının kodlarından faydalanabilir. 
+Eğer _Car_ sınıfını _Engine_ sınıfından _private_ kalıtımı ile elde etsek de sonuç benzer olacak. 
+Yani duruma _Car_ sınıfının işlevselliği açısından içerme ile _private_ kalıtımı arasında bir fark yok.
 
 ```
 class Engine {
@@ -173,21 +176,21 @@ public:
 };
 ```
 
-Şimdi bu iki yapıyı, yani içerme ile `private` kalıtımını birbiriyle karşılaştıralım. Önce ortak noktalara değinelim:
+Şimdi bu iki yapıyı, yani içerme ile _private_ kalıtımını birbiriyle karşılaştıralım. Önce ortak noktalara değinelim:
 
-1. İki yapıda da her `Car` nesnesinin içinde bir `Engine` nesnesi var ve `Car` nesnesi bu engine nesnesini kullanabiliyor.
-2. İki yapıda da `Car` sınıfının müşterilerine için `Car *` türünden `Engine *` türüne dönüşüm izini verilmiyor. (Çünkü her araba aynı zamanda bir motor değildir).
-3. İki yapıda da `Car` sınıfı `Engine` sınıfının `public` arayüzünü kendi arayüzüne eklemiyor.
-4. İki yapıda da `Car` sınıfı `Engine` sınıfının `public` arayüzünün istediği kısım ya da kısımlarını kendi `public` arayüzüne seçerek katabilir.
+1. İki yapıda da her _Car_ nesnesinin içinde bir _Engine_ nesnesi var ve _Car_ nesnesi bu engine nesnesini kullanabiliyor.
+2. İki yapıda da _Car_ sınıfının müşterilerine için _Car *_ türünden _Engine *_ türüne dönüşüm izini verilmiyor. (Çünkü her araba aynı zamanda bir motor değildir).
+3. İki yapıda da _Car_ sınıfı _Engine_ sınıfının _public_ arayüzünü kendi arayüzüne eklemiyor.
+4. İki yapıda da _Car_ sınıfı _Engine_ sınıfının _public_ arayüzünün istediği kısım ya da kısımlarını kendi _public_ arayüzüne seçerek katabilir.
 
 Şimdi de farklılıklara bakalım:
-1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda `private` kalıtımının kullanılması çoklu kalıtım gerektirecekti.
+1. Eğer bir arabanın birden fazla motoru olacak ise tercihimiz içerme olurdu. Bu durumda _private_ kalıtımının kullanılması çoklu kalıtım gerektirecekti.
 
-2. `private` kalıtımında `Car` sınıfının kendi kodlarına ve arkadaşlarına `Car *` türünden `Engine *` türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
+2. _private_ kalıtımında _Car_ sınıfının kendi kodlarına ve arkadaşlarına _Car *_ türünden _Engine *_ türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
 
 3. `private` türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
 
-4. İçerme durumunda `Engine` sınıfının `public` arayüzündeki bir işlevi `Car` sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev `(forwarding function)` oluşturmak gerekiyor:
+4. İçerme durumunda _Engine_ sınıfının _public_ arayüzündeki bir işlevi _Car_ sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev _(forwarding function)_ oluşturmak gerekiyor:
 
 ```
 void Car::start()
@@ -196,11 +199,11 @@ void Car::start()
 }
 ```
 
-`private` kalıtımında ise bu işi bir sınıf içi `using` bildirimiyle gerçekleştirebiliyoruz:
+_private_ kalıtımında ise bu işi bir sınıf içi _using_ bildirimiyle gerçekleştirebiliyoruz:
 
-`using Engine::start;`
+```using Engine::start;```
 
-5. `private` türetmesinde `Car` sınıfı `Engine` sınıfının sanal işlevlerini ezebiliyor ama içerme durumunda bu doğrudan mümkün değil. 
+5. _private_ türetmesinde _Car_ sınıfı _Engine_ sınıfının sanal işlevlerini ezebiliyor ama içerme durumunda bu doğrudan mümkün değil. 
 Bu dolaylı olarak şöyle gerçekleştirebilir:
 
 ```
