@@ -1,6 +1,6 @@
-`Java`, `C#` gibi dillerden biraz farklı olarak `C++` dilinde 3 ayrı kalıtım `(inheritance)` biçimi var: `public`, `private` ve `protected` kalıtımları. Aslında bunlardan yalnızca `public` kalıtımı, `Nesne Yönelimli Programlama`'daki kalıtım kavramına karşı geliyor. `public` kalıtımı ile ingilizcede "`is a"` ilişkisi denilen modeli gerçekliyoruz. `private` ve `protected` kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce `private` kalıtımına ilişkin kuralları bir gözden geçirelim:
+_Java_, _C#_ gibi dillerden biraz farklı olarak _C++_ dilinde 3 ayrı kalıtım _(inheritance)_ biçimi var: _public_, _private_ ve _protected_ kalıtımları. Aslında bunlardan yalnızca _public_ kalıtımı, _Nesne Yönelimli Programlama_'daki kalıtım kavramına karşı geliyor. _public_ kalıtımı ile ingilizcede "_is a_" ilişkisi denilen modeli gerçekliyoruz. _private_ ve _protected_ kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce _private_ kalıtımına ilişkin kuralları bir gözden geçirelim:
 
-`C++`'da kalıtımın hiçbir biçiminde taban sınıfın `private` bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın `private` bölümü hem taban sınıfın `(parent class)` kendi müşterilerine `(clients)` hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara `(child classes)` kapalı. `private` kalıtımında taban sınıfın `public` ve `protected` bölümleri türemiş sınıfın `private` bölümü gibi ele alınıyor.  Taban sınıfın `public` ya da `protected` bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
+_C++_'da kalıtımın hiçbir biçiminde taban sınıfın `private` bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın _private_ bölümü hem taban sınıfın _(parent class)_ kendi müşterilerine _(clients)_ hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara _(child classes)_ kapalı. _private_ kalıtımında taban sınıfın _public_ ve _protected_ bölümleri türemiş sınıfın _private_ bölümü gibi ele alınıyor.  Taban sınıfın _public_ ya da _protected_ bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
 
 ```
 class Base {
@@ -32,7 +32,7 @@ int main()
 }
 ```
 
-`Der` sınıfı `Base` sınıfından `private` kalıtımı yoluyla oluşturulmuş. `':'` atomundan sonra `private` anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak `private` kalıtımı anlamına gelecekti. Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi `private`:
+_Der_ sınıfı _Base_ sınıfından _private_ kalıtımı yoluyla oluşturulmuş. _':'_ atomundan sonra _private_ anahtar sözcüğü kullanılmasaydı da yine kod geçerli olacak ancak _private_ kalıtımı anlamına gelecekti. Yani sınıflar söz konusu olduğunda varsayılan kalıtım biçimi _private_:
 
 ```
 class Base {
@@ -54,7 +54,7 @@ struct Der : Base {  //public kalıtımı
 };
 ```
 
-`public` kalıtımında türemiş sınıf türünden bir nesne aynı zamanda taban sınıf türünden bir nesne kabul edildiğinden türemiş sınıftan taban sınıfa `(upcasting)` dönüşüme izin veriliyor:
+_public_ kalıtımında türemiş sınıf türünden bir nesne aynı zamanda taban sınıf türünden bir nesne kabul edildiğinden türemiş sınıftan taban sınıfa _(upcasting)_ dönüşüme izin veriliyor:
 
 ```
 class Base {
@@ -74,7 +74,7 @@ int main()
 }
 ```
 
-Ancak `private` kalıtımında bu tür dönüşümler yalnızca taban sınıftan türeyen sınıflar ve bunların arkadaşları için geçerli:
+Ancak _private_ kalıtımında bu tür dönüşümler yalnızca taban sınıftan türeyen sınıflar ve bunların arkadaşları için geçerli:
 
 ```
 class Base {
@@ -99,7 +99,7 @@ int main()
 }
 ```
 
-Kalıtım biçiminin `public`, `protected` ya da `private` olması taban sınıfın `private` olmayan sanal işlevlerinin türemiş sınıflar tarafından ezilmesine `(override)` engel bir durum değil:
+Kalıtım biçiminin _public_, _protected_ ya da _private_ olması taban sınıfın _private_ olmayan sanal işlevlerinin türemiş sınıflar tarafından ezilmesine _(override)_ engel bir durum değil:
 
 ```
 class Base {
@@ -128,15 +128,15 @@ Her bir `X` aynı zamanda bir `Y`'dir. Yani `Y` nesnesi gereken her yerde bir 
 
 Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak `private` ve `protected` kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık `"is a"` ilişkisi söz konusu değil.
 
-Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede `"composition"` deniyor. `Composition`, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak `"has a"` ilişkisi deniyor:
+Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede _"composition"_ deniyor. _Composition_, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak _"has a"_ ilişkisi deniyor:
 
-Eğer her `X`'in bir `Y` türünden bir öğesi var ise, bir `X` nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu `Y` nesnesini kullanabilir:
+Eğer her _X_'in bir _Y_ türünden bir öğesi var ise, bir _X_ nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu _Y_ nesnesini kullanabilir:
 
-Bilgisayarın ana kartı var.<br>
-Savaşçının silahları var.<br>
-Arabanın motoru var.<br>
+* Bilgisayarın ana kartı var.
+* Savaşçının silahları var.
+* Arabanın motoru var
 
-`C++` gibi bir dilde `composition` ilişkisini kodlamanın en basit ve en sık tercih edilen yolu bir sınıfın başka bir sınıf türünden veri öğesi ya da öğelerine sahip olması. Gelin bu yola "içerme" `(containment)` diyelim. Her arabanın bir motoru var, değil mi?
+_C++_ gibi bir dilde _composition_ ilişkisini kodlamanın en basit ve en sık tercih edilen yolu bir sınıfın başka bir sınıf türünden veri öğesi ya da öğelerine sahip olması. Gelin bu yola "içerme" _(containment)_ diyelim. Her arabanın bir motoru var, değil mi?
 
 ```
 class Engine {
@@ -218,29 +218,29 @@ class Car {
 };
 ```
 
-Şimdi önemli soru şu: `Composition` gereken bir durumda oluşturacağımız sınıfa istediğimiz işlevselliği hem "içerme" hem de `"private kalıtımı"` ile sağlayabiliyoruz. 
-Bu durumda neden `private` kalıtımını tercih edelim? `Composition` açısından baktığımızda "içerme", `private` kalıtımının bir alt kümesi olarak görülebilir. `Composition`'ı gerçeklerken `private` kalıtımı bize daha fazla araç sunuyor. İçerme yerine `private` kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
+Şimdi önemli soru şu: _Composition_ gereken bir durumda oluşturacağımız sınıfa istediğimiz işlevselliği hem _"içerme"_ hem de _"private kalıtımı"_ ile sağlayabiliyoruz. 
+Bu durumda neden _private_ kalıtımını tercih edelim? _Composition_ açısından baktığımızda "içerme", _private_ kalıtımının bir alt kümesi olarak görülebilir. _Composition_'ı gerçeklerken _private_ kalıtımı bize daha fazla araç sunuyor. İçerme yerine _private_ kalıtımını tercih etmemizi gerektiren nedenler şunlar olabilir:
 
-* Kullanılacak sınıfın `protected` kısmına (özellikle de `protected` kurucu işlevlere) erişmek istiyoruz.
-* Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek `(override)` istiyoruz (ya da buna mecburuz). Eğer arayüzünü kullanacağımız sınıf soyut `(abstract)` ise bu sınıfın tüm saf sanal `(pure virtual)` işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. Sınıfımız türünden nesneler oluşturabilmek `(instantiate)` için somut bir sınıf oluşturmak zorundayız.
+* Kullanılacak sınıfın _protected_ kısmına (özellikle de _protected_ kurucu işlevlere) erişmek istiyoruz.
+* Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek _(override)_ istiyoruz (ya da buna mecburuz). Eğer arayüzünü kullanacağımız sınıf soyut _(abstract)_ ise bu sınıfın tüm saf sanal _(pure virtual)_ işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. Sınıfımız türünden nesneler oluşturabilmek _(instantiate)_ için somut bir sınıf oluşturmak zorundayız.
 
 Eğer bu iki olanaktan faydalanma gibi bir amaç söz konusu değilse tercih edilmesi gereken "içerme" yapısı. Kalıtıma göre sınıfların birbirine bağımılığı bu yapıda daha az. 
 Diğer taraftan `private` kalıtım tek bir öğe sayısıyla sınırlı.
 
-`private` kalıtımı `OOP` açısından bir kalıtım değil. Kalıtımdaki amaç taban sınıf olarak alınan sınıfın kodlarını kullanmak. 
-`A` sınıfını `B` sınıfından `private` kalıtımıyla oluşturmak `A`'yı `B` türünden yapmıyor ve `A`'ya `B`'nin arayüzünü katmıyor. 
-Bu yüzden private inheritance tasarım ile değil gerçekleştirim `(implementasyon)` ile ilgili.
+_private_ kalıtımı _OOP_ açısından bir kalıtım değil. Kalıtımdaki amaç taban sınıf olarak alınan sınıfın kodlarını kullanmak. 
+_A_ sınıfını _B_ sınıfından _private_ kalıtımıyla oluşturmak _A_'yı _B_ türünden yapmıyor ve _A_'ya _B_'nin arayüzünü katmıyor. 
+Bu yüzden _private inheritance_ tasarım ile değil gerçekleştirim _(implementasyon)_ ile ilgili.
 
-Eğer içerme ile `private` kalıtım arasında tereddütte kalıyorsanız şu ilkeye bağlı kalabilirsiniz: 
-Kullanabildiğiniz her yerde içerme yapısını kullanın yalnızca zorunlu olduğunuz durumlarda `private` kalıtımı kullanın.
+Eğer içerme ile _private_ kalıtım arasında tereddütte kalıyorsanız şu ilkeye bağlı kalabilirsiniz: 
+Kullanabildiğiniz her yerde içerme yapısını kullanın yalnızca zorunlu olduğunuz durumlarda _private_ kalıtımı kullanın.
 
-`private` kalıtımın içermeye tercih edileceği bir senaryo daha var:
+_private_ kalıtımın içermeye tercih edileceği bir senaryo daha var:
 
-C++'da statik olmayan `(non static)` bir veri öğesine sahip olmayan, yani boş sınıflar `(empty class)` olabiliyor. 
+C++'da statik olmayan _(non static)_ bir veri öğesine sahip olmayan, yani boş sınıflar `(empty class)` olabiliyor. 
 Standart kütüphane de bazı nedenlerden boş sınıfları kullanıyor. 
 Boş bir sınıf türünden bir sınıf nesnesi tanımlandığında derleyici belirli işlemleri yapabilecek kodları üretebilmek için bu sınıf nesnesine bellekte bir yer ayırmak zorunda. 
-Böylesi durumlarda derleyiciler boş sınıf nesneleri için tipik olarak `1` byte'lık bir yer ayırıyorlar.
-Ancak boş bir sınıf nesnesi başka nesnelerle birlikte aynı bellek bloğunda yer aldığında hizalama `(alignment)` nedeniyle daha fazla bir bellek alanı kullanılabiliyor. 
+Böylesi durumlarda derleyiciler boş sınıf nesneleri için tipik olarak _1_ byte'lık bir yer ayırıyorlar.
+Ancak boş bir sınıf nesnesi başka nesnelerle birlikte aynı bellek bloğunda yer aldığında hizalama _(alignment)_ nedeniyle daha fazla bir bellek alanı kullanılabiliyor. 
 Aşağıdaki koda bakalım:
 
 ```
@@ -271,7 +271,7 @@ sizeof(A)   = 1
 sizeof(B)   = 8
 ```
 
-Oysa derleyiciler kalıtımla boş bir sınıftan yeni bir sınıf oluşturulduğunda, popüler olarak "boş taban sınıf optimizasyonu" olarak bilinen `(EBO - empty base optimization)` bir tekniği uygulayarak boş taban sınıf nesnesi için bir yer ayırmıyorlar:
+Oysa derleyiciler kalıtımla boş bir sınıftan yeni bir sınıf oluşturulduğunda, popüler olarak _"boş taban sınıf optimizasyonu"_ olarak bilinen _(EBO - empty base optimization)_ bir tekniği uygulayarak boş taban sınıf nesnesi için bir yer ayırmıyorlar:
 
 ```
 #include <iostream>
@@ -300,11 +300,11 @@ sizeof(A)   = 1
 sizeof(B)   = 4
 ```
 
-Bu şu anlama geliyor. 
-Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden `private` kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
+Bu şu anlama geliyor: 
+Eğer sınıfınız boş bir sınıf nesnesini kullanacak ise bu nesneyi sınıfınızın veri öğesi yapmak (içerme) yerine, sınıfınızı bu nesnenin ait olduğu boş sınıf türünden _private_ kalıtımı ile oluşturmak, sınıf nesneleri için ihtiyaç duyulan bellek alanını azaltabilir.
 
 ## private kalıtımının "is a" ilişkisi için kullanılması
-Sözünü edeceğimz duruma popüler olarak "kısıtlı" ya da "kontrollü çok biçimlilik" deniyor.
+Sözünü edeceğimz duruma popüler olarak _"kısıtlı"_ ya da _"kontrollü çok biçimlilik"_ deniyor.
 Bazı durumlarda çalışma zamanı çok biçimliliğinden yalnızca seçilmiş belirli işlevlerin faydalanmasını ve bu aracın diğer işlevlere kapatılmasını istiyoruz. 
 Aşağıdaki kodu inceleyelim:
 
@@ -341,7 +341,7 @@ void foo2()
 }
 ```
 
-`Der` sınıfı `public` kalıtımıyla `Base` sınıfından oluşturulmuş ve taban sınıfın sanal vfunc işlevini ezmiş `(override etmiş)`. 
+_Der_ sınıfı `public` kalıtımıyla `Base` sınıfından oluşturulmuş ve taban sınıfın sanal vfunc işlevini ezmiş `(override etmiş)`. 
 Global `gfunc` işlevi `Base` nesnelerini çokbiçimli `(polimorfik)` olarak kullanıyor. 
 Şimdi amacımızın şunu sağlamak olduğunu düşünelim: Yalnızca `foo1` işlevi çok biçimlilikten faydalansın fakat diğer işlevler, örneğin `foo2` işlevi, bu yapıdan faydalanamasın. 
 Yukarıdaki kodda hem `foo1` işlevinde hem de `foo2` işlevinde `gfunc` işlevine `Der` türünden nesnelerle yapılan çağrılar geçerli. 
@@ -392,12 +392,12 @@ Kalıtımın `private` olmasının taban sınıfın sanal işlevlerini ezmeye en
 friend void foo1();
 ```
 
-bildirimiyle `foo1` işlevine arkadaşlık veriliyor. 
-`Der` sınıfınına arkadaş olan işlevlerin `Der` sınıfından `Base` sınıfına dönüşüm izninin olduğunu diğer işlevlerin bu hakka sahip olmadığını biliyoruz. 
-`foo1` işlevinde yapılan
+bildirimiyle _foo1_ işlevine arkadaşlık veriliyor. 
+_Der_ sınıfınına arkadaş olan işlevlerin _Der_ sınıfından _Base_ sınıfına dönüşüm izninin olduğunu diğer işlevlerin bu hakka sahip olmadığını biliyoruz. 
+_foo1_ işlevinde yapılan
 
 ```
 gfunc(der);
 ```
 
-çağrısı geçerli iken `foo2` işlevi içinde yapılan aynı çağrı geçerli değil.
+çağrısı geçerli iken _foo2_ işlevi içinde yapılan aynı çağrı geçerli değil.
