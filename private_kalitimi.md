@@ -1,6 +1,6 @@
 _Java_, _C#_ gibi dillerden biraz farklı olarak _C++_ dilinde 3 ayrı kalıtım _(inheritance)_ biçimi var: _public_, _private_ ve _protected_ kalıtımları. Aslında bunlardan yalnızca _public_ kalıtımı, _Nesne Yönelimli Programlama_'daki kalıtım kavramına karşı geliyor. _public_ kalıtımı ile ingilizcede "_is a_" ilişkisi denilen modeli gerçekliyoruz. _private_ ve _protected_ kalıtımları ise tamamen farklı amaçlarla kullanılıyorlar. Daha sonra bu konuya geri dönmek üzere önce _private_ kalıtımına ilişkin kuralları bir gözden geçirelim:
 
-_C++_'da kalıtımın hiçbir biçiminde taban sınıfın `private` bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın _private_ bölümü hem taban sınıfın _(parent class)_ kendi müşterilerine _(clients)_ hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara _(child classes)_ kapalı. _private_ kalıtımında taban sınıfın _public_ ve _protected_ bölümleri türemiş sınıfın _private_ bölümü gibi ele alınıyor.  Taban sınıfın _public_ ya da _protected_ bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
+_C++_'da kalıtımın hiçbir biçiminde taban sınıfın _private_ bölümüne türemiş sınıfların erişim hakkı yok. Yani taban sınıfın _private_ bölümü hem taban sınıfın _(parent class)_ kendi müşterilerine _(clients)_ hem de taban sınıftan kalıtım yoluyla elde edilecek sınıflara _(child classes)_ kapalı. _private_ kalıtımında taban sınıfın _public_ ve _protected_ bölümleri türemiş sınıfın _private_ bölümü gibi ele alınıyor.  Taban sınıfın _public_ ya da _protected_ bölümüne türemiş sınıf müşterilerinin erişim hakkı yok. Aşağıdaki kodu inceleyelim:
 
 ```
 class Base {
@@ -239,7 +239,7 @@ Kullanabildiğiniz her yerde içerme yapısını kullanın yalnızca zorunlu old
 
 _private_ kalıtımın içermeye tercih edileceği bir senaryo daha var:
 
-C++'da statik olmayan _(non static)_ bir veri öğesine sahip olmayan, yani boş sınıflar `(empty class)` olabiliyor. 
+C++'da statik olmayan _(non static)_ bir veri öğesine sahip olmayan, yani boş sınıflar _(empty class)_ olabiliyor. 
 Standart kütüphane de bazı nedenlerden boş sınıfları kullanıyor. 
 Boş bir sınıf türünden bir sınıf nesnesi tanımlandığında derleyici belirli işlemleri yapabilecek kodları üretebilmek için bu sınıf nesnesine bellekte bir yer ayırmak zorunda. 
 Böylesi durumlarda derleyiciler boş sınıf nesneleri için tipik olarak _1_ byte'lık bir yer ayırıyorlar.
