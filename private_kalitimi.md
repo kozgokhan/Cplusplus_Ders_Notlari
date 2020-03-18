@@ -128,7 +128,7 @@ Her bir _X_ aynı zamanda bir _Y_'dir. Yani _Y_ nesnesi gereken her yerde bir 
 
 Bu ne anlama geliyor? Çalışan gereken her yerde bir satış görevlisi de kullanılabilir. Bir hayvan gereken her yerde bir aslan kullanılabilir. Yalancı gereken her yerde bir politikacı bu işi görebilir. Ancak _private_ ve _protected_ kalıtımları aslında bambaşka bir amaçla kullanılıyorlar. Yani artık _"is a"_ ilişkisi söz konusu değil.
 
-Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede _"composition"_ deniyor. _Composition_, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında composition gösteren bir ilişkiye ingilizcede popüler olarak _"has a"_ ilişkisi deniyor:
+Bir nesnenin başka bir nesneyi onun sahibi olarak kullanmasına ingilizcede _"composition"_ deniyor. _Composition_, nesne yönelimli programlamanın en önemli araçlarından biri. Sınıflar arasında _composition_ gösteren bir ilişkiye ingilizcede popüler olarak _"has a"_ ilişkisi deniyor:
 
 Eğer her _X_'in bir _Y_ türünden bir öğesi var ise, bir _X_ nesnesi belirli hizmetleri kendi müşterilerine sağlamak için sahibi olduğu _Y_ nesnesini kullanabilir:
 
@@ -188,7 +188,7 @@ public:
 
 2. _private_ kalıtımında _Car_ sınıfının kendi kodlarına ve arkadaşlarına _Car *_ türünden _Engine *_ türüne dönüşüm izni veriliyor. Ancak "içerme" durumunda böyle bir izin söz konusu değil.
 
-3. `private` türetmesinde `Car` sınıfı Engine sınıfının `protected` bölümüne erişebiliyor. Ancak "içerme" durumunda `Car` sınıfının `Engine` sınıfın `protected` bölümüne erişim hakkı yok.
+3. _private_ türetmesinde _Car_ sınıfı _Engine_ sınıfının _protected_ bölümüne erişebiliyor. Ancak "içerme" durumunda _Car_ sınıfının _Engine_ sınıfın _protected_ bölümüne erişim hakkı yok.
 
 4. İçerme durumunda _Engine_ sınıfının _public_ arayüzündeki bir işlevi _Car_ sınıfının public arayüzüne katmak için bu işlevi çağıracak yeni bir işlev _(forwarding function)_ oluşturmak gerekiyor:
 
@@ -228,7 +228,7 @@ Bu durumda neden _private_ kalıtımını tercih edelim? _Composition_ açısı
 * Kullanılacak sınıfın sanal işlev ya da işlevlerini işlevlerini ezmek _(override)_ istiyoruz (ya da buna mecburuz). Eğer arayüzünü kullanacağımız sınıf soyut _(abstract)_ ise bu sınıfın tüm saf sanal _(pure virtual)_ işlevlerini ezmez isek bizim oluşturduğumuz sınıf da soyut olacaktı. Sınıfımız türünden nesneler oluşturabilmek _(instantiate)_ için somut bir sınıf oluşturmak zorundayız.
 
 Eğer bu iki olanaktan faydalanma gibi bir amaç söz konusu değilse tercih edilmesi gereken "içerme" yapısı. Kalıtıma göre sınıfların birbirine bağımılığı bu yapıda daha az. 
-Diğer taraftan `private` kalıtım tek bir öğe sayısıyla sınırlı.
+Diğer taraftan _private_ kalıtım tek bir öğe sayısıyla sınırlı.
 
 _private_ kalıtımı _OOP_ açısından bir kalıtım değil. Kalıtımdaki amaç taban sınıf olarak alınan sınıfın kodlarını kullanmak. 
 _A_ sınıfını _B_ sınıfından _private_ kalıtımıyla oluşturmak _A_'yı _B_ türünden yapmıyor ve _A_'ya _B_'nin arayüzünü katmıyor. 
@@ -344,13 +344,13 @@ void foo2()
 }
 ```
 
-_Der_ sınıfı `public` kalıtımıyla `Base` sınıfından oluşturulmuş ve taban sınıfın sanal vfunc işlevini ezmiş `(override etmiş)`. 
-Global `gfunc` işlevi `Base` nesnelerini çokbiçimli `(polimorfik)` olarak kullanıyor. 
-Şimdi amacımızın şunu sağlamak olduğunu düşünelim: Yalnızca `foo1` işlevi çok biçimlilikten faydalansın fakat diğer işlevler, örneğin `foo2` işlevi, bu yapıdan faydalanamasın. 
-Yukarıdaki kodda hem `foo1` işlevinde hem de `foo2` işlevinde `gfunc` işlevine `Der` türünden nesnelerle yapılan çağrılar geçerli. 
-Oysa biz `foo2` işlevine (ve muhtemelen bazı başka işlevlere) kalıtımla elde edilmiş `Der` sınıf nesnelerinin gönderilmesini geçersiz kılmak istiyoruz.
-Reçete hazır: Der sınıfı Base sınıfından private kalıtımıyla oluşturulsun ve çok biçimlilikten faydalanacak işlevlere arkadaşlık `(friend)` versin. 
-`private` kalıtımında türemiş sınıftan `(child class)` taban sınıfa `(Base class)` otomatik `(implicit)` tür dönüşümlerinin yalnızca türemiş sınıfların kodlarına ve bu sınıfların arkadaşları olan kodlara tanınan bir hak olduğunu hatırlayalım:
+_Der_ sınıfı _public_ kalıtımıyla _Base_ sınıfından oluşturulmuş ve taban sınıfın sanal _vfunc_ işlevini ezmiş _(override etmiş)_. 
+Global _gfunc_ işlevi _Base_ nesnelerini çokbiçimli _(polimorfik)_ olarak kullanıyor. 
+Şimdi amacımızın şunu sağlamak olduğunu düşünelim: Yalnızca _foo1_ işlevi çok biçimlilikten faydalansın fakat diğer işlevler, örneğin _foo2_ işlevi, bu yapıdan faydalanamasın. 
+Yukarıdaki kodda hem _foo1_ işlevinde hem de _foo2_ işlevinde _gfunc_ işlevine _Der_ türünden nesnelerle yapılan çağrılar geçerli. 
+Oysa biz _foo2_ işlevine (ve muhtemelen bazı başka işlevlere) kalıtımla elde edilmiş _Der_ sınıf nesnelerinin gönderilmesini geçersiz kılmak istiyoruz.
+Reçete hazır: _Der_ sınıfı _Base_ sınıfından _private_ kalıtımıyla oluşturulsun ve çok biçimlilikten faydalanacak işlevlere arkadaşlık _(friend)_ versin. 
+_private_ kalıtımında türemiş sınıftan _(child class)_ taban sınıfa _(Base class)_ otomatik _(implicit)_ tür dönüşümlerinin yalnızca türemiş sınıfların kodlarına ve bu sınıfların arkadaşları olan kodlara tanınan bir hak olduğunu hatırlayalım:
 
 ```
 class Base {
@@ -385,11 +385,11 @@ void foo2()
 }
 ```
 
-Bu kez `Der` sınıfı `Base` sınıfından `private` kalıtımıyla oluşturuldu. 
-`Der` sınıfı yine `Base` sınıfının sanal işlevini eziyor. 
-Kalıtımın `private` olmasının taban sınıfın sanal işlevlerini ezmeye engel olmadığını hatırlayalım. 
-`Der` sınıfı artık çok biçimlilikten faydalanacak işlevelere arkadaşlık verebilir. 
-`Der` sınıfı içinde yapılan
+Bu kez _Der_ sınıfı _Base_ sınıfından _private_ kalıtımıyla oluşturuldu. 
+_Der_ sınıfı yine _Base_ sınıfının sanal işlevini eziyor. 
+Kalıtımın _private_ olmasının taban sınıfın sanal işlevlerini ezmeye engel olmadığını hatırlayalım. 
+_Der_ sınıfı artık çok biçimlilikten faydalanacak işlevelere arkadaşlık verebilir. 
+_Der_ sınıfı içinde yapılan
 
 ```
 friend void foo1();
