@@ -169,7 +169,6 @@ public:
 };
 
 class Car : private Engine{
-	Engine itsEngine;
 public:
 	using Engine::start;
 	///
