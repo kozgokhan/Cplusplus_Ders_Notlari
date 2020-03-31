@@ -209,4 +209,26 @@ Eğer _USE_RAW_SOCKETS_ makrosu tanımlanmış ise bu kez _RawUDPSockets_ isim 
 Bu durumda da bu isim alanı içindeki _UDPSocket_ sınıfı doğrudan _Networking_ isim alanında görülüyor olacak. 
 Bir başka deyişle _UDPSocket_ sınıfının hangi sürümünün kullanılacağı _USE_RAW_SOCKETS_ makrosunun tanımlanmış olup olmamasına bağlı.
 
+_inline_ isim alanlarının bir başka kullanım nedeni _ADL (argument dependant lookup)_. Bu konu biraz daha teknik. Aşağıdaki koda bakalım:
 
+```
+namespace Nec {
+	namespace Nested {
+		class C {
+		    //...
+		};
+		//...
+	}
+    using namespace Nested;
+    void func(Nested::C);
+}
+
+int main()
+{
+	Nec::Nested::C x;
+
+	func(x); //gecersiz
+}
+```
+
+ _Nec_ isim alanı içinde bildirilen _func_ isimli işlevin parametresinin _Nested_ isim alanı içinde tanımlanan _C_ sınıfı türünden olduğunu görüyorsunuz. _Nec_ isim alanı içinde yapılan _using namespace_ bildirimi ile _Nested_ isim alanı içindeki isimler _Nec_ isim alanı içinde görünür kılınmış. Ancak _main_ işlevi içinde yapılan _func_ çağrısı geçerli değil. Yapılan _using namespace_ bildirimine karşın argümana bağlı isim arama _(ADL)_ burada devreye girmiyor. Yeni kurallara göre _Nested_ isim alanının _inline_ olarak bildirilmesi durumunda argümana bağlı isim arama ile _func_ isminin _Nec_ isim alanında da aranması garanti altında.
