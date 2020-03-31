@@ -232,3 +232,27 @@ int main()
 ```
 
  _Nec_ isim alanı içinde bildirilen _func_ isimli işlevin parametresinin _Nested_ isim alanı içinde tanımlanan _C_ sınıfı türünden olduğunu görüyorsunuz. _Nec_ isim alanı içinde yapılan _using namespace_ bildirimi ile _Nested_ isim alanı içindeki isimler _Nec_ isim alanı içinde görünür kılınmış. Ancak _main_ işlevi içinde yapılan _func_ çağrısı geçerli değil. Yapılan _using namespace_ bildirimine karşın argümana bağlı isim arama _(ADL)_ burada devreye girmiyor. Yeni kurallara göre _Nested_ isim alanının _inline_ olarak bildirilmesi durumunda argümana bağlı isim arama ile _func_ isminin _Nec_ isim alanında da aranması garanti altında.
+ 
+ _C++_ standart kütüphanesi de _inline_ isim alanlarını kullanıyor. Örneğin _<string>_ başlık dosyasından gelen _string\_literals_ isim alanı ve bunu içine alan _literals_ isim alanı _inline_ olarak nitelenmişler:
+	
+```
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	auto name = "necati"s;
+}
+```
+
+Yukarıdaki kodda kullanılan _"user-defined literal"_ operatör fonksiyonu _s_ aslında _literals_ isim alanı içindeki _string_literals_ isim alanında bildirilmiş olmasına karşın nitelenmeden _(unqualified)_ kullanılabiliyor:
+```
+namespace std {
+	inline namespace literals {
+		inline namespace string_literals {
+			constexpr string operator""s(const char *str, size_t len);
+		}
+	}
+}
+```
