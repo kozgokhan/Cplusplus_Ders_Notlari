@@ -26,7 +26,7 @@ namespace std {
     };
 }
 ```
-## `std::any` nesnelerini oluşturmak
+## std::any nesnelerini oluşturmak
 
 Bir _any_ sınıf nesnesi belirli türden bir değeri tutacak durumda ya da boş olarak yani bir değer tutmayan durumda hayata getirilebilir:
 
@@ -52,7 +52,7 @@ int main()
 }
 ```
 
-_any_ sınıf nesnesinin kurucu işlevine gönderilen argümandan farklı türden bir değeri tutabilmesi için kurucu işlevin ilk parametresine standart _\<utility>_ başlık dosyasında tanımlanan _in_place_type\<>_ argümanının gönderilmesi gerekiyor. 
+_any_ sınıf nesnesinin kurucu işlevine gönderilen argümandan farklı türden bir değeri tutabilmesi için kurucu işlevin ilk parametresine standart *\<utility>* başlık dosyasında tanımlanan *in_place_type\<>* argümanının gönderilmesi gerekiyor. 
 `any` tarafından tutulacak nesnenin kurucu işlevine birden fazla değer gönderilmesi durumunda da yine `in_place_type<>` çağrıdaki ilk argüman olmalı:
 
 ```
@@ -92,13 +92,15 @@ int main()
 ```
 
 ## std::any nesneleri için bellek ihtiyacı
-Bir _any_ sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi `(storage)` 1 byte da olabilir `5000` byte da. `any` nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. 
-Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. Derleyiciler tipik olarak doğrudan _any_ nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. 
-(`C++17` standartları da böyle bir gerçekleştirimi öneriyor.) 
-Eğer `any` tarafından saklanacak değer bu bellek alanına sığıyor ise değer bu alanda tutuluyor. 
-Bu tekniğe "küçük tampon optimizasyonu" `(small buffer optimization SBO)` deniyor. 
-Saklanacak nesne bu bellek alanına sığmıyor ise `heap` alanından bir bellek bloğu elde ediliyor. 
-Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve any nesneleri için _sizeof` değerinin ne olduğunu görün:
+Bir _any_ sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi _(storage)_ 1 byte da olabilir _5000_ byte da. 
+_any_ nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. 
+Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. 
+Derleyiciler tipik olarak doğrudan _any_ nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. 
+(_C++17_ standartları da böyle bir gerçekleştirimi öneriyor.) 
+Eğer _any_ tarafından saklanacak değer bu bellek alanına sığıyor ise değer bu alanda tutuluyor. 
+Bu tekniğe "küçük tampon optimizasyonu" _(small buffer optimization SBO)_ deniyor. 
+Saklanacak nesne bu bellek alanına sığmıyor ise _heap_ alanından bir bellek bloğu elde ediliyor. 
+Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve _any_ nesneleri için _sizeof_ değerinin ne olduğunu görün:
 
 ```
 #include <any>
@@ -109,6 +111,7 @@ int main()
 	std::cout << "sizeof(any) : " << sizeof(std::any) << '\n';
 }
 ```
+
 Benim farklı derleyiciler ile yaptığım testlerin sonucu şöyle oldu:
 
 ```
@@ -119,7 +122,8 @@ MSVC 2017 15.7.0 64-bit        64
 ```
 
 ## `std::any` nesnesinin değerini değiştirmek
-Sınıfın atama operatör işlevi ya da `emplace<>` işlev şablonu ile bir `any` sınıf nesnesinin değeri değiştirilebilir. Aşağıdaki kodu inceleyin:
+Sınıfın atama operatör işlevi ya da *emplace<>* işlev şablonu ile bir _any_ sınıf nesnesinin değeri değiştirilebilir. 
+Aşağıdaki kodu inceleyin:
 
 ```
 #include <any>
