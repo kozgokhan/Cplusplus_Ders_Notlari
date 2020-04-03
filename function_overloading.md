@@ -355,8 +355,8 @@ Aşağıda standart dönüşümlere ilişkin bazı örnekler veriliyor:
 void func(int);
 void foo(long);
 void f(float);
-void pf(int _);
-void vfunc(void _);
+void pf(int *);
+void vfunc(void *);
 
 int main()
 {
@@ -366,7 +366,7 @@ int main()
 	func(20U);	//standart dönüşüm (unsigned int türünden int türüne)
 	f(7.5);		//standart dönüşüm (double türden float türüne)
 	pf(0);		//standart dönüşüm (0 tamsayı sabitinin bir göstericiye kopyalanması
-	vfunc(&x)	//standart dönüşüm (int _ türden void _ türüne)
+	vfunc(&x)	//standart dönüşüm (int * türden void * türüne)
 }
 ```
 
@@ -378,14 +378,14 @@ int foo(double);	//2
 void foo(char);		//3
 long foo(long);		//4
 void foo(int, int);	//5
-void foo(char _);	//6
-void foo(int _);	//7
+void foo(char *);	//6
+void foo(int *);	//7
 
 void func()
 {
 	foo(10);
 	foo(3.4F);
-	foo((double _)0x1FC0);
+	foo((double *)0x1FC0);
 	foo(6U);
 }
 ```
@@ -413,7 +413,7 @@ foo(3.4F)
 + Yükseltme durumu olarak değerlendirildiğinden _2_ numaralı fonksiyon en uygun olanıdır.
 
 ```
-foo((double _) 0x1FC0)
+foo((double *) 0x1FC0)
 ```
 Çağrısı için
 1, 2, 3, 4, 5, 6, 7 numaralı fonksiyonlar aday işlevlerdir. 
@@ -436,8 +436,8 @@ ___const_ yüklemesi _(const overloading)___
 Aşağıdaki bildirimlere bakalım:
 
 ```
-void func(int _ptr);		//1
-void func(const int _ptr);	//2
+void func(int *ptr);		//1
+void func(const int *ptr);	//2
 ```
 
 Bu bir fonksiyon yüklemesidir _(function overloading_). 
@@ -452,8 +452,8 @@ Bu durumda çağrılan ikinci fonksiyon olur.
 Aşağıdaki koda bakalım:
 
 ```
-void func(int _ptr);		//1
-void func(const int _ptr);	//2
+void func(int *ptr);		//1
+void func(const int *ptr);	//2
 
 int main()
 {
