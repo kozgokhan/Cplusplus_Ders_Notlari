@@ -41,7 +41,7 @@ using Vec = std::vector<T, Alloc<T>>;
 Vec<int> v;
 ```
 
-Yukarıdaki kodda_ Allocator_ olarak kullanılacak _Alloc_ isimli bir sınıf tanımlanıyor. 
+Yukarıdaki kodda _Allocator_ olarak kullanılacak _Alloc_ isimli bir sınıf tanımlanıyor. 
 Daha sonra _Vec_ isimli bir eş isim şablonu oluşturuluyor. 
 Böylece kod içinde _vector_ sınıf şablonunda ikinci şablon tür parametresi olarak _Alloc_ sınıf şablonunun kullanılması durumunda, 
 şablon tür argümanı olarak _Alloc_ sınıfını belirtmeye gerek kalmayacak. 
