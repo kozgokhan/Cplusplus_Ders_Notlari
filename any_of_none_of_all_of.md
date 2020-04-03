@@ -1,4 +1,4 @@
-Bu yazımızın konusu _C++11_ ilestandartları ile standart kütüphaneye eklenmiş basit ama faydalı 3 algoritma.
+Bu yazımızın konusu _C++11_ ile standart kütüphaneye eklenmiş basit ama faydalı 3 algoritma.
 
 _any_of_ algoritmasıyla bir aralık _(range)_ içindeki değerlerden herhangi birinin bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
 
