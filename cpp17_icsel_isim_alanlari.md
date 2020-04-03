@@ -16,7 +16,7 @@ namespace Csd {
 }
 ```
 
-_ModelBase_ isimli sınıfın tanımı _Csd_ isim alanı içinde yer alan `Game` isim alanında yer alan _Models_ isim alanı içinde yapılmış. 
+_ModelBase_ isimli sınıfın tanımı _Csd_ isim alanı içinde yer alan _Game_ isim alanında yer alan _Models_ isim alanı içinde yapılmış. 
 Burada kullanılması gereken iç içe bloklar bildirimin yazılmasını ve okunmasını zorlaştırıyor.
 
 Bazı programcılar bu bildirimi kodun okunmasını kolaylaştırmak için şöyle bir kod yerleşimi _(layout)_ ile yapıyorlardı:
@@ -98,7 +98,6 @@ int main()
 	std::cout << A::x << " " << A::t << "\n";
 	std::cout << A::B::y << "\n";
 	std::cout << A::B::C::z << "\n";
-
 }
 ```
 
