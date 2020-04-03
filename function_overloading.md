@@ -240,7 +240,7 @@ __standart dönüşümler__
 
 Bu dönüşümler dilin kurallarına göre örtülü _(implicit)_ olarak yapılabilen dönüşümlerdir. 
 Standart dönüşümlerin kalitesi programcı tarafından tanımlanan dönüşümlerin kalitesinden daha yüksektir. 
-Standart dönüşümler de keni içinde 3 kategoriye ayrılır.
+Standart dönüşümler de kendi içinde 3 kategoriye ayrılır.
 
 + Tam uyum _(exact match)_
 + Yükseltme _(promotion)_
