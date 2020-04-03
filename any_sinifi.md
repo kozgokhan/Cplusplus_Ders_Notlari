@@ -1,12 +1,23 @@
 # std::any Sınıfı
 
-Öyle bir nesne olsun ki istediğimiz herhangi türden bir değeri tutabilsin. İstediğimiz zaman nesnemizin tuttuğu değeri herhangi türden bir değer olarak değiştirebilelim. `C++17` standartları ile dile eklenen `std::any` sınıfı işte bu işe yarıyor.
+Öyle bir nesne olsun ki istediğimiz herhangi türden bir değeri tutabilsin. 
+İstediğimiz zaman nesnemizin tuttuğu değeri herhangi türden bir değer olarak değiştirebilelim. 
+_C++17_ standartları ile dile eklenen _std::any_ sınıfı işte bu işe yarıyor.</br>
 
-`C++` dilinin sağladığı en önemli avantajlardan biri tür güvenliği `(type safety)`. Yazdığımız kodlarda değer taşıyacak nesnelerimizi bildirirken onların türlerini de belirtiyoruz. Derleyici program bu bildirimlerden edindiği bilgi ile nesne üzerinde hangi işlemlerin yapılabileceğini derleme zamanında biliyor ve kodu buna göre kontrol ediyor. `C++` dilinde değer taşıyan nesnelerin türleri programın çalışma zamanında hiçbir şekilde değişmiyor.
+_C++_ dilinin sağladığı en önemli avantajlardan biri tür güvenliği _(type safety)_. 
+Yazdığımız kodlarda değer taşıyacak nesnelerimizi bildirirken onların türlerini de belirtiyoruz. 
+Derleyici program bu bildirimlerden edindiği bilgi ile nesne üzerinde hangi işlemlerin yapılabileceğini derleme zamanında biliyor ve kodu buna göre kontrol ediyor. 
+`C++` dilinde değer taşıyan nesnelerin türleri programın çalışma zamanında hiçbir şekilde değişmiyor.
 
-`std::any sınıfı` herhangi bir türden değer tutabilirken bir değer türü `(value type)` olarak tür güvenliği de sağlıyor. `any` bir sınıf şablonu değil. Bir `any` nesnesi oluşturduğumuzda onun hangi türden bir değer tutacağını belirtmemiz gerekmiyor. `any` türünden bir nesne herhangi bir türden değeri tutabilirken sahip olduğu değerin türünü de biliyor. Peki bu nasıl mümkün oluyor? Yani nasıl oluyor da bir nesne herhangi türden bir değeri saklayabiliyor? Bunun sırrı `any` nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin `typeid` değerini de `(typeinfo)` tutuyor olması.
+_std::any_ sınıfı herhangi bir türden değer tutabilirken bir değer türü _(value type)_ olarak tür güvenliği de sağlıyor. 
+_any_ bir sınıf şablonu değil. 
+Bir _any_ nesnesi oluşturduğumuzda onun hangi türden bir değer tutacağını belirtmemiz gerekmiyor. 
+_any_ türünden bir nesne herhangi bir türden değeri tutabilirken sahip olduğu değerin türünü de biliyor. 
+Peki bu nasıl mümkün oluyor? 
+Yani nasıl oluyor da bir nesne herhangi türden bir değeri saklayabiliyor? 
+Bunun sırrı _any_ nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin _typeid_ değerini de _(typeinfo)_ tutuyor olması.
 
-`any` sınıfının tanımı any isimli başlık dosyasında:
+_any_ sınıfının tanımı any isimli başlık dosyasında:
 
 ```
 namespace std {
@@ -17,7 +28,7 @@ namespace std {
 ```
 ## `std::any` nesnelerini oluşturmak
 
-Bir `any` sınıf nesnesi belirli türden bir değeri tutacak durumda ya da boş olarak yani bir değer tutmayan durumda hayata getirilebilir:
+Bir _any_ sınıf nesnesi belirli türden bir değeri tutacak durumda ya da boş olarak yani bir değer tutmayan durumda hayata getirilebilir:
 
 ``` 
 #include <string>
@@ -40,7 +51,9 @@ int main()
 	std::any b3 = {}; //boş
 }
 ```
-`any` sınıf nesnesinin kurucu işlevine gönderilen argümandan farklı türden bir değeri tutabilmesi için kurucu işlevin ilk parametresine standart `<utility>` başlık dosyasından tanımlanan `in_place_type<>` argümanının gönderilmesi gerekiyor. `any` tarafından tutulacak nesnenin kurucu işlevine birden fazla değer gönderilmesi durumunda da yine `in_place_type<>` çağrıdaki ilk argüman olmalı:
+
+_any_ sınıf nesnesinin kurucu işlevine gönderilen argümandan farklı türden bir değeri tutabilmesi için kurucu işlevin ilk parametresine standart _\<utility>_ başlık dosyasında tanımlanan _in_place_type\<>_ argümanının gönderilmesi gerekiyor. 
+`any` tarafından tutulacak nesnenin kurucu işlevine birden fazla değer gönderilmesi durumunda da yine `in_place_type<>` çağrıdaki ilk argüman olmalı:
 
 ```
 #include <any>
@@ -60,7 +73,8 @@ int main()
 }
 ```
 ## `std::make_any<>` yardımcı işlevi
-`any` türünden bir nesne oluşturmanın bir başka yolu da `make_any<>` yardımcı fabrika işlevini kullanmak. Burada `any` nesnesinin tutacağı değerin türü şablon tür argümanı olarak seçildiğinden `in_place_type<>` yardımcısının kullanılması gerekmiyor:
+`any` türünden bir nesne oluşturmanın bir başka yolu da `make_any<>` yardımcı fabrika işlevini kullanmak. 
+Burada `any` nesnesinin tutacağı değerin türü şablon tür argümanı olarak seçildiğinden `in_place_type<>` yardımcısının kullanılması gerekmiyor:
 
 ```
 #include <any>
@@ -78,7 +92,13 @@ int main()
 ```
 
 ## `std::any` nesneleri için bellek ihtiyacı
-Bir `any` sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi `(storage)` 1 byte da olabilir `5000` byte da. `any` nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. Derleyiciler tipik olarak doğrudan `any` nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. (`C++17` standartları da böyle bir gerçekleştirimi öneriyor.) Eğer `any` tarafından saklanacak değer bu bellek alanına sığıyor ise değer bu alanda tutuluyor. Bu tekniğe "küçük tampon optimizasyonu" `(small buffer optimization SBO)` deniyor. Saklanacak nesne bu bellek alanına sığmıyor ise `heap` alanından bir bellek bloğu elde ediliyor. Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve any nesneleri için `sizeof` değerinin ne olduğunu görün:
+Bir `any` sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi `(storage)` 1 byte da olabilir `5000` byte da. `any` nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. 
+Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. Derleyiciler tipik olarak doğrudan `any` nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. 
+(`C++17` standartları da böyle bir gerçekleştirimi öneriyor.) 
+Eğer `any` tarafından saklanacak değer bu bellek alanına sığıyor ise değer bu alanda tutuluyor. 
+Bu tekniğe "küçük tampon optimizasyonu" `(small buffer optimization SBO)` deniyor. 
+Saklanacak nesne bu bellek alanına sığmıyor ise `heap` alanından bir bellek bloğu elde ediliyor. 
+Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve any nesneleri için `sizeof` değerinin ne olduğunu görün:
 
 ```
 #include <any>
@@ -136,7 +156,8 @@ Bir değer tutan `any` nesnesini boşaltmak için sınıfın `reset` isimli iş
 ```
 a.reset();
 ```
-Bu çağrı ile `any` türünden `a` değişkeni eğer boş değil ise `a` değişkeninin tuttuğu nesnenin hayatı sonlandırılıyor. Bu işlemden sonra `a` değişkeni boş durumda. `any` nesnesini boşaltmanın bir başka yolu da ona varsayılan kurucu işlev `(default constructor)` ile oluşturulmuş bir geçici nesneyi atamak:
+Bu çağrı ile `any` türünden `a` değişkeni eğer boş değil ise `a` değişkeninin tuttuğu nesnenin hayatı sonlandırılıyor. 
+Bu işlemden sonra `a` değişkeni boş durumda. `any` nesnesini boşaltmanın bir başka yolu da ona varsayılan kurucu işlev `(default constructor)` ile oluşturulmuş bir geçici nesneyi atamak:
 
 ```
 a = std::any{};
@@ -259,7 +280,10 @@ Sınıfın `type` isimli üye işlevi ile `any` tarafından tutulmakta olan nesn
 ```
 const std::type_info& type() const noexcept;
 ```
-İşlevin geri dönüş değeri `any` nesnesinin tuttuğu değerin tür bilgisini taşıyan `type_info` nesnesi.  Eğer `any` nesnesi boş ise type işlevinin geri dönüş değeri `typeid(void)` olur. Bu işlevle erişilen `type_info` nesnesi `type_info` sınıfının `operator==` işleviyle bir karşılaştırma işlemine sokulabilir. Aşağıdaki kodu inceleyelim:
+İşlevin geri dönüş değeri `any` nesnesinin tuttuğu değerin tür bilgisini taşıyan `type_info` nesnesi.  
+Eğer `any` nesnesi boş ise type işlevinin geri dönüş değeri `typeid(void)` olur. 
+Bu işlevle erişilen `type_info` nesnesi `type_info` sınıfının `operator==` işleviyle bir karşılaştırma işlemine sokulabilir. 
+Aşağıdaki kodu inceleyelim:
 
 ```
 #include <any>
@@ -277,8 +301,12 @@ int main()
 	cout << (x.type() == typeid(double)) << '\n'; //false
 }
 ```
+
 ## `std::any` sınıfı ve taşıma semantiği
-`any` sınıfı taşıma `(move)` semantiğini de destekliyor. Ancak taşıma semantiğinin desteklenmesi için tutulan değere ilişkin türün kopyalama semantiğini de desteklemesi gerekiyor. `unique_ptr<T>` gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler `(movable but not copyable) any` nesneleri tarafından tutulamazlar. Aşağıdaki kodda `string` nesnesinden `any` nesnesine ve `any` nesnesinden `string` nesnesine yapılan taşıma işlemlerini görebilirsiniz:
+_any_ sınıfı taşıma _(move)_ semantiğini de destekliyor. 
+Ancak taşıma semantiğinin desteklenmesi için tutulan değere ilişkin türün kopyalama semantiğini de desteklemesi gerekiyor. 
+_unique\_ptr<T>_ gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler _(movable but not copyable)_ _any_ nesneleri tarafından tutulamazlar. 
+Aşağıdaki kodda _string_ nesnesinden _any_ nesnesine ve _any_ nesnesinden _string_ nesnesine yapılan taşıma işlemlerini görebilirsiniz:
 
 ```
 #include <any>
@@ -298,7 +326,13 @@ int main()
 ```
 
 ## `std::any` sınıfının kullanıldığı yerler
-`C++17` standartları öncesinde `C++` dilinde yazılan kodlarda daha önce `void*` türünün kullanıldığı birçok yerde `any` sınıfı kullanılabilir. `void *` türünden bir gösterici `(pointer)` değişken, herhangi türünden bir nesnenin adresini tutabilir. Ancak `void*` türünden bir değişken adresini tuttuğu nesnenin türünü bilmez ve onun hayatını kontrol edemez. Ayrıca `void *` türü bir gösterici türü olduğu için "deger türü" `(value type)` semantiğine sahip değildir. `any` istenilen herhangi türden bir değeri saklayabilir. Tutulan nesnenin değeri ve türü değiştirilebilir. `any` tuttuğu nesnenin hayatını da kontrol eder ve her zaman tuttuğu nesnenin türünü bilir. Eğer tutulacak değerin hangi türlerden olabileceği biliniyorsa `any` yerine `variant` türünün kullanılması çok daha uygun olacaktır. Aşağıdaki kullanım örneği resmi öneri metninden alındı:
+_C++17_ standartları öncesinde _C++_ dilinde yazılan kodlarda daha önce `void*` türünün kullanıldığı birçok yerde _any_ sınıfı kullanılabilir. `void *` türünden bir gösterici _(pointer)_ değişken, herhangi türünden bir nesnenin adresini tutabilir. 
+Ancak `void*` türünden bir değişken adresini tuttuğu nesnenin türünü bilmez ve onun hayatını kontrol edemez. 
+Ayrıca _void \*_ türü bir gösterici türü olduğu için "deger türü" _(value type)_ semantiğine sahip değildir. _any_ istenilen herhangi türden bir değeri saklayabilir. 
+Tutulan nesnenin değeri ve türü değiştirilebilir. 
+_any_ tuttuğu nesnenin hayatını da kontrol eder ve her zaman tuttuğu nesnenin türünü bilir. 
+Eğer tutulacak değerin hangi türlerden olabileceği biliniyorsa `any` yerine `variant` türünün kullanılması çok daha uygun olacaktır. 
+Aşağıdaki kullanım örneği resmi öneri metninden alındı:
 
 ```
 #include <string>
