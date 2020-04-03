@@ -1,17 +1,17 @@
-Bu yazımızın konusu `C++11` ile standart kütüphaneye basit ama faydalı `3` algoritma.
+Bu yazımızın konusu _C++11_ ilestandartları ile standart kütüphaneye eklenmiş basit ama faydalı 3 algoritma.
 
-`any_of` algoritmasıyla bir aralık `(range)` içindeki değerlerden herhangi birinin bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
+_any_of_ algoritmasıyla bir aralık _(range)_ içindeki değerlerden herhangi birinin bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
 
 ```
 template<class InIter, class UnPred>
 bool any_of(InIter first, InIter last, UnPred f);
 ```
 
-Şablondan üretilecek işlevin ilk iki parametresi ilgili aralığa ilişkin adımlayıcılar `(iterator)`. 
-İşlevin son parametresi tek parametreli bir sınayıcı `(predicate)`. 
-Eğer `[first, last)` aralığındaki herhangi bir öğe için sınayıcımız olan `f`, `"true"` değer üretirse işlevimiz `"true"` değer döndürecek. 
-Eğer aralıktaki hiçbir değer için `f`, `"true"` değer üretmez ise işlevimiz `"false"` değerini döndürecek. 
-Kısaca bu işlev ile `[first, last)` aralığında en az bir değerin verilen bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
+Şablondan üretilecek işlevin ilk iki parametresi ilgili aralığa ilişkin adımlayıcılar _(iterator)_. 
+İşlevin son parametresi tek parametreli bir sınayıcı _(predicate)_. 
+Eğer _\[first last)_ aralığındaki herhangi bir öğe için sınayıcımız olan _f_, _"true"_ değer üretirse işlevimiz _"true"_ değer döndürecek. 
+Eğer aralıktaki hiçbir değer için _f_, _"true"_ değer üretmez ise işlevimiz _"false"_ değerini döndürecek. 
+Kısaca bu işlev ile _\[first, last)_ aralığında en az bir değerin verilen bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
 
 ```
 #include <vector>
@@ -36,7 +36,7 @@ int main()
 }
 ```
 
-Yukarıdaki kodda `ivec vector`'ünde bulunan tamsayılar içinde en az bir asal sayı bulunup bulunmadığını test ediyoruz. 
+Yukarıdaki kodda _ivec_ _vector_'ünde bulunan tamsayılar içinde en az bir asal sayı bulunup bulunmadığını test ediyoruz. 
 Bu sınamayı pekala `find_if` algoritmasıyla da gerçekleştirebilirdik, değil mi?
 
 ```
@@ -52,8 +52,8 @@ InIter find_if(InIter first, InIter last, UnPred f)
 }
 ```
 
-`find_if` algoritması bir aralık içinde bir koşulu sağlayan ilk öğeyi arıyor ve koşulu sağlayan ilk öğenin konumunu döndürüyor. 
-Eğer öğelerden hiçbiri ilgili koşulu sağlamıyor ise algoritmanın geri dönüş değeri kendisine geçilen `last` konumu.
+_find\_if_ algoritması bir aralık içinde bir koşulu sağlayan ilk öğeyi arıyor ve koşulu sağlayan ilk öğenin konumunu döndürüyor. 
+Eğer öğelerden hiçbiri ilgili koşulu sağlamıyor ise algoritmanın geri dönüş değeri kendisine geçilen _last_ konumu.
 
 ```
 template<class InIter, class UnPred>
@@ -69,7 +69,7 @@ bool any_of(InIter first, InIter last, UnPred f)
 }
 ```
 
-`any_of` algoritmasını şu şekilde de kodlayabilirdik:
+_any\_of_ algoritmasını şu şekilde de kodlayabilirdik:
 
 ```
 template<class InIter, class UnPred>
@@ -79,7 +79,7 @@ bool any_of(InIter first, InIter last, UnPred f)
 }
 ```
 
-`all_of` algoritması ile bir aralıktaki tüm değerlerin bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
+_all\_of_ algoritması ile bir aralıktaki tüm değerlerin bir koşulu sağlayıp sağlamadığını sınayabiliyoruz:
 
 ```
 template<class InIter, class UnPred>
@@ -103,16 +103,14 @@ int main()
         cin >> n;
 	if (all_of(ls.begin(), ls.end(), [n](int x){return x % n == 0; }))
 		cout << "listedeki tum degerler " << n << " ile tam bolunuyor\n";
-	//
+	//...
 
 }
 ```
 
-`ls` isimli listedeki tüm sayıların `n` tamsayısına tam olarak bölünüp bölünmediğini sınamak için `all_of` algoritmasının kullanıldığını görüyorsunuz.
- Bu örnekte sınayıcı parametresine bir `lambda` ifadesi geçiliyor. 
- `lambda` ifadesinde yerel değişken olan `n` yakalanıyor `(capture ediliyor)`.
-
-`all_of` işlev şablonu şu şekilde kodlanabilir:
+_ls_ isimli listedeki tüm sayıların _n_ tamsayısına tam olarak bölünüp bölünmediğini sınamak için _all_of_ algoritmasının kullanıldığını görüyorsunuz.  Bu örnekte sınayıcı parametresine bir _lambda_ ifadesi geçiliyor. 
+ _lambda_ ifadesinde yerel değişken olan _n_ yakalanıyor _(capture ediliyor)_.
+_all_of_ işlev şablonu şu şekilde kodlanabilir:
 
 ```
 template<class InIter, class UnPred>
@@ -127,7 +125,7 @@ bool all_of(InIter first, InIter last, UnPred f)
 }
 ```
 
-`all_of` algoritmasının başka bir gerçekleştirimi şöyle olabilirdi:
+_all\_of_ algoritmasının başka bir gerçekleştirimi şöyle olabilirdi:
 
 ```
 template<class InIter, class UnPred>
@@ -137,8 +135,8 @@ bool all_of(InIter first, InIter last, UnPred f)
 }
 ```
 
-Bu arada `find_if_not` algoritmasının da `C++11` ile geldiğini hatırlatalım. 
-`find_if_not` algoritması ile bir aralıkta bulunan değerlerden bir koşulu sağlamayan ilk öğenin konumunu bulabiliyoruz:
+Bu arada _find\_if\_not_ algoritmasının da _C++11_ ile geldiğini hatırlatalım. 
+_find_if_not_ algoritması ile bir aralıkta bulunan değerlerden bir koşulu sağlamayan ilk öğenin konumunu bulabiliyoruz:
 
 ```
 template<class InIter, class UnPred>
@@ -153,15 +151,15 @@ InIter find_if_not(InIter first, InIter last, UnPred f)
 }
 ```
 
-Şimdi de `none_of` algoritmasını inceleyelim. 
-`none_of` algoritması bir aralıktaki değerlerden hiçbirinin verilen bir koşulu gerçeklemiyor ise `"true"` değer döndürüyor:
+Şimdi de _none\_of_ algoritmasını inceleyelim. 
+_none\_of_ algoritması bir aralıktaki değerlerden hiçbirinin verilen bir koşulu gerçeklemiyor ise _"true"_ değer döndürüyor:
 
 ```
 template<class InIter, class UnPred>
 bool none_of(InIter first, InIter last, UnPred f);
 ```
 
-Aşağıdaki `main` işlevini inceleyelim:
+Aşağıdaki _main_ işlevini inceleyelim:
 
 ```
 #include <algorithm>
@@ -181,8 +179,8 @@ int main()
 }
 ```
 
-Yukarıdaki kodda `svec` içinde tutulan isimlerden hiçbirinin uzunluğu `6`'dan fazla değilse programın akışı `if` deyiminin içine girecek. 
-`none_of` algoritması aşağıdaki gibi kodlanabilir:
+Yukarıdaki kodda _svec_ içinde tutulan isimlerden hiçbirinin uzunluğu _6_'dan fazla değilse programın akışı _if_ deyiminin içine girecek. 
+_none_of_ algoritması aşağıdaki gibi kodlanabilir:
 
 ```
 template<class InIter, class UnPred>
@@ -198,7 +196,7 @@ bool none_of(InIter first, InIter last, UnPred f)
 }
 ```
 
-`none_of` algoritmasının `any_of` algoritmasının lojik değili olduğu açık, değil mi?
+_none\_of_ algoritmasının _any\_of_ algoritmasının lojik değili olduğu açık, değil mi?
 
 ```
 template<class InIter, class UnPred>
