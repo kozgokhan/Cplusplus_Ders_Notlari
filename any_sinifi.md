@@ -7,7 +7,7 @@ _C++17_ standartları ile dile eklenen _std::any_ sınıfı işte bu işe yarıy
 _C++_ dilinin sağladığı en önemli avantajlardan biri tür güvenliği _(type safety)_. 
 Yazdığımız kodlarda değer taşıyacak nesnelerimizi bildirirken onların türlerini de belirtiyoruz. 
 Derleyici program bu bildirimlerden edindiği bilgi ile nesne üzerinde hangi işlemlerin yapılabileceğini derleme zamanında biliyor ve kodu buna göre kontrol ediyor. 
-`C++` dilinde değer taşıyan nesnelerin türleri programın çalışma zamanında hiçbir şekilde değişmiyor.
+_C++_ dilinde değer taşıyan nesnelerin türleri programın çalışma zamanında hiçbir şekilde değişmiyor.
 
 _std::any_ sınıfı herhangi bir türden değer tutabilirken bir değer türü _(value type)_ olarak tür güvenliği de sağlıyor. 
 _any_ bir sınıf şablonu değil. 
@@ -15,9 +15,9 @@ Bir _any_ nesnesi oluşturduğumuzda onun hangi türden bir değer tutacağını
 _any_ türünden bir nesne herhangi bir türden değeri tutabilirken sahip olduğu değerin türünü de biliyor. 
 Peki bu nasıl mümkün oluyor? 
 Yani nasıl oluyor da bir nesne herhangi türden bir değeri saklayabiliyor? 
-Bunun sırrı _any_ nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin _typeid_ değerini de _(type\_info)_ tutuyor olması.
+Bunun sırrı _any_ nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin _typeid_ değerini de *(type_info)* tutuyor olması.
 
-_any_ sınıfının tanımı any isimli başlık dosyasında:
+_any_ sınıfının tanımı _any_ isimli başlık dosyasında:
 
 ```
 namespace std {
@@ -53,7 +53,7 @@ int main()
 ```
 
 _any_ sınıf nesnesinin kurucu işlevine gönderilen argümandan farklı türden bir değeri tutabilmesi için kurucu işlevin ilk parametresine standart *\<utility>* başlık dosyasında tanımlanan *in_place_type\<>* argümanının gönderilmesi gerekiyor. 
-`any` tarafından tutulacak nesnenin kurucu işlevine birden fazla değer gönderilmesi durumunda da yine `in_place_type<>` çağrıdaki ilk argüman olmalı:
+`any` tarafından tutulacak nesnenin kurucu işlevine birden fazla değer gönderilmesi durumunda da yine *in_place_type<>* çağrıdaki ilk argüman olmalı:
 
 ```
 #include <any>
@@ -230,7 +230,7 @@ int main()
 ```
 
 ## std::bad_any_cast
-`any_cast<>` ile yapılan dönüşüm başarısız olursa yani dönüşümdeki hedef tür `any` nesnesinin tuttuğu tür ile aynı değilse `bad_any_cast` sınıfı türünden bir hata nesnesi gönderilir:
+*any_cast<>* ile yapılan dönüşüm başarısız olursa yani dönüşümdeki hedef tür `any` nesnesinin tuttuğu tür ile aynı değilse `bad_any_cast` sınıfı türünden bir hata nesnesi gönderilir:
 
 ```
 #include <any>
@@ -254,6 +254,7 @@ int main()
 	}
 }
 ```
+
 Burada gönderilen *bad_any_cast* sınıfı için türetme hiyerarşisi şöyle:
 
 ```
@@ -313,10 +314,10 @@ int main()
 }
 ```
 
-## `std::any` sınıfı ve taşıma semantiği
+## std::any sınıfı ve taşıma semantiği
 _any_ sınıfı taşıma _(move)_ semantiğini de destekliyor. 
 Ancak taşıma semantiğinin desteklenmesi için tutulan değere ilişkin türün kopyalama semantiğini de desteklemesi gerekiyor. 
-*unique_ptr<T>* gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler _(movable but not copyable)_ _any_ nesneleri tarafından tutulamazlar. 
+*unique_ptr\<T>* gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler _(movable but not copyable)_ _any_ nesneleri tarafından tutulamazlar. 
 Aşağıdaki kodda _string_ nesnesinden _any_ nesnesine ve _any_ nesnesinden _string_ nesnesine yapılan taşıma işlemlerini görebilirsiniz:
 
 ```
@@ -339,7 +340,7 @@ int main()
 ## std::any sınıfının kullanıldığı yerler
 _C++17_ standartları öncesinde _C++_ dilinde yazılan kodlarda daha önce `void*` türünün kullanıldığı birçok yerde _any_ sınıfı kullanılabilir. 
 `void *` türünden bir gösterici _(pointer)_ değişken, herhangi türünden bir nesnenin adresini tutabilir. 
-Ancak `void*` türünden bir değişken adresini tuttuğu nesnenin türünü bilmez ve onun hayatını kontrol edemez. 
+Ancak _void*_ türünden bir değişken adresini tuttuğu nesnenin türünü bilmez ve onun hayatını kontrol edemez. 
 Ayrıca _void \*_ türü bir gösterici türü olduğu için "deger türü" _(value type)_ semantiğine sahip değildir. 
 _any_ istenilen herhangi türden bir değeri saklayabilir. 
 Tutulan nesnenin değeri ve türü değiştirilebilir. 
