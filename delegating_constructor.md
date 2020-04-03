@@ -1,8 +1,15 @@
 # Delege Eden Kurucu İşlev (Delegating Constructor)
 
-Bir sınıfın birden fazla kurucu işlevinin olması çok doğal ve çoğu zaman da gerekli. Bu durumda çoğunlukla bu kurucu işlevlerin paylaştığı ortak bir kod söz konusu oluyor. Yine tipik olarak bu ortak kodun bir kısmı sınıfın veri öğelerini ilk değer verici liste ile `(constructor initializer list)` başlatıyor. Ortak kodun farklı noktalarda yeniden yazılmasının kodun bakımını zorlaştırdığını dahası kodlama hatalarına davetiye çıkarttığını biliyorsunuz. `C++11` standartlarından önce bu sorunla başa çıkmak için dil tarafından doğrudan desteklenen bir araç yoktu. `C++11` ile dile eklenen delege eden kurucu işlev `(delegating constructor)` kurucu işlevlerde karşılaşılan bu tipik sorunla başa çıkmak için önemli bir destek sağlıyor.
+Bir sınıfın birden fazla kurucu işlevinin _(constructor)_ olması çok doğal ve çoğu zaman da gerekli. 
+Bu durumda çoğunlukla bu kurucu işlevlerin paylaştığı ortak bir kod söz konusu oluyor. 
+Yine tipik olarak bu ortak kodun bir kısmı sınıfın veri öğelerini ilk değer verici liste ile _(constructor initializer list)_ başlatıyor. 
+Ortak kodun farklı noktalarda yeniden yazılmasının kodun bakımını zorlaştırdığını ve kodlama hatalarına davetiye çıkarttığını biliyorsunuz. 
+_C++11_ standartlarından önce bu sorunla başa çıkmak için dil tarafından doğrudan desteklenen bir araç yoktu. 
+_C++11_ ile dile eklenen delege eden kurucu işlev _(delegating constructor)_ kurucu işlevlerde karşılaşılan bu tipik sorunla başa çıkmak için önemli bir destek sağlıyor.
 
-`C++11` öncesinde kurucu işlevlerin ortak bir koda sahip olması durumunda programcıların tipik başvurduğu yol, ortak kodu sınıfın bir `private` işlevinde toplamak ve kurucu işlevler içinde de bu işlevi çağırmaktı. Standartlara bu konuda verilen `SC22/WG21/N1986` No'lu öneri belgesindeki örneği inceleyelim:
+_C++11_ öncesinde kurucu işlevlerin ortak bir koda sahip olması durumunda programcıların tipik başvurduğu yol, 
+ortak kodu sınıfın bir _private_ işlevinde toplamak ve kurucu işlevler içinde de bu işlevi çağırmaktı. 
+Standartlara bu konuda verilen _SC22/WG21/N1986_ No'lu öneri belgesindeki örneği inceleyelim:
 
 ```
 class X {
@@ -30,11 +37,24 @@ X::X(W e) : y_(53), z_( e )
 	commonInit();
 }
 ```
-`X` sınıfının `Y` ve `Z` türlerinden veri öğeleri var. Sınıfın üç ayrı kurucu işlevinin olduğunu görüyorsunuz. Bu kurucu işlevlerin ortak olan kodu sınıfın `commonInit` isimli `private` işlevinde toplanmış. Kurucu işlevlerin ana bloğunun içinde `commonInit` işlevi çağrılıyor. Yine kurucu işlevler içinde, öğe ilk değer verme listesi ile sınıfın `y_` ve `z_` isimli öğelerine ilk değer veriliyor. Peki bu kodlarda bizi rahatsız edecek noktalar var mı?
 
-`X` sınıfının kurucu işlevlerin ortak kodunun bir parçası da öğelere ilk değer vermek. Ancak bu işi bir başka işleve delege edemiyoruz. Yalnızca kurucu işlevler veri öğelerine ilk değer verebilirler, değil mi? Örnekte yer alan `commonInit` işlevi çağrıldığında zaten öğeler hayata gelmiş olacak.
-Bu yapıda kurucu işlevlerin ana bloğunu boş bırakamıyoruz. Örneğin `commonInit` işlevinin kodundan bir hata nesnesi `(exception)` gönderilebilir. `commonInit` üye işlevi sınıfı kodları tarafından (yanlışlıkla) çağrılabilir. Bu işlevin sınıfı diğer işlevleri tarafından çağrılmasını engelleyen bir mekanizma yok.
-`C++11` standartlarıyla gelen eklemeyle artık bir kurucu işlev başka bir kurucu işlevin kodunu çalıştırabiliyor. Şimdi kodu yeniden düzenleyerek delege eden kurucu işlevler oluşturuyoruz:
+_X_ sınıfının _Y_ ve _Z_ türlerinden veri öğeleri var. 
+Sınıfın üç ayrı kurucu işlevinin olduğunu görüyorsunuz. 
+Bu kurucu işlevlerin ortak olan kodu sınıfın _commonInit_ isimli _private_ işlevinde toplanmış. 
+Kurucu işlevlerin ana bloğunun içinde _commonInit_ işlevi çağrılıyor. 
+Yine kurucu işlevler içinde, öğe ilk değer verme listesi ile sınıfın *y_* ve *z_* isimli öğelerine ilk değer veriliyor. 
+Peki bu kodlarda bizi rahatsız edecek noktalar var mı?
+
+_X_ sınıfının kurucu işlevlerin ortak kodunun bir parçası da öğelere ilk değer vermek. 
+Ancak bu işi bir başka işleve delege edemiyoruz. 
+Yalnızca kurucu işlevler veri öğelerine ilk değer verebilirler, değil mi? 
+Örnekte yer alan _commonInit_ işlevi çağrıldığında zaten öğeler hayata gelmiş olacak.
+Bu yapıda kurucu işlevlerin ana bloğunu boş bırakamıyoruz. 
+Örneğin _commonInit_ işlevinin kodundan bir hata nesnesi _(exception)_ gönderilebilir. 
+_commonInit_ üye işlevi sınıfı kodları tarafından (yanlışlıkla) çağrılabilir. 
+Bu işlevin sınıfı diğer işlevleri tarafından çağrılmasını engelleyen bir mekanizma yok.
+_C++11_ standartlarıyla gelen eklemeyle artık bir kurucu işlev başka bir kurucu işlevin kodunu çalıştırabiliyor. 
+Şimdi kodu yeniden düzenleyerek delege eden kurucu işlevler oluşturuyoruz:
 
 ```
 class X {
@@ -56,7 +76,9 @@ X::X() : X(42, 3.14) {}
 X::X(int i) : X(i, 3.14) {}
 X::X(W &w) : X(53, w) {}
 ```
-Yukarıdaki kodu inceleyelim: Sınıfa daha önceki kodda yer almayan `private` bir kurucu işlev ekledik:
+
+Yukarıdaki kodu inceleyelim: 
+Sınıfa daha önceki kodda yer almayan _private_ bir kurucu işlev ekledik:
 
 ```
 X::X(int i, W &e) : y_(i), z_(e) 
@@ -64,9 +86,14 @@ X::X(int i, W &e) : y_(i), z_(e)
 	/*ortak kod */
 }
 ```
-Bu `private` işlev `y_` ve `z_` veri öğelerini üye ilk değer verme listesiyle hayata başlattığı gibi, kuruluş sürecinde yapılması gerelen diğer işlemleri de ana bloğundaki kod ile gerçekleştiriyor. Yani bir önceki sürümdeki `init` işlevinin kodunun bu kurucu işlevin ana bloğu içine yerleştirildiğini düşenebilirsiniz. Diğer kurucu işlevler ise tüm işi `private` kurucu işleve yaptırıyorlar (delege ediyorlar).
 
-`SC22/WG21/N1986` No'lu öneride verilen güzel bir örnek de şöyle:
+Bu _private_ işlev *y_* ve *z_* veri öğelerini üye ilk değer verme listesiyle hayata başlattığı gibi, 
+kuruluş sürecinde yapılması gerelen diğer işlemleri de ana bloğundaki kod ile gerçekleştiriyor. 
+Yani bir önceki sürümdeki _init_ işlevinin kodunun bu kurucu işlevin ana bloğu içine yerleştirildiğini düşenebilirsiniz. 
+Diğer kurucu işlevler ise tüm işi _private_ kurucu işleve yaptırıyorlar (delege ediyorlar).
+
+_SC22/WG21/N1986_ No'lu öneride verilen güzel bir örnek de şöyle:
+
 
 ```
 //fullname.h
@@ -109,9 +136,12 @@ FullName::FullName(const std::string &firstName, const std::string &lastName)
 	//
 }
 ```
-Yukarıdaki kodda `FullName` sınıfının hem iki parametreli kurucu işlevi hem de kopyalayan kurucu işlevi, sınıfın üç parametreli kurucu işlevine delege ediyorlar.
 
-Delege eden kurucu işlev içinde, ilk değer verme listesi ile bir veri öğesine ilk değer veremiyoruz. Yani ilk değer verme listesinde bulunan tek öğe delege edilen kurucu işleve yapılan çağrı olmalı. Aşağıdaki koda bakalım:
+Yukarıdaki kodda _FullName_ sınıfının hem iki parametreli kurucu işlevi hem de kopyalayan kurucu işlevi, 
+sınıfın üç parametreli kurucu işlevine delege ediyorlar.
+
+Delege eden kurucu işlev içinde, ilk değer verme listesi ile bir veri öğesine ilk değer veremiyoruz. 
+Yani ilk değer verme listesinde bulunan tek öğe delege edilen kurucu işleve yapılan çağrı olmalı. Aşağıdaki koda bakalım:
 
 ```
 class A {
@@ -122,11 +152,13 @@ public:
 	A() : A(0), my{0} {}; //geçersiz
 };
 ```
-`A` sınıfının kurucu işlevinin tanımı geçerli olsaydı sınıfın `my` isimli veri öğesine iki kez ilk değer verilmiş olurdu, değil mi?
 
-Delege edilen kurucu işlev de aynı sentaksı kullanarak bir başka kurucu işleve delege edebilir. Ancak derleyici böyle bir durumda oluşacak sonsuz bir çevrimi kontrol etmekle yükümlü değil, böyle bir çevrim oluşmasından tamamen programcı sorumlu.
+_A_ sınıfının kurucu işlevinin tanımı geçerli olsaydı sınıfın _my_ isimli veri öğesine iki kez ilk değer verilmiş olurdu, değil mi?
 
-Eğer delege edilen bir kurucu işlev bir hata nesnesi gönderirse gönderilen hata nesnesini delege eden kurucu işlevde oluşturulan bir "işlev try bloğu" `(function try block)` ile yakalayabiliyoruz:
+Delege edilen kurucu işlev de aynı sentaksı kullanarak bir başka kurucu işleve delege edebilir. 
+Ancak derleyici böyle bir durumda oluşacak sonsuz bir çevrimi kontrol etmekle yükümlü değil, böyle bir çevrim oluşmasından tamamen programcı sorumlu.
+
+Eğer delege edilen bir kurucu işlev bir hata nesnesi gönderirse gönderilen hata nesnesini delege eden kurucu işlevde oluşturulan bir "işlev try bloğu" _(function try block)_ ile yakalayabiliyoruz:
 
 ```
 #include <iostream>
@@ -156,6 +188,9 @@ int main()
 	}
 }
 ```
-Yukarıdaki kodda `A` sınıfının varsayılan kurucu işlevinin bir hata nesnesi gönderdiğini görüyorsunuz. Sınıfın `int` parametreli kurucu işlevi varsayılan kurucu işleve delege ediyor. Varsayılan kurucu işlevden gönderilen hata nesnesi `int` parametreli kurucu işlevin oluşturduğu `işlev try bloğu` ile yakalanıyor.
+
+Yukarıdaki kodda _A_ sınıfının varsayılan kurucu işlevinin bir hata nesnesi gönderdiğini görüyorsunuz. 
+Sınıfın _int_ parametreli kurucu işlevi varsayılan kurucu işleve delege ediyor. 
+Varsayılan kurucu işlevden gönderilen hata nesnesi _int_ parametreli kurucu işlevin oluşturduğu _işlev try bloğu_ ile yakalanıyor.
 
 Delege eden kurucu işlevler örneklerden de görüldüğü kodu karmaşıklıktan arındırıyor ve kodun bakımını kolaylaştırıyor.
