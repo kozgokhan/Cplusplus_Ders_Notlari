@@ -1,4 +1,4 @@
-`C++11` öncesinde bir türe eş isim `(type alias)` oluşturmanın tek yolu `C`'den gelen `typedef` bildirimleriydi:
+_C++11_ öncesinde bir türe eş isim _(type alias)_ oluşturmanın tek yolu _C_'den gelen _typedef_ bildirimleriydi:
 
 ```
 #include <vector>
@@ -11,11 +11,10 @@ typedef int(*Fptr)(int, int);
 typedef const std::vector<std::string> Csvec;
 ```
 
-
-`C++11` standartları ile türlere eş isim oluşturmak için ikinci bir araç daha geldi. 
-Artık eş isim bildirimlerini `using` anahtar sözcüğü ile yapabiliyoruz. 
-Sentaks çok basit: `using` anahtar sözcüğünü seçilen eş isim izliyor ve `=` atomundan sonra ise eş ismin hangi türe karşılık geldiği yazılıyor. 
-Yukarıdaki `typedef` bildirimleri yerine using bildirimleri yazalım:
+_C++11_ standartları ile türlere eş isim oluşturmak için ikinci bir araç daha geldi. 
+Artık eş isim bildirimlerini _using_ anahtar sözcüğü ile yapabiliyoruz. 
+Sentaks çok basit: _using_ anahtar sözcüğünü seçilen eş isim izliyor ve _=_ atomundan sonra ise eş ismin hangi türe karşılık geldiği yazılıyor. 
+Yukarıdaki _typedef_ bildirimleri yerine _using_ bildirimleri yazalım:
 
 ```
 using Word = int;
@@ -25,7 +24,8 @@ using Fptr = int(*)(int, int);
 using Csvec = const std::vector<std::string>;
 ```
 
-Ancak eş isim bildirimleri konusunda yeni bir aracın daha dile eklenmesinin ana nedeni, daha önce `typedef` bildirimleriyle mümkün olmayan eş isim şablonlarının `(alias templates)` oluşturabilmesini mümkün kılmak:
+Ancak eş isim bildirimleri konusunda yeni bir aracın daha dile eklenmesinin ana nedeni, 
+daha önce _typedef_ bildirimleriyle mümkün olmayan eş isim şablonlarının _(alias templates)_ oluşturabilmesini mümkün kılmak:
 
 ```
 template <class T>
@@ -41,9 +41,11 @@ using Vec = std::vector<T, Alloc<T>>;
 Vec<int> v;
 ```
 
-Yukarıdaki kodda` Allocator` olarak kullanılacak `Alloc` isimli bir sınıf tanımlanıyor. 
-Daha sonra `Vec` isimli bir eş isim şablonu oluşturuluyor. 
-Böylece kod içinde `vector` sınıf şablonunda ikinci şablon tür parametresi olarak `Alloc` sınıf şablonunun kullanılması durumunda, şablon tür argümanı olarak `Alloc` sınıfını belirtmeye gerek kalmayacak. Örneğin
+Yukarıdaki kodda_ Allocator_ olarak kullanılacak _Alloc_ isimli bir sınıf tanımlanıyor. 
+Daha sonra _Vec_ isimli bir eş isim şablonu oluşturuluyor. 
+Böylece kod içinde _vector_ sınıf şablonunda ikinci şablon tür parametresi olarak _Alloc_ sınıf şablonunun kullanılması durumunda, 
+şablon tür argümanı olarak _Alloc_ sınıfını belirtmeye gerek kalmayacak. 
+Örneğin
 
 ```
 std::vector<int, Alloc<int>>
@@ -55,7 +57,8 @@ yazmak yerine, yalnızca
 Vec<int>
 ```
 
-yazılabilecek. Birkaç örnek daha verelim:
+yazılabilecek. 
+Birkaç örnek daha verelim:
 
 ```
 #include <map>
@@ -67,8 +70,9 @@ using Smap = std::map<std::string, T>;
 Smap<int> simap;
 ```
 
-Yukarıdaki kodda oluşturulan `Smap` eş isim şablonunun tür parametresi, standart `map` sınıfının ikinci şablon tür parametresini belirleyecek. 
-Birinci şablon tür parametresi standart `string` sınıfı olacak. Bu durumda
+Yukarıdaki kodda oluşturulan _Smap_ eş isim şablonunun tür parametresi, standart _map_ sınıfının ikinci şablon tür parametresini belirleyecek. 
+Birinci şablon tür parametresi standart _string_ sınıfı olacak. 
+Bu durumda
 
 ```
 Smap<int>
@@ -78,7 +82,9 @@ yazmak ile
 ```
 std::map<std::string, int>
 ```
-yazmak aynı anlama gelecek. Şimdi de aşağıdaki koda bakalım:
+
+yazmak aynı anlama gelecek. 
+Şimdi de aşağıdaki koda bakalım:
 
 ```
 template<typename T>
@@ -88,7 +94,7 @@ double dval = 2.3;
 Ptr<double> p = &dval;
 ```
 
-Yukarıdaki kodda `p` `double` türden bir nesneyi gösteren bir `pointer` değişken.
+Yukarıdaki kodda _p_ _double_ türden bir nesneyi gösteren bir _pointer_ değişken.
 
 Eş isim şablonları da varsayılan tür argümanı alabilir:
 
@@ -105,14 +111,15 @@ int main()
 	//...
 }
 ```
-Yukarıdaki kodda tanımlanan `myset` değişkeni
+
+Yukarıdaki kodda tanımlanan _myset_ değişkeni
 
 ```
 std::set<double, std::greater<int>, std::allocator<int>>
 ```
 türünden.
 
-Şablon sabit parametreleri de `(non type parameters)` eş isim şablonlarında kullanılabilir:
+Şablon sabit parametreleri de _(non type parameters)_ eş isim şablonlarında kullanılabilir:
 
 ```
 template<typename T, size_t low, size_t high>
@@ -129,15 +136,16 @@ int main()
         //...
 }
 ```
-Yukarıdaki kodda, `Irand` şablon ismi `100` argüman değeri ile kullanıldığında bu şablon açılımı
+
+Yukarıdaki kodda, _Irand_ şablon ismi _100_ argüman değeri ile kullanıldığında bu şablon açılımı
 
 ```
 Rand<int, 0, 100>
 ```
 açılımı anlamına geliyor.
 
-Sınıf şablonlarında ya da işlev şablonlarında yapılabilen açık özelleştirme `(explicit specialization)` ya da yalnızca sınıf şablonlarında mümkün olan kısmi özelleştirme `(partial specialization)` araçları eş isim şablonlarında kullanılamıyor. 
+Sınıf şablonlarında ya da işlev şablonlarında yapılabilen açık özelleştirme _(explicit specialization)_ ya da 
+yalnızca sınıf şablonlarında mümkün olan kısmi özelleştirme _(partial specialization)_ araçları eş isim şablonlarında kullanılamıyor. 
 Eş isim şablonlarında tür çıkarımı da söz konusu değil.
-Eş isim şablonları isim alanı kapsamında `(namespace scope)` ya da sınıf kapsamında `(class scope)` bildirilebiliyor. 
+Eş isim şablonları isim alanı kapsamında _(namespace scope)_ ya da sınıf kapsamında _(class scope)_ bildirilebiliyor. 
 Ancak sınıf şablonlarında ve işlev şablonlarında olduğu gibi isim alanı şablonlarının da yerel bir blok içinde bildirilmesi geçerli değil.
-
