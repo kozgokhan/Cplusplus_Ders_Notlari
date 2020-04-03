@@ -1,5 +1,5 @@
-`C++17` standartları ile gelen yeni özelliklerin hemen hepsi yaygın kullanımda olan derleyiciler tarafından gerçekleştirilmiş `(implemente edilmiş)` durumda. 
-Bu yeni özelliklerden biri de içsel isim alanlarının `(nested namespaces)` bildirimine ilişkin:
+_C++17_ standartları ile gelen yeni özelliklerin hemen hepsi yaygın kullanımda olan derleyiciler tarafından gerçekleştirilmiş _(implemente edilmiş)_ durumda. 
+Bu yeni özelliklerden biri de içsel isim alanlarının _(nested namespaces)_ bildirimine ilişkin:
 
 Yazdığımız bir oyun programında kullanılan bir isim alanına bakalım:
 
@@ -16,10 +16,10 @@ namespace Csd {
 }
 ```
 
-`ModelBase` isimli sınıfın tanımı `Csd` isim alanı içinde yer alan `Game` isim alanında yer alan `Models` isim alanı içinde yapılmış. 
+_ModelBase_ isimli sınıfın tanımı _Csd_ isim alanı içinde yer alan `Game` isim alanında yer alan _Models_ isim alanı içinde yapılmış. 
 Burada kullanılması gereken iç içe bloklar bildirimin yazılmasını ve okunmasını zorlaştırıyor.
 
-Bazı programcılar bu bildirimi kodun okunmasını kolaylaştırmak için şöyle bir kod yerleşimi `(layout)` ile yapıyorlardı:
+Bazı programcılar bu bildirimi kodun okunmasını kolaylaştırmak için şöyle bir kod yerleşimi _(layout)_ ile yapıyorlardı:
 
 ```
 namespace Csd { namespace Game { namespace Models {
@@ -32,7 +32,7 @@ namespace Csd { namespace Game { namespace Models {
 }}}
 ```
 
-`C++17` standartları ile `Models` isim alanı içindeki `ModelBase` sınıfını artık şu şekilde bildirebiliyoruz:
+_C++17_ standartları ile _Models_ isim alanı içindeki _ModelBase_ sınıfını artık şu şekilde bildirebiliyoruz:
 
 ```
 namespace Csd::Game::Models {
