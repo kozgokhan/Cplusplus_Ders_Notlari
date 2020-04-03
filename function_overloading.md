@@ -284,8 +284,8 @@ void func(int);
 
 int main()
 {
-	func('A');	_// yükseltme (integral promotion)_
-	func(true); 	_// yükseltme (integral promotion)_
+	func('A');	// yükseltme (integral promotion)
+	func(true); 	// yükseltme (integral promotion)
 	//...
 }
 ```
@@ -299,7 +299,7 @@ int main()
 {
 	float fx = 2.3f;
 	//...
-	func(fx); _//yükseltme_
+	func(fx); //yükseltme
 	//...
 }
 ```
@@ -442,10 +442,10 @@ void func(const int _ptr);	//2
 
 Bu bir fonksiyon yüklemesidir _(function overloading_). 
 Bu şekilde yapılan bir yüklemeye "_const_ yüklemesi" _(const overloading)_ denir.
-Her iki işlevin de parametresi bir gösterici (pointer). 
+Her iki işlevin de parametresi bir gösterici _(pointer)_. 
 Ancak ikinci işlevin parametresi gösterdiği yer _const_ olan bir gösterici _(pointer to const object / low level const)_. 
 _func_ işlevi bir adresle çağrıldığında derleyici hangi işlevin çağrıldığını nasıl anlayacak? 
-Eğer fonksiyon çağrısı bir _const_ nesne adresi ile yapılırsa zaten birinci func işlevi uygun _(viable)_ olmaktan çıkıyor. 
+Eğer fonksiyon çağrısı bir _const_ nesne adresi ile yapılırsa zaten birinci _func_ işlevi uygun _(viable)_ olmaktan çıkıyor. 
 Bu durumda çağrılan ikinci fonksiyon olur. 
 Çağrının _const_ olmayan bir nesne adresi ile yapılması durumunda her iki fonksiyon çağrıya uygun olsa da dilin kurallarına göre 
 çağrılan birinci fonksiyon olur. 
