@@ -15,7 +15,7 @@ Bir _any_ nesnesi oluşturduğumuzda onun hangi türden bir değer tutacağını
 _any_ türünden bir nesne herhangi bir türden değeri tutabilirken sahip olduğu değerin türünü de biliyor. 
 Peki bu nasıl mümkün oluyor? 
 Yani nasıl oluyor da bir nesne herhangi türden bir değeri saklayabiliyor? 
-Bunun sırrı _any_ nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin _typeid_ değerini de _(typeinfo)_ tutuyor olması.
+Bunun sırrı _any_ nesnesinin tuttuğu değerin yanı sıra bu değere ilişkin _typeid_ değerini de _(type\_info)_ tutuyor olması.
 
 _any_ sınıfının tanımı any isimli başlık dosyasında:
 
@@ -72,9 +72,9 @@ int main()
 	//...
 }
 ```
-## `std::make_any<>` yardımcı işlevi
-`any` türünden bir nesne oluşturmanın bir başka yolu da `make_any<>` yardımcı fabrika işlevini kullanmak. 
-Burada `any` nesnesinin tutacağı değerin türü şablon tür argümanı olarak seçildiğinden `in_place_type<>` yardımcısının kullanılması gerekmiyor:
+## std::make_any<> yardımcı işlevi
+_any_ türünden bir nesne oluşturmanın bir başka yolu da *make_any<>* yardımcı fabrika işlevini kullanmak. 
+Burada _any_ nesnesinin tutacağı değerin türü şablon tür argümanı olarak seçildiğinden *in_place_type<>* yardımcısının kullanılması gerekmiyor:
 
 ```
 #include <any>
@@ -91,14 +91,14 @@ int main()
 }
 ```
 
-## `std::any` nesneleri için bellek ihtiyacı
-Bir `any` sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi `(storage)` 1 byte da olabilir `5000` byte da. `any` nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. 
-Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. Derleyiciler tipik olarak doğrudan `any` nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. 
+## std::any nesneleri için bellek ihtiyacı
+Bir _any_ sınıf nesnesi tarafından tutulacak değerin bellek gereksinimi `(storage)` 1 byte da olabilir `5000` byte da. `any` nesnesi sahip olacağı değeri tutmak için heap alanında bir bellek bloğu edinebilir. 
+Bu konuda derleyiciler istedikleri gibi kod üretebiliyorlar. Derleyiciler tipik olarak doğrudan _any_ nesnesi içinde bir bellek alanını  görece olarak küçük nesnelerin tutulması amaçlı kullanıyorlar. 
 (`C++17` standartları da böyle bir gerçekleştirimi öneriyor.) 
 Eğer `any` tarafından saklanacak değer bu bellek alanına sığıyor ise değer bu alanda tutuluyor. 
 Bu tekniğe "küçük tampon optimizasyonu" `(small buffer optimization SBO)` deniyor. 
 Saklanacak nesne bu bellek alanına sığmıyor ise `heap` alanından bir bellek bloğu elde ediliyor. 
-Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve any nesneleri için `sizeof` değerinin ne olduğunu görün:
+Aşağıda programı kendi derleyiciniz ile derleyerek çalıştırın ve any nesneleri için _sizeof` değerinin ne olduğunu görün:
 
 ```
 #include <any>
@@ -150,14 +150,16 @@ int main()
 	a.emplace<set<int, decltype(fcmp)>>({ 1, 5, -4, -6, 3 }, fcmp);
 }
 ```
-## `std::any` nesnesini boşaltmak
-Bir değer tutan `any` nesnesini boşaltmak için sınıfın `reset` isimli işlevi çağrılabilir:
+
+## std::any nesnesini boşaltmak
+Bir değer tutan _any_ nesnesini boşaltmak için sınıfın _reset_ isimli işlevi çağrılabilir:
 
 ```
 a.reset();
 ```
-Bu çağrı ile `any` türünden `a` değişkeni eğer boş değil ise `a` değişkeninin tuttuğu nesnenin hayatı sonlandırılıyor. 
-Bu işlemden sonra `a` değişkeni boş durumda. `any` nesnesini boşaltmanın bir başka yolu da ona varsayılan kurucu işlev `(default constructor)` ile oluşturulmuş bir geçici nesneyi atamak:
+Bu çağrı ile _any_ türünden _a_ değişkeni eğer boş değil ise _a_ değişkeninin tuttuğu nesnenin hayatı sonlandırılıyor. 
+Bu işlemden sonra _a_ değişkeni boş durumda. 
+_any_ nesnesini boşaltmanın bir başka yolu da ona varsayılan kurucu işlev _(default constructor)_ ile oluşturulmuş bir geçici nesneyi atamak:
 
 ```
 a = std::any{};
@@ -168,8 +170,8 @@ Atama aşağıdaki gibi de yapılabilir:
 a = {};
 ```
 
-## `std::any` nesnesinin boş olup olmadığını sınamak
-Bir `any` nesnesinin boş olup olmadığı yani bir değer tutup tutmadığı sınıfın `has_value` isimli üye işleviyle sınanabilir. (`boost::any` sınıfında olan `empty` üye işlevi yerine `has_value` ìsminin tercih edilmiş olması ilginç.)
+## std::any nesnesinin boş olup olmadığını sınamak
+Bir _any_ nesnesinin boş olup olmadığı yani bir değer tutup tutmadığı sınıfın `has_value` isimli üye işleviyle sınanabilir. (*boost::any* sınıfında olan _empty_ üye işlevi yerine _has_value_ ìsminin tercih edilmiş olması ilginç.)
 
 ```
 bool has_value()const noexcept;
@@ -197,8 +199,9 @@ int main()
 	cout << a.has_value() << '\n'; //false
 }
 ```
-## `std::any_cast<>` işlev şablonu
-`any` sınıf nesnesinin tuttuğu değere erişmenin tek yolu onu global `any_cast<>` işleviyle tuttuğu değerin türüne dönüştürmek. `any_cast<>` işleviyle, `any` sınıf nesnesi bir değer türüne bir referans türüne ya da bir pointer türüne dönüştürülebilir:
+
+## std::any_cast<> işlev şablonu
+_any_ sınıf nesnesinin tuttuğu değere erişmenin tek yolu onu global *any_cast<>* işleviyle tuttuğu değerin türüne dönüştürmek. *any_cast<>* işleviyle, _any_ sınıf nesnesi bir değer türüne bir referans türüne ya da bir adres türüne dönüştürülebilir:
 
 ```
 #include <any>
@@ -221,7 +224,8 @@ int main()
 	crs = "ali serce"; //gecersiz
 }
 ```
-## `std::bad_any_cast`
+
+## std::bad_any_cast
 `any_cast<>` ile yapılan dönüşüm başarısız olursa yani dönüşümdeki hedef tür `any` nesnesinin tuttuğu tür ile aynı değilse `bad_any_cast` sınıfı türünden bir hata nesnesi gönderilir:
 
 ```
@@ -246,7 +250,7 @@ int main()
 	}
 }
 ```
-Burada gönderilen `bad_any_cast` sınıfı için türetme hiyerarşisi şöyle:
+Burada gönderilen *bad_any_cast* sınıfı için türetme hiyerarşisi şöyle:
 
 ```
 std::exception  
@@ -255,7 +259,9 @@ std::bad_cast
      ^
 std::bad_any_cast
 ```
-`any_cast<>` dönüştürme işlevini kullanarak `any` tarafından tutulan nesneye gösterici `(pointer)` semantiği ile de erişilebilir. Ancak bu durumda şablon argümanı olarak kullanılan tür tutulan nesnenin türü değil ise bir hata nesnesi gönderilmez (`exception throw` edilmez), `nullptr` değeri elde edilir:
+
+*any_cast<>* dönüştürme işlevini kullanarak _any_ tarafından tutulan nesneye gösterici _(pointer)_ semantiği ile de erişilebilir. 
+Ancak bu durumda şablon argümanı olarak kullanılan tür tutulan nesnenin türü değil ise bir hata nesnesi gönderilmez _(exception throw edilmez)?, _nullptr_ değeri elde edilir:
 
 ```
 #include <any>
@@ -275,14 +281,15 @@ int main()
 }
 ```
 ## tutulan nesnenin türünü öğrenmek
-Sınıfın `type` isimli üye işlevi ile `any` tarafından tutulmakta olan nesnenin türü öğrenilebilir:
+Sınıfın _type_ isimli üye işlevi ile _any_ tarafından tutulmakta olan nesnenin türü öğrenilebilir:
 
 ```
 const std::type_info& type() const noexcept;
 ```
-İşlevin geri dönüş değeri `any` nesnesinin tuttuğu değerin tür bilgisini taşıyan `type_info` nesnesi.  
-Eğer `any` nesnesi boş ise type işlevinin geri dönüş değeri `typeid(void)` olur. 
-Bu işlevle erişilen `type_info` nesnesi `type_info` sınıfının `operator==` işleviyle bir karşılaştırma işlemine sokulabilir. 
+
+İşlevin geri dönüş değeri _any_ nesnesinin tuttuğu değerin tür bilgisini taşıyan *type_info* nesnesi.  
+Eğer _any_ nesnesi boş ise _type_ işlevinin geri dönüş değeri _typeid(void)_ olur. 
+Bu işlevle erişilen _type_info_ nesnesi _type_info_ sınıfının _operator==_ işleviyle bir karşılaştırma işlemine sokulabilir. 
 Aşağıdaki kodu inceleyelim:
 
 ```
@@ -305,7 +312,7 @@ int main()
 ## `std::any` sınıfı ve taşıma semantiği
 _any_ sınıfı taşıma _(move)_ semantiğini de destekliyor. 
 Ancak taşıma semantiğinin desteklenmesi için tutulan değere ilişkin türün kopyalama semantiğini de desteklemesi gerekiyor. 
-_unique\_ptr<T>_ gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler _(movable but not copyable)_ _any_ nesneleri tarafından tutulamazlar. 
+*unique_ptr<T>* gibi kopyalamaya kapalı ancak taşımaya açık türlerden değerler _(movable but not copyable)_ _any_ nesneleri tarafından tutulamazlar. 
 Aşağıdaki kodda _string_ nesnesinden _any_ nesnesine ve _any_ nesnesinden _string_ nesnesine yapılan taşıma işlemlerini görebilirsiniz:
 
 ```
@@ -325,13 +332,15 @@ int main()
 }
 ```
 
-## `std::any` sınıfının kullanıldığı yerler
-_C++17_ standartları öncesinde _C++_ dilinde yazılan kodlarda daha önce `void*` türünün kullanıldığı birçok yerde _any_ sınıfı kullanılabilir. `void *` türünden bir gösterici _(pointer)_ değişken, herhangi türünden bir nesnenin adresini tutabilir. 
+## std::any sınıfının kullanıldığı yerler
+_C++17_ standartları öncesinde _C++_ dilinde yazılan kodlarda daha önce `void*` türünün kullanıldığı birçok yerde _any_ sınıfı kullanılabilir. 
+`void *` türünden bir gösterici _(pointer)_ değişken, herhangi türünden bir nesnenin adresini tutabilir. 
 Ancak `void*` türünden bir değişken adresini tuttuğu nesnenin türünü bilmez ve onun hayatını kontrol edemez. 
-Ayrıca _void \*_ türü bir gösterici türü olduğu için "deger türü" _(value type)_ semantiğine sahip değildir. _any_ istenilen herhangi türden bir değeri saklayabilir. 
+Ayrıca _void \*_ türü bir gösterici türü olduğu için "deger türü" _(value type)_ semantiğine sahip değildir. 
+_any_ istenilen herhangi türden bir değeri saklayabilir. 
 Tutulan nesnenin değeri ve türü değiştirilebilir. 
 _any_ tuttuğu nesnenin hayatını da kontrol eder ve her zaman tuttuğu nesnenin türünü bilir. 
-Eğer tutulacak değerin hangi türlerden olabileceği biliniyorsa `any` yerine `variant` türünün kullanılması çok daha uygun olacaktır. 
+Eğer tutulacak değerin hangi türlerden olabileceği biliniyorsa _any_ yerine _variant_ türünün kullanılması çok daha uygun olacaktır. 
 Aşağıdaki kullanım örneği resmi öneri metninden alındı:
 
 ```
@@ -350,6 +359,13 @@ struct property
 
 typedef std::list<property> properties;
 ```
-Yukarıdaki kodda tanımlanan `property` türünden bir nesne hem istenilen türden bir değer saklayabilir hem de bu değere ilişkin tanımlayıcı bir yazıyı tutabilir. Böyle bir tür `GUI` uygulamalarından oyun programlarına kadar birçok yerde kullanılabilir. Bir kütüphanenin ele alacağı türleri bilmeden o türlerden değerleri tutabilmesi ve başka `API`'lere bunları gönderebilmesi gereken durumlarda any sınıfı iyi bir seçenek oluşturabilir. Betik `(script)` dilleriyle arayüz oluşturma, betik dilleri için yazılan yorumlayıcı programlarda böyle türlere ihtiyaç artabiliyor.
 
-`any` sınıfının tasarımında büyük ölçüde `Kelvin Henney` tarafından yazılan ve 2001 yılında `boost` kütüphanesine eklenen `boost::any` sınıfı esas alındı. `Kevlin Henney` ve `Beman Dawes` 2006 yılında ``WG21/N1939=J16/06-0009` belge numarasıyla `any` sınıfının standartlara eklenmesi önerisini sundular. Nihayet Beman Dawes ve Alisdair Meredith'in önerileriyle diğer kütüphane bileşenleriyle birlikte any sınıfı da `C++17` standartları ile dile eklendi. `boost::any` kütüphanesinde olmayan, `emplace` işlevi, `in_place_type_t<>` parametreli kurucu işlev, küçük tampon optimizasyonu yapılabilmesi gibi bazı özellikler `std::any` kütüphanesine yer alıyor.
+Yukarıdaki kodda tanımlanan _property_ türünden bir nesne hem istenilen türden bir değer saklayabilir hem de bu değere ilişkin tanımlayıcı bir yazıyı tutabilir. 
+Böyle bir tür _GUI_ uygulamalarından oyun programlarına kadar birçok yerde kullanılabilir. 
+Bir kütüphanenin ele alacağı türleri bilmeden o türlerden değerleri tutabilmesi ve başka _API_'lere bunları gönderebilmesi gereken durumlarda any sınıfı iyi bir seçenek oluşturabilir. 
+Betik _(script)_ dilleriyle arayüz oluşturma, betik dilleri için yazılan yorumlayıcı programlarda böyle türlere ihtiyaç artabiliyor.
+
+_any_ sınıfının tasarımında büyük ölçüde _Kelvin Henney_ tarafından yazılan ve _2001_ yılında _boost_ kütüphanesine eklenen *boost::any* sınıfı esas alındı. 
+_Kevlin Henney_ ve _Beman Dawes_ 2006 yılında *WG21/N1939=J16/06-0009* belge numarasıyla _any_ sınıfının standartlara eklenmesi önerisini sundular. 
+Nihayet _Beman Dawes_ ve _Alisdair Meredith_'in önerileriyle diğer kütüphane bileşenleriyle birlikte any sınıfı da _C++17_ standartları ile dile eklendi. 
+*boost::any* kütüphanesinde olmayan, _emplace_ işlevi, *in_place_type_t<>* parametreli kurucu işlev, küçük tampon optimizasyonu _(small buffer optimization)_ yapılabilmesi gibi bazı özellikler _std::any` kütüphanesine yer alıyor.
