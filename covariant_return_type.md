@@ -19,7 +19,7 @@ public:
 
 Yukarıdaki kodda _Mercedes_ sınıfı taban sınıfı olan _Car_ sınıfının saf sanal _getCylinderVolume_ işlevini ezerken _(ovverride)_ farklı bir geri dönüş değeri bildirmiş.
 _C++_ dilinin kurallarına göre bu durum bir sentaks hatası oluşturuyor. 
-Ancak bu durumun "eşdeğişken geri dönüş türü" _(covariant return type)_ denen bir istisnası var.
+Ancak bu durumun "eş geri dönüş türü" _(covariant return type)_ denen bir istisnası var.
 _B_ bir sınıf türü olmak üzere, taban sınıfın sanal işlevinin geri dönüş değeri _B*_ türünden ise, türemiş sınıfın bu işlevi ezecek işlevinin geri dönüş değeri, 
 eğer _D_ sınıfı _B_ sınıfından public türetmesiyle elde edilmiş bir sınıf ise, _D*_ türünden olabilir.
 Aynı istisna referans semantiği için de söz konusu:
