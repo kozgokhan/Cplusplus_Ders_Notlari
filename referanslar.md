@@ -55,7 +55,7 @@ void func
 ```
 
 Tanımlanan bir referans bir nesnenin yerine geçer. 
-Artık söz konusu referans isim, kendi kapamı _(scope)_ içinde hep aynı nesnenin yerine geçecektir. 
+Artık söz konusu referans isim, kendi kapsamı _(scope)_ içinde hep aynı nesnenin yerine geçecektir. 
 Tanımlanmış bir referans bir başka nesnenin yerine geçemez yani referansın daha sonra bir başka nesneye bağlanması mümkün değildir:
 
 ```
