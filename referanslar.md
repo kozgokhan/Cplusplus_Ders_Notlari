@@ -254,14 +254,18 @@ int main()
 }
 ```
 
-## referansların const olarak bildirilmesi `(const referanslar)`
+## referansların const olarak bildirilmesi _(const referanslar)_
 
-Bir referans `const` anahtar sözcüğü ile tanımlanabilir. `const` anahtar sözcüğü `"&"` atomundan önce yazılır. 
-Böyle referanslara `const referans` diyeceğiz. `T` bir tür olmak üzere
+Bir referans _const_ anahtar sözcüğü ile tanımlanabilir. 
+_const_ anahtar sözcüğü _"&"_ atomundan önce yazılır. 
+Böyle referanslara _const referans_ diyeceğiz. 
+_T_ bir tür olmak üzere
+
 ```
 const T &r = x;
 ```
 yazmak ile
+
 ```
 T const &r = x;
 ```
@@ -278,13 +282,14 @@ int main()
 }
 ```
 
-`main` işlevi içinde yer alan
+_main_ işlevi içinde yer alan
 
 ```
 r = 20
 ```
 
-ifadesi geçerli değildir. Atama aslında _a_ değişkenine yapılır. 
+ifadesi geçerli değildir. 
+Atama aslında _a_ değişkenine yapılır. 
 _const_ referans kullanılarak, referansın bağlandığı nesne değiştirilemez. 
 Referans isim, salt okuma erişimli olarak işlemlere sokulabilir. 
 Yukarıdaki program parçasının göstericilerle oluşturulan eşdeğer _C_ karşılığı şöyle olabilir:
@@ -301,7 +306,8 @@ int main()
 Burada _ptr_, hem kendisi _const_ hem de gösterdiği nesne _const_ olan bir gösterici değişkendir. 
 _ptr_'nin kendisine yapılan atamalar geçersiz olduğu gibi _ptr_'nin gösterdiği nesneye yapılan atamalar da geçersizdir. 
 Peki _const_ anahtar sözcüğü _'&'_ atomundan sonra, referansın isminden önce kullanabilir mi? 
-Gösterici isminden önce _'*'_ atomundan sonra _const_ anahtar sözcüğü kullanıldığında, bu durum göstericinin kendisinin _const_ olduğu anlamına geliyordu.
+Gösterici isminden önce _'*'_ atomundan sonra _const_ anahtar sözcüğü kullanıldığında, 
+bu durum göstericinin kendisinin _const_ olduğu anlamına geliyordu.
 
 ```
 int x;
@@ -312,7 +318,7 @@ int &const r = x;
 Yukarıdaki kodda *r* isimli referansın tanımı doğru değildir. 
 Çünkü referanslar zaten tanımları gereği yalnızca belirli bir nesneye bağlanmak üzere oluşturulur. 
 Yani bir referans, zaten bir nesne ile ilk değerini aldıktan sonra artık başka bir nesnenin yerine geçemez.
-Referanslar bu anlamlarıyla zaten kendileri const nesnedir. 
+Referanslar bu anlamlarıyla zaten kendileri _const_ nesnedir. 
 Dolayısıyla, *const* anahtar sözcüğünün yukarıdaki biçimde kullanılmasına gereksizdir.
 
 _const_ bir nesne adresinin, ancak gösterdiği nesne _const_ olan bir göstericiye atanabileceğini anımsayın. 
@@ -713,7 +719,8 @@ Bu arada _C++11_ standartları ile artık modern C++'ta _NULL pointer_ olarak _n
 _nullptr_ _C++_'ta bir anahtar sözcüktür ve türü _nullptr_t_ olan bir sabittir _(constant)_.
 
 + C'de bir fonksiyonun bir adres döndürmesi durumunda başarısızlık belirtmek amacıyla _NULL_ adresi döndürmesi çok yaygın bir konvensiyondur. 
-Örneğin standart C fonksiyonu olan *fopen* bir dosyayı açamaz ise _NULL_ adresi döndürür. Standart C fonksiyonu _malloc_ başarısız olduğunda _NULL pointer_ döndürür.
+Örneğin standart C fonksiyonu olan *fopen* bir dosyayı açamaz ise _NULL_ adresi döndürür. 
+Standart C fonksiyonu _malloc_ başarısız olduğunda _NULL pointer_ döndürür.
 
 + C Dilinde bir veri yapısında arama yapan fonsiyonlar aranan değeri buamadıklarında tipik olarak _NULL_ gösterici döndürürler. 
 Örneğin standart bir C işlevi olan _strchr_ işlevinde bir yazı içinde bir karakter arar. 
@@ -722,7 +729,8 @@ Aranan karakteri yazıda bulursa bulduğu yerin adresini bulamazsa _NULL_ adresi
 + Çağıran koddan bir nesne adresi isteyen bir fonksiyon kendisine _NULL_ adresi gönderilmesini çağıran koda bir seçenek olarak verebilir. 
 Örneğin standart _C_ fonksiyonu olan time kendisine _NULL_ adresi gönderilirse takvim zamanı değerini yani _time_t_ türünden değeri bir nesneye yazmaz yalnızca geri dönüş değeri olarak üretir. 
 
-+ Yine _C_'de _NULL_ adresi bir gösterici için bir bayrak değeri olarak kullanılabilir. Örneğin bir kontrol deyiminde bir göstericinin değerinin _NULL_ adresi olup olmamasına göre farklı işler yapılabilir.
++ Yine _C_'de _NULL_ adresi bir gösterici için bir bayrak değeri olarak kullanılabilir. 
+Örneğin bir kontrol deyiminde bir göstericinin değerinin _NULL_ adresi olup olmamasına göre farklı işler yapılabilir.
 
 Bu tür temaların hiçbirinde referans semantiği kullanılamaz. Hiçbir nesnenin yerine geçmeyen bir referans tanımlanamaz. 
 _NULL_ referans diye bir kavram yoktur. 
