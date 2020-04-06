@@ -1,10 +1,10 @@
 ## Fonksiyon Yüklemesi (Function Overloading)
 
 C++ dilinde, bir kapsamda _(scope)_ aynı isimli birden fazla fonksiyon bildirilebilir ya da tanımlanabilir. 
-Programcıların işini kolaylaştıran bu araç İngilizce'de _"function overloading"_ (fonksiyon yüklemesi) olarak isimlendirilir. 
+Programcıların işini kolaylaştıran bu araç İngilizcede _"function overloading"_ (fonksiyon yüklemesi) olarak isimlendirilir. 
 Önce şu sorulara yanıt aramakla başlayalım: 
 Neden iki ya da daha fazla sayıda fonksiyonun isimlerinin aynı olmasını isteyelim? 
-İki ayrı fonksiyona aynı isim vermenin nasıl bir faydası olabilir? 
+İki ayrı fonksiyona aynı ismi vermenin nasıl bir faydası olabilir? 
 Bir örnekle başlayalım:
 
 C'nin aşağıdaki standart işlevlerini hatırlayalım:
@@ -15,16 +15,16 @@ double fabs(double x);
 long labs(long x);
 ```
 
-C'nin standart başlık dosyalarından biri olan _math.h_ içinde bildirimleri yer alan yukarıdaki fonksiyonların hepsi aslında aynı işlemi yapar. 
-Bu fonksiyonlar kendilerine argüman olarak gönderilen değerin mutlak değerini döndürür. Bu fonksiyonların çağıran koddan aldıkları 
+C'nin standart başlık dosyalarından biri olan _math.h_ içinde bildirimleri yer alan yukarıdaki fonksiyonların hepsi aslında aynı hesaplamayı yapar. 
+Bu fonksiyonlar kendilerine argüman olarak gönderilen değerin mutlak değerini döndürür. 
+Bu fonksiyonların çağıran koddan aldıkları 
 değerlerin türleri farklıdır. 
 Buna bağlı olarak geri dönüş değerlerinin türleri de farklıdır. 
 C dilinde aynı kapsamda aynı isimli fonksiyonlar tanımlanamayacağı için bu işlevlere ayrı isimler verilmiştir. 
 Bu fonksiyonların hepsinin isminin aynı olması bir fayda sağlar mıydı? 
-Örneğin hepsinin isimleri _abs_ olsaydı, mutlak değer alma işlemi yapacak programcının birden fazla fonksiyon 
-ismini bilmesi ya da anımsaması gerekmezdi, değil mi? Aslında dilin temel operatörlerini düşündüğünüz zaman benzer bir aracın kullanıma hazır 
-bir biçimde sunulduğunu görebilirsiniz.
-
+Örneğin hepsinin isimleri _abs_ olsaydı, 
+mutlak değer alma işlemi yapacak programcının birden fazla fonksiyon ismini bilmesi ya da anımsaması gerekmezdi, değil mi? 
+Aslında dilin temel operatörlerini düşündüğünüz zaman benzer bir aracın kullanıma hazır bir biçimde sunulduğunu görebilirsiniz.
 Toplama operatörünü ele alalım. Toplama operatörü ne iş yapar? 
 İki değerin toplanmasını sağlar, değil mi?
 
@@ -49,8 +49,7 @@ Yapılan işlemin sonucunda bir gerçek sayı değeri üretiliyor.
 Oysa işlemci düzeyinde bakıldığında, tamsayı türünden iki değerin birbiriyle toplanmasıyla, 
 gerçek sayı türünden iki değerin birbiri ile toplanması bambaşka işlemlerdir. 
 Bize çok doğal görünen bu iki örnekte yapılan işlemi, aslında ayrıntılarından soyutlayarak "toplama" olarak ifade ediyoruz.
-Matematikte olduğu gibi _C_ dilinde de, bu işlemleri yapmak için bir soyutlama kullanılarak 
-aynı operatör yani aynı simge kullanılıyor.
+Matematikte olduğu gibi _C_ dilinde de, bu işlemleri yapmak için bir soyutlama kullanılarak aynı operatör yani aynı simge kullanılıyor.
 İki işlem için farklı iki simge kullanılmış olsaydı algılama bu kadar kolay olur muydu?
 Şimdi de _m1_ ve _m2_ değişkenleri _Matrix_ isimli bir sınıf türünden olsun.
 
@@ -155,7 +154,7 @@ Bu fonksiyon tek başına olsaydı (aynı isimli başka fonksiyon olmasaydı) ç
 void foo();					//1
 void foo(int);					//2 
 void foo(double, double = 3.4)			//3
-void foo(char _);				//4
+void foo(char *);				//4
 
 void func()
 {
@@ -189,7 +188,7 @@ _int_ türünden _double_ türüne geçerli dönüşüm vardır.
 
 + 4 numaralı fonksiyon uygun değildir.
 Fonksiyonun parametre değişkeni sayısı ile fonksiyon çağrısındaki argüman sayısı birbirine eşittir. 
-Ancak int türünden _char__ türüne geçerli bir tür dönüşümü yoktur. 
+Ancak int türünden _char*_ türüne geçerli bir tür dönüşümü yoktur. 
 İkinci aşamada uygun bir fonksiyon bulunmaz ise fonksiyon çağrısı geçersiz kabul edilir.
 Bu duruma İngilizcede _"no match"_ durumu _(çağrılacak uygun bir fonksiyonun bulunmaması)_ denir.
 
@@ -333,7 +332,7 @@ Dilin kurallarınca geçerli olan ve örtülü _(implicit)_ olarak yapılabilen 
 Standart dönüşüm _(standard conversions)_ başlığı altında toplanan _5_ grup dönüşüm söz konusudur:
 
 __1. Tamsayı türlerine ilişkin dönüşümler__
-Bir tamsayı türünden ya da bir numaralandırma (enum) türünden başka bir tamsayı türüne yapılan dönüşümler.
+Bir tamsayı türünden ya da bir numaralandırma _(enum)_ türünden başka bir tamsayı türüne yapılan dönüşümler.
 
 __2. Gerçek sayı dönüşümleri__
 Bir gerçek sayı türünden başka bir gerçek sayı türüne yapılan dönüşümler.
