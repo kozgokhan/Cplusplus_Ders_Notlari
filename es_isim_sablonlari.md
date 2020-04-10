@@ -143,6 +143,12 @@ Yukarıdaki kodda, _Irand_ şablon ismi _100_ argüman değeri ile kullanıldı�
 Rand<int, 0, 100>
 ```
 açılımı anlamına geliyor.
+Standart kütüphane de birçok yerde eş isim şablonlarını kullanıyor. Örneğin _type_traits_ kütüphanesinde yer alan _enable_if_t_ türü aşağıdaki gibi bildirilmiş:
+
+```
+template <bool B, class T = void >
+using enable_if_t = typename enable_if<B, T>::type;
+```
 
 Sınıf şablonlarında ya da işlev şablonlarında yapılabilen açık özelleştirme _(explicit specialization)_ ya da 
 yalnızca sınıf şablonlarında mümkün olan kısmi özelleştirme _(partial specialization)_ araçları eş isim şablonlarında kullanılamıyor. 
