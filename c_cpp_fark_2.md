@@ -41,7 +41,7 @@ void foo(size_t n)
 	//...
 }
 ```
-`C`'de diğer aritmetik türlerde `enum` türlerine otomatik tür dönüşümü var. `C++`'ta yok.
+`C`'de diğer aritmetik türlerden `enum` türlerine otomatik tür dönüşümü var. `C++`'ta yok.
 `C`'de farklı `enum` türleri arasında otomatik tür dönüşümü var. `C++`'ta yok.
 
 ```
