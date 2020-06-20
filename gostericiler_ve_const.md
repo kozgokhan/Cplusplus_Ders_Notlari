@@ -116,9 +116,9 @@ __const__ anahtar sözcüğü _*p_'den önce geliyor. const olan _*p_, yani _p_'
 int const *p = &x;
 ```
 
-__const__ anahtar sözcüğü _*p_'den önce geliyor. **const** olan _*p_, yani _p*_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
+__const__ anahtar sözcüğü _*p_'den önce geliyor. __const__ olan _*p_, yani _p*_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
 
-**const** anahtar sözcüğü iki konumda birden de kullanılabilir. Bu durumda her iki **const** anahtar sözcüğünün verdiği anlam da korunur:
+__const__ anahtar sözcüğü iki konumda birden de kullanılabilir. Bu durumda her iki __const__ anahtar sözcüğünün verdiği anlam da korunur:
 
 ```
 int x = 10;
@@ -146,22 +146,21 @@ Gösterici değişkenlere ilişkin bu semantik yapı bizi daha çok fonksiyonlar
 
 ## Parametre değişkeni gösterici olan fonksiyonlar
 
-*T* bir tür olsun ve ismi func olan bir fonksiyon aşağıdaki şekilde bildirilmiş olsun:
+*T* bir tür olsun ve ismi _func_ olan bir fonksiyon aşağıdaki şekilde bildirilmiş olsun:
 
 ```
 void func(T *p);
 ```
 
-Fonksiyonun başka parametre değişkenleri de olabilir. Diğer parametre değişkenlerini şimdilik görmezden geliyoruz. C'de böyle bir fonksiyon arayüzünün (interface) anlamı şudur: Fonksiyon, adresini istediği nesnenin değerini değiştirmek amacıyla (onu set etmek için) nesneye erişecek. Böyle bir fonksiyona yapılan çağrı ile fonksiyona bir nesnenin (ya da bir dizinin) adresini gönderdiğimizde nesnemiz değişecek, nesnemize yeni değer ya da değerler (dizi ise) yazılacak. Böyle fonksiyonlara İngilizce'de duruma göre şöyle isimler yakıştırılıyor: *set function*, *setter*, *mutator* *(değiştiren anlamında)*. Şimdi neden böyle fonksiyonların tanımlandığını konuşalım:
+Fonksiyonun başka parametre değişkenleri de olabilir. Diğer parametre değişkenlerini şimdilik görmezden geliyoruz. C'de böyle bir fonksiyon arayüzünün _(interface)_ anlamı şudur: Fonksiyon, adresini istediği nesnenin değerini değiştirmek amacıyla _(onu set etmek için)_ nesneye erişecek. Böyle bir fonksiyona yapılan çağrı ile fonksiyona bir nesnenin (ya da bir dizinin) adresini gönderdiğimizde nesnemiz değişecek, nesnemize yeni değer ya da değerler (dizi ise) yazılacak. Böyle fonksiyonlara İngilizce'de duruma göre şöyle isimler yakıştırılıyor: _set function_, _setter_, _mutator_ _(değiştiren anlamında)_. Şimdi neden böyle fonksiyonların tanımlandığını konuşalım:
 
-* Fonksiyon, bize hesapladığı  bir değeri iletmek amacıyla tanımlanmış olabilir. Yani fonksiyon hesapladığı değeri, geri dönüş değeri *(return value)* ile bize iletmek yerine bu değeri bizden adresini istediği nesneye yazıyor olabilir. Bu noktada önemli olan sorulardan biri şu: Fonksiyon neden hesapladığı değeri geri dönüş değeri yöntemi ile değil de bu şekilde iletmeyi tercih etmiş olsun? Bu soruya daha sonra cevap vereceğim. Hadi böyle fonksiyonlara bir örnek verelim:
+* Fonksiyon, bize hesapladığı bir değeri iletmek amacıyla tanımlanmış olabilir. Yani fonksiyon hesapladığı değeri, geri dönüş değeri _(return value)_ ile bize iletmek yerine bu değeri bizden adresini istediği nesneye yazıyor olabilir. Bu noktada önemli olan sorulardan biri şu: Fonksiyon neden hesapladığı değeri geri dönüş değeri yöntemi ile değil de bu şekilde iletmeyi tercih etmiş olsun? Bu soruya daha sonra cevap vereceğim. Hadi böyle fonksiyonlara bir örnek verelim:
 
 ```
 void get_random_date(struct Date *p)
 ```
 
-
-Örneğimizde, *struct Date* isimli türden nesneler (türün etiket isminin de ima ettiği gibi) tarih verileri tutuyor olsun. Yukarıdaki işlevin amacı, müşteri koda rastgele oluşturulmuş bir tarihi iletmek. Fonksiyon bu değeri pek ala geri dönüş değeri ile de kendisini çağıran koda iletebilirdi. Böyle bir fonksiyonu oluşturduğumuz bir *struct Date* nesnesinin adresi ile çağırmamız gerekiyor. Böylece (adresini) gönderdiğimiz nesne fonksiyonun kodu çalıştıktan sonra rastgele bir tarih değeri tutuyor olacak.
+Örneğimizde, _struct Date_ isimli türden nesneler (türün etiket isminin de ima ettiği gibi) tarih verileri tutuyor olsun. Yukarıdaki işlevin amacı, müşteri koda rastgele oluşturulmuş bir tarihi iletmek. Fonksiyon bu değeri pek ala geri dönüş değeri ile de kendisini çağıran koda iletebilirdi. Böyle bir fonksiyonu oluşturduğumuz bir _struct Date_ nesnesinin adresi ile çağırmamız gerekiyor. Böylece (adresini) gönderdiğimiz nesne fonksiyonun kodu çalıştıktan sonra rastgele bir tarih değeri tutuyor olacak.
 
 ```
 {
@@ -173,29 +172,29 @@ void get_random_date(struct Date *p)
 
 Böyle fonksiyonların bu biçimdeki parametre değişkenleri İngilizcede yaygın olarak *"out parameter"* olarak isimlendiriliyor *(output parameter anlamında)*. Çünkü buradaki amaç, fonksiyonun hesapladığı (ürettiği) değer ya da değerleri kendisini çağıran koda iletmesi.
 
-* Fonksiyon yapmakla yükümlü iş gereği bizden adresini aldığı nesneyi değiştiriyor olabilir. Bir fonksiyonun bir başka yerel kapsamdaki *(local scope)* nesneyi değiştirebilmesinin başka bir yolu yok zaten. Örneğin *T* türünden iki nesneyi takas *(swap)* edecek bir fonksiyon şu parametrik yapıda olacaktır:
+* Fonksiyon yapmakla yükümlü iş gereği bizden adresini aldığı nesneyi değiştiriyor olabilir. Bir fonksiyonun bir başka yerel kapsamdaki _(local scope)_ nesneyi değiştirebilmesinin başka bir yolu yok zaten. Örneğin _T_ türünden iki nesneyi takas _(swap)_ edecek bir fonksiyon şu parametrik yapıda olacaktır:
 
 ```
 void swap(T *p1, T *p2);
 ```
 
-Bu fonksiyona adreslerini gönderdiğimiz *T* türünden iki nesne takas edilecek. Diziler ya da yazılar üzerinde, dizilerin ya da yazıların öğelerini değiştirmeye yönelik işlemleri gerçekleştirecek fonksiyonlar böyledir değil mi? C'nin standart kütüphanesinden bir örnek verelim:
+Bu fonksiyona adreslerini gönderdiğimiz _T_ türünden iki nesne takas edilecek. Diziler ya da yazılar üzerinde, dizilerin ya da yazıların öğelerini değiştirmeye yönelik işlemleri gerçekleştirecek fonksiyonlar böyledir değil mi? C'nin standart kütüphanesinden bir örnek verelim:
 
 ```
 char *strcpy(char *pdest, const char *psource);
 ```
 
-*strcpy* fonksiyonu *psource* adresindeki yazıyı *pdest* adresine kopyalar.
+_strcpy_ fonksiyonu _psource_ adresindeki yazıyı _pdest_ adresine kopyalar.
 
-* Fonksiyon bizden bir yapı *(structure)* nesnesinin adresini istiyor bu adresteki nesnenin bazı öğelerinden *(member)* yapacağı işlemlerde kullanacağı değerleri *(input)* okuyor aynı zamanda yapı nesnesinin bazı öğelerine ise hesapladığı değerleri yazıyor olabilir. Böyle fonksiyonların gösterici parametre değişkenlerine İngilizcede yaygın olarak *"in-out parameter"* *(input - output anlamında) *deniyor. Standart kütüphanenin *time.h* başlık dosyasında bildirilen mktime isimli fonksiyon buna bir örnek olarak verilebilir:
+* Fonksiyon bizden bir yapı _(structure)_ nesnesinin adresini istiyor bu adresteki nesnenin bazı öğelerinden _(member)_ yapacağı işlemlerde kullanacağı değerleri _(input)_ okuyor aynı zamanda yapı nesnesinin bazı öğelerine ise hesapladığı değerleri yazıyor olabilir. Böyle fonksiyonların gösterici parametre değişkenlerine İngilizcede yaygın olarak _"in-out parameter"_ _(input - output anlamında)_ deniyor. Standart kütüphanenin _time.h_ başlık dosyasında bildirilen _mktime_ isimli fonksiyon buna bir örnek olarak verilebilir:
 
 ```
 time_t mktime (struct tm * timeptr);
 ```
 
-Standart *mktime* fonksiyonu kendisini çağıracak koddan *struct tm* türünden bir nesnenin adresini istiyor. Adresini istediği nesnenin öğelerinden hesaplamada kullanacağı bazı değerleri alarak kullanacak, ancak duruma göre aynı nesnenin bazı öğelerine de hesapladığı değerleri yazacak.
+Standart _mktime_ fonksiyonu kendisini çağıracak koddan _struct tm_ türünden bir nesnenin adresini istiyor. Adresini istediği nesnenin öğelerinden hesaplamada kullanacağı bazı değerleri alarak kullanacak, ancak duruma göre aynı nesnenin bazı öğelerine de hesapladığı değerleri yazacak.
 
-Şimdi de diğer arayüzü inceleyelim. Yine *T* bir tür olsun ve ismi *func* olan bir fonksiyon aşağıdaki şekilde bildirilmiş olsun:
+Şimdi de diğer arayüzü inceleyelim. Yine _T_ bir tür olsun ve ismi _func_ olan bir fonksiyon aşağıdaki şekilde bildirilmiş olsun:
 
 ```
 void func(const T *p); 
@@ -207,19 +206,19 @@ Bu bildirim ile aşağıdaki bildirim arasında anlamsal bir fark olmadığını
 void func(const T *ptr);
 ```
 
-C'de böyle bir fonksiyon arayüzünün *(interface)* anlamı şudur: Fonksiyon, adresini istediği nesneye, onun değerini okumak amacıyla yani bu değeri yapacağı işlerde kullanmak için erişecek. Böyle bir fonksiyona çağrı yaptığımızda (adresini) gönderdiğimiz nesnenin değerinin fonksiyon tarafından değiştirilmeyeceğinden emin olabiliriz. Böyle fonksiyonlara İngilizce'de duruma göre şöyle isimler yakıştırılıyor: *get function, getter, accessor* *(erişen anlamında)*. Şimdi de neden böyle fonksiyonların tanımlandığını konuşalım...
+C'de böyle bir fonksiyon arayüzünün _(interface)_ anlamı şudur: Fonksiyon, adresini istediği nesneye, onun değerini okumak amacıyla yani bu değeri yapacağı işlerde kullanmak için erişecek. Böyle bir fonksiyona çağrı yaptığımızda (adresini) gönderdiğimiz nesnenin değerinin fonksiyon tarafından değiştirilmeyeceğinden emin olabiliriz. Böyle fonksiyonlara İngilizce'de duruma göre şöyle isimler yakıştırılıyor: _get function, getter, accessor_ _(erişen anlamında)_. Şimdi de neden böyle fonksiyonların tanımlandığını konuşalım...
 
-Yukarıdaki gibi bir fonksiyon yerine doğrudan değerle çağrılan bir fonksiyon *(call by value)* oluşturabilirdik:
+Yukarıdaki gibi bir fonksiyon yerine doğrudan değerle çağrılan bir fonksiyon _(call by value)_ oluşturabilirdik:
 
 ```
 void func(T x);
 ```
 
-Bu durumda bu fonksiyona yapılan her çağrı, argüman olarak gönderilen değerin fonksiyonun parametre değişkenine kopyalanması sonucunu doğuracaktı. Bu kopyalama maliyeti, *T* türünden bir nesnenin bellekteki yerinin *(storage)* büyüklüğü ile doğru orantılı olarak artacaktı. Örneğin sistemimizdeki kelime uzunluğu *4 byte*, *T* türü için de *sizeof* değeri *64* olsun. Bu durumda her fonksiyon çağrısı *64 byte*'lık bir bellek bloğunun kopyalanması sonucunu doğuracaktı.
+Bu durumda bu fonksiyona yapılan her çağrı, argüman olarak gönderilen değerin fonksiyonun parametre değişkenine kopyalanması sonucunu doğuracaktı. Bu kopyalama maliyeti, _T_ türünden bir nesnenin bellekteki yerinin _(storage)_ büyüklüğü ile doğru orantılı olarak artacaktı. Örneğin sistemimizdeki kelime uzunluğu _4 byte_, _T_ türü için de _sizeof_ değeri _64_ olsun. Bu durumda her fonksiyon çağrısı _64 byte_'lık bir bellek bloğunun kopyalanması sonucunu doğuracaktı.
 
 ## gösterici dizileri ve const anahtar sözcüğü
 
-Gösterici dizilerinin tanımlanmasında yine *const* anahtar sözcüğünün kullanıldığı yere bağlı olarak anlam değişir. Aşağıdaki koda bakalım:
+Gösterici dizilerinin tanımlanmasında yine __const__ anahtar sözcüğünün kullanıldığı yere bağlı olarak anlam değişir. Aşağıdaki koda bakalım:
 
 ```
 int x = 10, y = 20, z = 30;
@@ -227,7 +226,7 @@ int x = 10, y = 20, z = 30;
 int *const pa1[] = { &x, &y, &z };
 const int *pa2[] = { &x, &y, &z };
 ```
-_pa1_ dizisinin tanımında __const__ anahtar sözcüğü _'*'_ (asterisk) atomundan sonra ve dizinin isminden önce yazılmış. Bu durumda **const** olan dizinin kendisidir. Yani bu durumda dizinin öğelerini değiştirmeme sözü vermiş oluyoruz. Dizinin öğelerinin değiştirilmesi yani onlara atama yapılması derleyici tarafından sentaks hatası olarak işaretlenecek. Ancak bu durumda dizinin öğeleri olan göstericileri içerik _(dereferencing)_ operatörünün operandı yaparak değiştirmemizde bir engel yok. 
+_pa1_ dizisinin tanımında __const__ anahtar sözcüğü _'*'_ (asterisk) atomundan sonra ve dizinin isminden önce yazılmış. Bu durumda __const__ olan dizinin kendisidir. Yani bu durumda dizinin öğelerini değiştirmeme sözü vermiş oluyoruz. Dizinin öğelerinin değiştirilmesi yani onlara atama yapılması derleyici tarafından sentaks hatası olarak işaretlenecek. Ancak bu durumda dizinin öğeleri olan göstericileri içerik _(dereferencing)_ operatörünün operandı yaparak değiştirmemizde bir engel yok. 
 
 ```
 int main()
@@ -251,7 +250,7 @@ int main()
 }
 ```
 
-Burada da **const** anahtar sözcüğü iki yerde birden kullanılabilir:
+Burada da __const__ anahtar sözcüğü iki yerde birden kullanılabilir:
 
 ```
 int x = 10, y = 20, z = 30;
