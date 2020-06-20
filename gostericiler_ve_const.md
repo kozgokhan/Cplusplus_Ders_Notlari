@@ -11,29 +11,29 @@ int x = 10;
 int *const ptr = &x;
 ```
 
-İngilizcede bu şekilde tanımlanmış gösterici değişkenlere **"const pointer"** denmektedir.
-C dilinde yaygın olarak kullanılmasa da C++'ta böyle pointer değişkenler için *"top level const"* terimi de kullanılmaktadır.
-Bu tür gösterici değişkenler için kurs boyunca *"const gösterici"* ya da bu durumu özellikle vurgulamak için *"kendisi const gösterici"* terimini kullanacağım.
+İngilizcede bu şekilde tanımlanmış gösterici değişkenlere __"const pointer"__ denmektedir.
+C dilinde yaygın olarak kullanılmasa da _C++_'ta böyle pointer değişkenler için _"top level const"_ terimi de kullanılmaktadır.
+Bu tür gösterici değişkenler için kurs boyunca _"const gösterici"_ ya da bu durumu özellikle vurgulamak için _"kendisi const gösterici"_ terimini kullanacağım.
 
-Buradaki belirtilen *ptr* değişkeninin değerinin hayatı boyunca değişmeyecek olduğudur. Başka bir deyişle, *ptr* değişkeni hayatı boyunca *x* değişkenini gösterecektir. Bu durumda derleyici, *ptr* değişkeninin değerini değiştirmeye yönelik kodları geçersiz kabul etmekle yükümlüdür. Yani (yanlışlıkla) *ptr* değişkenine başka bir nesnenin adresini atarsak geçersiz kod (sentaks hatası) oluşur. Buradaki taahhüdümüz (sözümüz) *ptr* yoluyla erişilecek nesnenin, yani gösterilen nesnenin *(pointee)* yani 
+Buradaki belirtilen _ptr_ değişkeninin değerinin hayatı boyunca değişmeyecek olduğudur. Başka bir deyişle, _ptr_ değişkeni hayatı boyunca _x_ değişkenini gösterecektir. Bu durumda derleyici, _ptr_ değişkeninin değerini değiştirmeye yönelik kodları geçersiz kabul etmekle yükümlüdür. Yani (yanlışlıkla) _ptr_ değişkenine başka bir nesnenin adresini atarsak geçersiz kod (sentaks hatası) oluşur. Buradaki taahhüdümüz (sözümüz) _ptr_ yoluyla erişilecek nesnenin, yani gösterilen nesnenin _(pointee)_ yani 
 
 ```
 *ptr
 ```
 
-ifadesine karşılık gelen nesnenin değerinin değerinin değiştirilmeyeceği değildir, *ptr*'nin kendi değerinin değiştirilemeyeceğidir.
-**ptr* nesnesine **(pointee)** yani *ptr*'nin gösterdiği nesneye atama yapılabilir. Bu konuda bir söz verilmemiştir. Aşağıdaki koda bakalım:
+ifadesine karşılık gelen nesnenin değerinin değerinin değiştirilmeyeceği değildir, _ptr_'nin kendi değerinin değiştirilemeyeceğidir.
+_*ptr_ nesnesine **(pointee)** yani _ptr_'nin gösterdiği nesneye atama yapılabilir. Bu konuda bir söz verilmemiştir. Aşağıdaki koda bakalım:
 
 ```
 int main()
 {
-	int x = 10;
-	int y = 20;
+    int x = 10;
+    int y = 20;
 
-	int *const ptr = &x;  //ptr is a const pointer
-	//ptr = &y;  //gecersiz
-	*ptr = 90;   //geçerli
-	//...
+    int *const ptr = &x;  //ptr is a const pointer
+    //ptr = &y;  //gecersiz
+    *ptr = 90;   //geçerli
+    //...
 }
 ```
 
@@ -49,7 +49,7 @@ int g2 = 20;
 void func()
 {
 	int *ptr = &g1; //ptr'nin kendi hayatı boyunca g nesnesini göstermesi gerekiyor olsun.
-  //...
+        //...
 	ptr = &g2; //Bu atama yanlışlıkla yapılmış olsa da geçerli
 }
 ```
@@ -67,7 +67,7 @@ Bu kez aşağıdaki koda bakalım:
 int x = 10;
 const int *ptr = &x;
 ```
-*ptr* değişkeninin bildiriminde **const** anahtar sözcüğü ** (asterisk)* atomundan önce kullanılıyor. İngilizcede bu şekilde tanımlanmış gösterici değişkenlere **"pointer to const"** denmektedir. Örneğin yukarıdaki koddaki ptr için **"ptr is a pointer to const int"** diyebiliriz. C dilinde yaygın olarak kullanılmasa da C++ dilinde böyle gösterici değişkenler için **"low level const"** terimi de kullanılmaktadır. Bu tür gösterici değişkenler için kurs boyunca "const nesne göstericisi" ya da bu durumu özellikle vurgulamak için **"gösterdiği nesne const olan gösterici"** terimlerini kullanacağım.
+*ptr* değişkeninin bildiriminde **const** anahtar sözcüğü ** (asterisk)* atomundan önce kullanılıyor. İngilizcede bu şekilde tanımlanmış gösterici değişkenlere **"pointer to const"** denmektedir. Örneğin yukarıdaki koddaki ptr için __"ptr is a pointer to const int"__ diyebiliriz. C dilinde yaygın olarak kullanılmasa da C++ dilinde böyle gösterici değişkenler için __"low level const"__ terimi de kullanılmaktadır. Bu tür gösterici değişkenler için kurs boyunca "const nesne göstericisi" ya da bu durumu özellikle vurgulamak için __"gösterdiği nesne const olan gösterici"__ terimlerini kullanacağım.
 
 Yukarıdaki tanımlamada tür belirten *int* anahtar sözcüğü ile **const** anahtar sözcüğünün bildirimde yer değiştirmesi bir anlam farklılığı oluşturmaz. Yani
 
@@ -79,8 +79,8 @@ ile
 int const *ptr = &x;
 ```
 
-tanımlamaları tamamen aynı anlamdadır. Hangi biçimi tercih ettiğimiz kullandığımız kodlama konvensiyonları *(coding conventions)* ile ilgilidir. Burada belirtilen, *ptr* değişkeninin gösterdiği (ve ileride gösterebileceği) nesneleri salt okuma *(access)* amaçlı gösteriyor olmasıdır. Başka bir deyişle, **ptr* ifadesine karşılık gelen nesneyi, *ptr* yoluyla (aracılığı ile) değiştirmeme sözü vermiş oluyoruz.
-Bu durumda derleyici, **ptr* nesnesinin değerini değiştirmeye yönelik kodları geçersiz kabul etmekle yükümlüdür. Yani (yanlışlıkla) *ptr *yoluyla *ptr*'nin gösterdiği nesneye *(pointee)* bir atama yaparsak geçersiz kod (sentaks hatası) oluşur. Buradaki taahhüdümüz (sözümüz) *ptr*'nin değerini değiştirmemek değildir. *ptr*'nin değerini değiştirmemiz yani ona yeni bir değer atmamamız geçerlidir. Aşağıdaki koda bakalım:
+tanımlamaları tamamen aynı anlamdadır. Hangi biçimi tercih ettiğimiz kullandığımız kodlama konvensiyonları _(coding conventions)_ ile ilgilidir. Burada belirtilen, *ptr* değişkeninin gösterdiği (ve ileride gösterebileceği) nesneleri salt okuma _(access)_ amaçlı gösteriyor olmasıdır. Başka bir deyişle, _*ptr_ ifadesine karşılık gelen nesneyi, _ptr_ yoluyla (aracılığı ile) değiştirmeme sözü vermiş oluyoruz.
+Bu durumda derleyici, _*ptr_ nesnesinin değerini değiştirmeye yönelik kodları geçersiz kabul etmekle yükümlüdür. Yani (yanlışlıkla) _*ptr_ yoluyla _ptr_'nin gösterdiği nesneye *(pointee)* bir atama yaparsak geçersiz kod (sentaks hatası) oluşur. Buradaki taahhüdümüz (sözümüz) _ptr_'nin değerini değiştirmemek değildir. _ptr_'nin değerini değiştirmemiz yani ona yeni bir değer atmamamız geçerlidir. Aşağıdaki koda bakalım:
 
 ```
 int main()
@@ -96,7 +96,7 @@ int main()
 }
 ```
 
-Eğer yazdığınız kodda **const** anahtar sözcüğünü nereye yazacağınız konusunda tereddütünüz varsa (kuralları unutmuşsanız) her zaman şu cümleyi hatırlayın:
+Eğer yazdığınız kodda __const__ anahtar sözcüğünü nereye yazacağınız konusunda tereddütünüz varsa (kuralları unutmuşsanız) her zaman şu cümleyi hatırlayın:
 
 > const neden önce geliyorsa const olan odur
 
@@ -110,13 +110,13 @@ int * const p = &x;
 const int *p = &x;
 ```
 
-**const** anahtar sözcüğü **p*'den önce geliyor. const olan **p*, yani *p*'nin gösterdiği nesne. **p* ifadesine atama yaparsak sentaks hatası oluşacak.
+__const__ anahtar sözcüğü _*p_'den önce geliyor. const olan _*p_, yani _p_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
 
 ```
 int const *p = &x;
 ```
 
-**const** anahtar sözcüğü **p*'den önce geliyor. **cons** olan **p*, yani *p*'nin gösterdiği nesne. **p* ifadesine atama yaparsak sentaks hatası oluşacak.
+__const__ anahtar sözcüğü _*p_'den önce geliyor. **const** olan _*p_, yani _p*_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
 
 **const** anahtar sözcüğü iki konumda birden de kullanılabilir. Bu durumda her iki **const** anahtar sözcüğünün verdiği anlam da korunur:
 
@@ -125,7 +125,7 @@ int x = 10;
 const int *const ptr = &x;
 ```
 
-Yukarıdaki gibi tanımlanan bir gösterici değişkene İngilizcede **"const pointer to const int"** denmektedir. Bu durumda verdiğimiz söz hem *ptr*'nin hem de **ptr*'nin değerini değiştirmemektir. Bir başka deyişle hem *ptr*'ye başka bir adres atamak hem de **ptr* ifadesine başka bir değer atamak mantıksal hata ise, gösterici değişkeni bu şekilde tanımlamalıyız. Aşağıdaki koda bakalım:
+Yukarıdaki gibi tanımlanan bir gösterici değişkene İngilizcede _"const pointer to const int"_ denmektedir. Bu durumda verdiğimiz söz hem *ptr*'nin hem de _*ptr_'nin değerini değiştirmemektir. Bir başka deyişle hem *ptr*'ye başka bir adres atamak hem de _*ptr_ ifadesine başka bir değer atamak mantıksal hata ise, gösterici değişkeni bu şekilde tanımlamalıyız. Aşağıdaki koda bakalım:
 
 ```
 int main()
