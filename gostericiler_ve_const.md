@@ -60,16 +60,16 @@ void func()
 
 * Bazı durumlarda derleyicinin *ptr* değişkeninin değerinin değişmeyeceğini bilemesi derleyiciye daha iyi bir optimizasyon *(eniyileme)* olanağı vermektedir.
 
-## const anahtar sözcüğünün bildirimde * (asterisk) atomundan önce kullanılması
+## const anahtar sözcüğünün bildirimde _* (asterisk)_ atomundan önce kullanılması
 
 Bu kez aşağıdaki koda bakalım: 
 ```
 int x = 10;
 const int *ptr = &x;
 ```
-*ptr* değişkeninin bildiriminde **const** anahtar sözcüğü ** (asterisk)* atomundan önce kullanılıyor. İngilizcede bu şekilde tanımlanmış gösterici değişkenlere **"pointer to const"** denmektedir. Örneğin yukarıdaki koddaki ptr için __"ptr is a pointer to const int"__ diyebiliriz. C dilinde yaygın olarak kullanılmasa da C++ dilinde böyle gösterici değişkenler için __"low level const"__ terimi de kullanılmaktadır. Bu tür gösterici değişkenler için kurs boyunca "const nesne göstericisi" ya da bu durumu özellikle vurgulamak için __"gösterdiği nesne const olan gösterici"__ terimlerini kullanacağım.
+_ptr_ değişkeninin bildiriminde **const** anahtar sözcüğü _'*'_ _(asterisk)_ atomundan önce kullanılıyor. İngilizcede bu şekilde tanımlanmış gösterici değişkenlere _"pointer to const"_ denmektedir. Örneğin yukarıdaki koddaki _ptr_ için _"ptr is a pointer to const int"_ diyebiliriz. C dilinde yaygın olarak kullanılmasa da _C++_ dilinde böyle gösterici değişkenler için _"low level const"_ terimi de kullanılmaktadır. Bu tür gösterici değişkenler için kurs boyunca "const nesne göstericisi" ya da bu durumu özellikle vurgulamak için _"gösterdiği nesne const olan gösterici"_ terimlerini kullanacağım.
 
-Yukarıdaki tanımlamada tür belirten *int* anahtar sözcüğü ile **const** anahtar sözcüğünün bildirimde yer değiştirmesi bir anlam farklılığı oluşturmaz. Yani
+Yukarıdaki tanımlamada tür belirten _int_ anahtar sözcüğü ile __const__ anahtar sözcüğünün bildirimde yer değiştirmesi bir anlam farklılığı oluşturmaz. Yani
 
 ```
 const int *ptr = &x;
@@ -79,7 +79,7 @@ ile
 int const *ptr = &x;
 ```
 
-tanımlamaları tamamen aynı anlamdadır. Hangi biçimi tercih ettiğimiz kullandığımız kodlama konvensiyonları _(coding conventions)_ ile ilgilidir. Burada belirtilen, *ptr* değişkeninin gösterdiği (ve ileride gösterebileceği) nesneleri salt okuma _(access)_ amaçlı gösteriyor olmasıdır. Başka bir deyişle, _*ptr_ ifadesine karşılık gelen nesneyi, _ptr_ yoluyla (aracılığı ile) değiştirmeme sözü vermiş oluyoruz.
+tanımlamaları tamamen aynı anlamdadır. Hangi biçimi tercih ettiğimiz kullandığımız kodlama konvensiyonları _(coding conventions)_ ile ilgilidir. Burada belirtilen, _ptr_ değişkeninin gösterdiği (ve ileride gösterebileceği) nesneleri salt okuma _(access)_ amaçlı gösteriyor olmasıdır. Başka bir deyişle, _*ptr_ ifadesine karşılık gelen nesneyi, _ptr_ yoluyla (aracılığı ile) değiştirmeme sözü vermiş oluyoruz.
 Bu durumda derleyici, _*ptr_ nesnesinin değerini değiştirmeye yönelik kodları geçersiz kabul etmekle yükümlüdür. Yani (yanlışlıkla) _*ptr_ yoluyla _ptr_'nin gösterdiği nesneye *(pointee)* bir atama yaparsak geçersiz kod (sentaks hatası) oluşur. Buradaki taahhüdümüz (sözümüz) _ptr_'nin değerini değiştirmemek değildir. _ptr_'nin değerini değiştirmemiz yani ona yeni bir değer atmamamız geçerlidir. Aşağıdaki koda bakalım:
 
 ```
@@ -104,19 +104,19 @@ Eğer yazdığınız kodda __const__ anahtar sözcüğünü nereye yazacağını
 int * const p = &x;
 ```
 
-**const** anahtar sözcüğü *p*'den önce geliyor. **const** olan *p*'nin kendisi. *p*'ye atama yaparsak sentaks hatası olacak:
+__const__ anahtar sözcüğü *p*'den önce geliyor. __const__ olan _p_'nin kendisi. _p_'ye atama yaparsak sentaks hatası olacak:
 
 ```
 const int *p = &x;
 ```
 
-__const__ anahtar sözcüğü _*p_'den önce geliyor. const olan _*p_, yani _p_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
+__const__ anahtar sözcüğü _*p_'den önce geliyor. __const__ olan _*p_, yani _p_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
 
 ```
 int const *p = &x;
 ```
 
-__const__ anahtar sözcüğü _*p_'den önce geliyor. __const__ olan _*p_, yani _p*_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
+__const__ anahtar sözcüğü _*p_'den önce geliyor. __const__ olan _*p_, yani _p_'nin gösterdiği nesne. _*p_ ifadesine atama yaparsak sentaks hatası oluşacak.
 
 __const__ anahtar sözcüğü iki konumda birden de kullanılabilir. Bu durumda her iki __const__ anahtar sözcüğünün verdiği anlam da korunur:
 
@@ -125,7 +125,7 @@ int x = 10;
 const int *const ptr = &x;
 ```
 
-Yukarıdaki gibi tanımlanan bir gösterici değişkene İngilizcede _"const pointer to const int"_ denmektedir. Bu durumda verdiğimiz söz hem *ptr*'nin hem de _*ptr_'nin değerini değiştirmemektir. Bir başka deyişle hem *ptr*'ye başka bir adres atamak hem de _*ptr_ ifadesine başka bir değer atamak mantıksal hata ise, gösterici değişkeni bu şekilde tanımlamalıyız. Aşağıdaki koda bakalım:
+Yukarıdaki gibi tanımlanan bir gösterici değişkene İngilizcede _"const pointer to const int"_ denmektedir. Bu durumda verdiğimiz söz hem _ptr_'nin hem de _*ptr_'nin değerini değiştirmemektir. Bir başka deyişle hem _ptr_'ye başka bir adres atamak hem de _*ptr_ ifadesine başka bir değer atamak mantıksal hata ise, gösterici değişkeni bu şekilde tanımlamalıyız. Aşağıdaki koda bakalım:
 
 ```
 int main()
