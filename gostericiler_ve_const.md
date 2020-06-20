@@ -227,7 +227,7 @@ int x = 10, y = 20, z = 30;
 int *const pa1[] = { &x, &y, &z };
 const int *pa2[] = { &x, &y, &z };
 ```
-*pa1* dizisinin tanımında const anahtar sözcüğü *'*'* (asterisk) atomundan sonra ve dizinin isminden önce yazılmış. Bu durumda **const** olan dizinin kendisidir. Yani bu durumda dizinin öğelerini değiştirmeme sözü vermiş oluyoruz. Dizinin öğelerinin değiştirilmesi yani onlara atama yapılması derleyici tarafından sentaks hatası olarak işaretlenecek. Ancak bu durumda dizinin öğeleri olan göstericileri içerik *(dereferencing)* operatörünün operandı yaparak değiştirmemizde bir engel yok. 
+_pa1_ dizisinin tanımında __const__ anahtar sözcüğü _'*'_ (asterisk) atomundan sonra ve dizinin isminden önce yazılmış. Bu durumda **const** olan dizinin kendisidir. Yani bu durumda dizinin öğelerini değiştirmeme sözü vermiş oluyoruz. Dizinin öğelerinin değiştirilmesi yani onlara atama yapılması derleyici tarafından sentaks hatası olarak işaretlenecek. Ancak bu durumda dizinin öğeleri olan göstericileri içerik _(dereferencing)_ operatörünün operandı yaparak değiştirmemizde bir engel yok. 
 
 ```
 int main()
@@ -239,7 +239,7 @@ int main()
 }
 ```
 
-*pa2* dizisinde ise durum farklı. Burada dizinin elemanları *const int** türünden. Dizinin kendisi **const** değil. Yani dizinin elemanlarının değerlerini değiştirebiliriz. Verdiğimiz söz dizinin öğeleri olan göstericiler ile eriştiğimiz nesneleri salt okuma amaçlı kullanmak. Aşağıdaki koda bakalım:
+_pa2_ dizisinde ise durum farklı. Burada dizinin elemanları _const int*_ türünden. Dizinin kendisi __const__ değil. Yani dizinin elemanlarının değerlerini değiştirebiliriz. Verdiğimiz söz dizinin öğeleri olan göstericiler ile eriştiğimiz nesneleri salt okuma amaçlı kullanmak. Aşağıdaki koda bakalım:
 
 ```
 int main()
@@ -266,3 +266,5 @@ int main()
 	//...
 }
 ```
+
+__devam edecek__
