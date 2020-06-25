@@ -4,12 +4,12 @@ _C++11_ ile gelen araçlardan biri de numaralandırma sınıfları.
 Standartların kullandığı ingilizce resmi terim _"strongly typed enums"_. 
 "Güçlü tür özelliği kazandırılmış numaralandırma türleri" olarak Türkçeye çevirebiliriz.
 Numaralandırma sınıflarının dile eklenmesiyle birlikte artık _C++_'da iki ayrı numaralandırma aracı var. 
-Geçmişten gelen ve bazı eklemelerle halen varlığını koruyan numaralandırma türlerine bundan sonra "düz numaralandırma türleri" _(plain enum)_ diyeceğiz. 
-Numaralandırma sınıflarının dile neden eklendiğini anlayabilmek için, düz numaralandırma türlerinin _C++11_ öncesinde yol açtığı tipik sorunları anlayabilmemiz gerekiyor:
+Geçmişten gelen ve bazı eklemelerle halen varlığını koruyan numaralandırma türlerine bundan sonra "düz numaralandırma türleri" _(plain enum)_ ya da "kapsamsız numaralandırma türleri" _(unscoped enums)_ diyeceğiz. 
+Numaralandırma sınıflarının dile neden eklendiğini anlayabilmek için, kapsamsız numaralandırma türlerinin _C++11_ öncesinde yol açtığı tipik sorunları anlayabilmemiz gerekiyor:
 
 ## numaralandırma sabitlerinin bilinirlik alanları
-Düz numaralandırma türlerinde, tanıtılan numaralandırma sabitlerinin bilinirlik alanı numaralandırma türünün bilinirlik alanıdır. 
-Bu durum numaralandırma sabitleri olan isimlerin aynı bilinirlik alanında bulunan diğer isimlerle çakışma riskini arttırır. 
+Düz numaralandırma türlerinde tanıtılan numaralandırma sabitlerinin kapsamları _(scope)_ numaralandırma türünün bilinirlik alanıdır. 
+Bu durum numaralandırma sabitleri olan isimlerin aynı kapsamda bulunan diğer isimlerle çakışma riskini arttırır. 
 Çok sayıda kütüphanenin bir arada kullanıldığı projelerde numaralandırma sabitleri olarak kullanılan isimlerin çakışması çok sık karşılaşılan bir durumdur:
 
 ```
@@ -28,7 +28,7 @@ Yukarıdaki kodda _traffic.h_ başlık dosyasında tanıtılan _enum TrafficLigh
 Bu başlık dosyası ile doğrudan bir ilişkisi olmayan _screen.h_ isimli başlık dosyası ise _enum ScreenColor_ isimli bir türü tanıtmış. 
 _simulation.cpp_ isimli kod dosyası her iki modülün sağladığı hizmetlerden faydalanabilmek için iki başlık dosyasını da _#include_ önişlemci komutlarıyla kendi kaynak dosyasına eklemiş. 
 Bu durumu derleyici bir sentaks hatası olarak işaretleyecek. _Green_ ve _Red_ isimleri çakışıyor. 
-Aynı bilinirlik alanında birden fazla farklı varlık aynı ismi taşıyamaz, değil mi? 
+Aynı kapsamda birden fazla farklı varlık aynı ismi taşıyamaz, değil mi? 
 Numaralandırma sınıflarının sağladığı faydalardan ilki burada. 
 Numaralandırma sınıfı türlerinin kendi bilinirlik alanları var ve tanıtılan numaralandırma sabitleri, numaralandırma sınıfının kendi bilinirlik alanında yer alıyor. 
 Yukarıdaki kodda şimdi numaralandırma sınıflarını kullanıyoruz:
@@ -58,7 +58,7 @@ Aşağıdaki gibi bir kullanım geçerli değil:
 ```
 ScreenColor scr_color = Magenta; //geçersiz
 ```
-Düz numaralandırma türleri ile tanıtılan numaralandırma sabitlerinin bir bilinirlik alanı olmamasına karşın 
+Kapsamsız numaralandırma türleri ile tanıtılan numaralandırma sabitlerinin bir kapsamı olmamasına karşın 
 _C++11_ artık onları da numaralandırma tür ismiyle niteleyerek kullanabiliyoruz:
 
 ```
@@ -89,8 +89,8 @@ namespace Neco {
 Neco::Suit s = Neco::Diamond;
 ```
 
-## düz numaralandırma türlerine ilişkin sorunlu tür dönüşümleri
-Düz numaralandırma türlerine yalnızca aynı türden değerler atanabilir, yani diğer türlerden düz numaralandırma türlerine otomatik _(implicit)_ tür dönüşümü yoktur:
+## kapsamsız numaralandırma türlerine ilişkin sorunlu tür dönüşümleri
+Kapsamsız numaralandırma türlerine yalnızca aynı türden değerler atanabilir, yani diğer türlerden kapsamsız numaralandırma türlerine otomatik _(implicit)_ tür dönüşümü yoktur:
 
 ```
 enum Color { White, Yellow, Gray, Green, Brown, Black };
@@ -108,7 +108,7 @@ int main()
 
 Yukarıdaki kodda geçersiz atamaları görüyorsunuz. 
 Numaralandırma türlerine diğer türlerden otomatik tür dönüşümü olmaması yanlış yazımlara karşı önemli bir koruma sağlar. 
-Eğer, küçük bir olasılıkla da olsa, geçersiz olan ilk değer verme ya da atama işlemleri istenerek yapılıyorsa *static_cast* tür dönüştürme işleci kullanılabilir:
+Eğer küçük bir olasılıkla da olsa, geçersiz olan ilk değer verme ya da atama işlemleri istenerek yapılıyorsa *static_cast* tür dönüştürme operatörü kullanılabilir:
 
 ```
 enum Color { White, Yellow, Gray, Green, Brown, Black };
@@ -124,7 +124,7 @@ int main()
 	//
 }
 ```
-Ancak düz numaralandırma türlerinden tamsayı ve gerçek sayı türlerine otomatik _(implicit)_ tür dönüşümü var. 
+Ancak kapsamsız numaralandırma türlerinden tamsayı ve gerçek sayı türlerine otomatik _(implicit)_ tür dönüşümü var. 
 Aşağıdaki koda bakalım:
 
 ```
@@ -162,7 +162,7 @@ int main()
 
 Yukarıdaki kodda _i_ değişkenine verilen ilk değer geçerli değil. 
 Çünkü _Color_ türünden _int_ türüne otomatik tür dönüşümü yok. 
-Ancak _j_ değişkenine ilk değer verilirken _Color_ türünden değer *static_cast* işleciyle _int_ türüne dönüştürülüyor. 
+Ancak _j_ değişkenine ilk değer verilirken _Color_ türünden değer *static_cast* operatörü _int_ türüne dönüştürülüyor. 
 Kod geçerli.
 
 ## numaralandırma türlerinin baz türleri
@@ -201,7 +201,7 @@ hem de bir numaralandırma türünün ön bildiriminin _(forward declaration)_ 
 
 _C++11_ standartlarıyla bu konuda önemli değişiklikler yapıldı:
 
-+ Hem düz numaralandırma türleri hem de numaralandırma sınıfları için bildirimde ya da tanımda baz tür belirlenebiliyor. 
++ Hem kapsamsız numaralandırma türleri hem de numaralandırma sınıfları için bildirimde ya da tanımda baz tür belirlenebiliyor. 
 Aşağıdaki örneklere bakalım:
 
 ```
@@ -222,13 +222,13 @@ enum class ErrorCode;
 enum class ImageWidth : unsigned long;
 ```
 
-Yukarıdaki kodda tanımlanan düz _enum Suit_ türünün baz türü olarak _unsigned char_ türü seçilmiş. 
+Yukarıdaki kodda tanımlanan kapsamsız _enum Suit_ türünün baz türü olarak _unsigned char_ türü seçilmiş. 
 Baz türün _enum_ etiketi olarak seçilen isimden sonra gelen _":"_ atomunu izlediğini görüyorsunuz.
 Numaralandırma sınıfı olarak tanımlanan _BufferSize_ türünde ise baz tür olarak _unsigned int_ seçilmiş.
-Düz numaralandırma türü olan _Color_ yalnızca bildirilmiş ancak tanımlanmamış. 
+Kapsamsız numaralandırma türü olan _Color_ yalnızca bildirilmiş ancak tanımlanmamış. 
 _C++11_ öncesinde numaralandırma türlerine ilişkin ön bildirim yapılamıyordu. 
 Bildirimde baz tür olarak _unsigned char_ türü seçilmiş.
-Düz numaralandırma türü olan _Font_ yalnızca bildirilmiş ancak tanımlanmamış. 
+Kapsamsız numaralandırma türü olan _Font_ yalnızca bildirilmiş ancak tanımlanmamış. 
 Bildirimde baz tür belirtilmediği için bildirim geçersiz.
 Numaralandırma sınıfı olarak bildirilen _ErrorCode_ türünde baz tür belirtilmemiş. 
 Baz tür varsayılan biçimde _int_ türü kabul edilecek.
@@ -237,7 +237,7 @@ Numaralandırma sınıfı olarak bildirilen _ImageWidth_ türünde baz tür ola
 ## ön bildirim neden önemli?
 Kodla tanımlanan türler _(user defined types)_ söz konusu olduğunda derleyici bir türün tanımını görmese de o türün bildirimine dayanarak belirli bağlamlarda kullanımını geçerli kabul eder. 
 Derleyicinin varlığından haberdar olduğu ancak henüz tanımını görmediği bir türe "tamamlanmamış tür" _(incomplete type)_ denir. 
-Tamamlanmamış türlerden gösterici değişkenler tanımlanabilir ya da tamamlanmamış türler işlev bildirimlerinde kullanılabilir. 
+Tamamlanmamış türlerden gösterici değişkenler tanımlanabilir ya da tamamlanmamış türler fonksiyon bildirimlerinde kullanılabilir. 
 Tamamlanmamış türleri belirli bağlamlarda kullanabilmek için derleyici bu türlerin ön bildirimini görmelidir. 
 Bir türü ön bildirimle kullanabildiğimiz durumlarda bu türün tanımını içeren başlık dosyasını kendi kodumuza dahil etmemiz gerekmez. 
 Bu durumda başlık dosyalarının birbirine bağımlılığı ortadan kaldırıldığı gibi derleme süreleri kısalır. 
@@ -274,7 +274,8 @@ private:
 };
 ```
 
-Oysa _C++11_ kurallarına göre artık _ErrorCode_ türünün ön bildirimi bu türden bir veri öğesini kullanabilmemiz için yeterli. Şimdi kazandığımız avantajlara bir bakalım:
+Oysa _C++11_ kurallarına göre artık _ErrorCode_ türünün ön bildirimi bu türden bir veri öğesini kullanabilmemiz için yeterli. 
+Şimdi kazandığımız avantajlara bir bakalım:
 _fileoperations.h_ başlık dosyasını dahil eden müşteri kodları _ErrorCode_ türünün tanımını içeren başlık dosyasını dahil etmeyecekler. 
 Böylece
 
